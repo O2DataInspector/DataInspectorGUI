@@ -1,0 +1,66 @@
+#devices-selection.col2 {
+  column-gap: 100px;
+  grid-template-columns: 1fr 1fr;
+}
+
+#devices-listing.row3 {
+  grid-area: col1;
+  justify-self: end;
+  row-gap: 10px;
+}
+
+#devices-listing span {
+  grid-area: row1;
+  font-size: 1.7em;
+}
+
+#selection-buttons1.col2 {
+  column-gap: 15px;
+  grid-area: row2;
+}
+
+#selection-buttons1 button {
+  height: 2em;
+  width: 170px;
+}
+
+#selection-select {
+  grid-area: col1;
+}
+
+#selection-deselect {
+  grid-area: col2;
+}
+
+#devices-listing input {
+  height: 17px;
+  width: 30px;
+}
+
+#devices-listing label {
+  font-size: 1.7em;
+}
+
+#selection-buttons2.col2 {
+  align-self: start;
+  column-gap: 15px;
+  grid-area: col2;
+  justify-self: left;
+}
+
+#selection-buttons2 button {
+  border-radius: 7px;
+  font-size: 1.3em;
+  height: 1.9em;
+  width: 110px;
+}
+
+#selection-save {
+  background-color: #00FF0030;
+  grid-area: col1;
+}
+
+#selection-cancel {
+  background-color: #FF000030;
+  grid-area: col2;
+}
