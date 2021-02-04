@@ -1,0 +1,36 @@
+#navigation-bar {
+  background-color: #00000020;
+  border: 1px solid #000000A0;
+  grid-area: row1;
+  height: 100%;
+  padding-left: 9px;
+  padding-top: 3px;
+}
+
+#navigation-logo > span {
+  font-size: 1.8em;
+  font-style: italic;
+  font-weight: bold;
+  padding-left: 7px;
+}
+
+#navigation-buttons {
+  position: absolute;
+  right: 10px;
+  top: 4px;
+}
+
+#navigation-buttons button {
+  border-radius: 7px;
+  font-size: 1.3em;
+  padding: 3px 10px;
+  margin-left: 10px;
+}
+
+#select-devices {
+  background-color: #0000FF30;
+}
+
+#disconnect {
+  background-color: #FF000030;
+}
