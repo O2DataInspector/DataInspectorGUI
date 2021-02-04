@@ -1,0 +1,11 @@
+#selection.row2 {
+  row-gap: 15px;
+}
+
+#selection #navigation-bar {
+  grid-area: row1;
+}
+
+#devices-selection {
+  grid-area: row2;
+}
