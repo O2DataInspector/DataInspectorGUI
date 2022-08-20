@@ -72,7 +72,7 @@ const PortField = ({ onChange }: PortFieldProps) => {
 
   return (
     <div id="port-field">
-      <label>Enter analysis task`&apos;`s port:</label>
+      <label>Enter analysis task&apos;s port:</label>
       <ValidInvalid isValid={!hasError}>
         <input type="text" placeholder="Port" onChange={onChange_} />
       </ValidInvalid>

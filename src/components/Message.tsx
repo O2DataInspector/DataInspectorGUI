@@ -69,7 +69,7 @@ const Header = ({ message }: MessageProps) => (
       <tr>
         <td>FirstTForbit: {message.firstTForbit}</td>
         <td>
-          Task`&apos;`s hash: {message.taskHash ? message.taskHash : "N/A"}
+          Task&apos;s hash: {message.taskHash ? message.taskHash : "N/A"}
         </td>
       </tr>
       <tr>
