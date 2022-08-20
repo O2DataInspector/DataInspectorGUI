@@ -2,6 +2,7 @@ import Axios from 'axios'
 import React from 'react'
 import * as Redux from 'react-redux'
 import * as Router from 'react-router-dom'
+import { Store } from 'redux'
 
 import State, { Device } from 'store/state'
 import { setDevices } from 'store/actions'
@@ -16,7 +17,7 @@ interface DevicesSelectionProps {
 
 const DevicesSelection = ({ devices }: DevicesSelectionProps) => {
   const [state, setState] = React.useState(devices)
-  const store = Redux.useStore()
+  const store = Redux.useStore() as Store<State>
   const history = Router.useHistory()
 
   function onClick(device: Device) {

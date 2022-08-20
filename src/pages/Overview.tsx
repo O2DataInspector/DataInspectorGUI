@@ -2,6 +2,7 @@ import React from 'react'
 import * as Redux from 'react-redux'
 import * as Router from 'react-router-dom'
 
+
 import { MessageHeader, MessageView } from 'components/Message'
 import NavigationBar, * as Buttons from 'components/NavigationBar'
 import ExitIcon from 'icons/exit.svg'
@@ -30,7 +31,7 @@ const Overview = ({ maybeDevice }: OverviewProps) => {
       </NavigationBar>
       {maybeDevice ? <NonEmptyDevice device={maybeDevice} /> : <EmptyDevice />}
       <div id='overview-exit'>
-        <img onClick={onExit} src={ExitIcon} />
+        <img onClick={onExit} src={ExitIcon} alt="ExitIcon"/>
       </div>
     </div>
   )

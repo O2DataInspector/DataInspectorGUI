@@ -14,7 +14,7 @@ interface MessageHeaderProps {
 
 const MessageHeader = ({ device }: MessageHeaderProps) => (
   <div id='device-header' className='flex-row'>
-    <img src={DeviceIcon} />
+    <img src={DeviceIcon} alt="DeviceIcon"/>
     <span>{device.name}</span>
   </div>
 )

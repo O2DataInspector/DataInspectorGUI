@@ -12,13 +12,14 @@ import State, { Device, Message } from 'store/state'
 
 import 'components/common.css'
 import 'pages/dashboard.css'
+import { Store } from 'redux'
 
 interface DashboardProps {
   devices: Device[]
 }
 
 const Dashboard = ({ devices }: DashboardProps) => {
-  const store = Redux.useStore()
+  const store = Redux.useStore() as Store<State>
 
   function onRefresh() {
     const address = selectAddress(store.getState())
@@ -48,7 +49,7 @@ const Dashboard = ({ devices }: DashboardProps) => {
         ? <NonEmptyDashboard devices={devices} />
         : <EmptyDashboard />}
       <div id='dashboard-refresh'>
-        <img onClick={onRefresh} src={RefreshIcon} />
+        <img onClick={onRefresh} src={RefreshIcon} alt="RefreshIcon"/>
       </div>
     </div>
   )

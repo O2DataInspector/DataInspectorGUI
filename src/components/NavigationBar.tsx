@@ -2,15 +2,17 @@ import Axios from 'axios'
 import React from 'react'
 import * as Redux from 'react-redux'
 import * as Router from 'react-router-dom'
+import { Store } from 'redux'
 
 import HomeIcon from 'icons/home.svg'
 import { disconnect } from 'store/actions'
 import { selectAddress } from 'store/selectors'
+import State from 'store/state'
 
 import './navigation-bar.css'
 import 'components/common.css'
 
-const NavigationBar: React.FC = props => (
+const NavigationBar = (props:any) => (
   <div id='navigation-bar' className='inline-row'>
     <Logo />
     <div id='navigation-buttons'>
@@ -21,13 +23,13 @@ const NavigationBar: React.FC = props => (
 
 const Logo = () => (
   <div id='navigation-logo' className='flex-row'>
-    <img src={HomeIcon} />
+    <img src={HomeIcon} alt="HomeIcon"/>
     <span>Data Inspector</span>
   </div>
 )
 
 const Disconnect = () => {
-  const store = Redux.useStore()
+  const store = Redux.useStore() as Store<State>
   const history = Router.useHistory()
 
   function onClick() {

@@ -1,6 +1,6 @@
 import Axios from 'axios'
 import React from 'react'
-import Loader from 'react-loader-spinner'
+import { TailSpin } from 'react-loader-spinner'
 import * as Redux from 'react-redux'
 import * as Router from 'react-router-dom'
 
@@ -48,13 +48,13 @@ const Connection = () => {
 const ConnectionHeader = () => (
   <div id='connection-header' className='flex-row'>
     <span>Connect to Data Inspector</span>
-    <img src={WebIcon} />
+    <img src={WebIcon} alt="WebIcon"/>
   </div>
 )
 
 const Spinner = () => (
   <div id='loader'>
-    <Loader type='TailSpin' color='#000000A0' height='40px' />
+    <TailSpin color='#000000A0' height='40px' />
   </div>
 )
 

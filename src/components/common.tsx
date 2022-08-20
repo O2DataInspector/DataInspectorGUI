@@ -1,7 +1,11 @@
 import React from 'react'
 import './common.css'
 
-const InRowComponents: React.FC = props => (
+type ContainerProps =  {
+  children: React.ReactNode;
+};
+
+const InRowComponents = (props:ContainerProps) => (
   <div id='in-row-component' className='inline'>
     {props.children}
   </div>
@@ -9,9 +13,10 @@ const InRowComponents: React.FC = props => (
 
 interface ValidInvalidProps {
   isValid: boolean
+  children: React.ReactNode
 }
 
-const ValidInvalid: React.FC<ValidInvalidProps> = props => (
+const ValidInvalid: React.FC<ValidInvalidProps> = (props:ValidInvalidProps) => (
   <div id='valid-invalid' className={props.isValid ? '' : 'invalid'}>
     {props.children}
   </div>

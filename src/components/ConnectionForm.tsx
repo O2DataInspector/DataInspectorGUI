@@ -98,7 +98,7 @@ const HostField = ({ onChange }: HostFieldProps) => {
   const [state, setState] = React.useState<HostFieldState>({
     hasError: false,
     isLocal: true,
-    address: undefined
+    address: localhost
   })
 
   const onChange_ = (event: React.ChangeEvent<HTMLInputElement>) => {

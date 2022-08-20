@@ -76,7 +76,7 @@ function reduce(state = initialState, action: Action): State {
       }
     default:
       return state
-  }
+    }
 }
 
 function mapToDevicesNames(messages: Message[]): Map<string, Message[]> {
