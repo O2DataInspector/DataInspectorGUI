@@ -8,7 +8,8 @@
   grid-row: row1-col1 / row1-col2;
 }
 
-#dashboard-empty, #dashboard-non-empty {
+#dashboard-empty,
+#dashboard-non-empty {
   grid-area: row2-col1;
 }
 
@@ -36,7 +37,7 @@
   grid-template-rows: 50px 1fr 45px;
   position: relative;
   margin-bottom: 15px;
-  margin-left: 25px;  
+  margin-left: 25px;
 }
 
 #dashboard-non-empty #device-header {
@@ -52,7 +53,7 @@
 }
 
 #dashboard-device-view {
-  background-color: #00FF0030;
+  background-color: #00ff0030;
   border-radius: 7px;
   font-size: 1.3em;
   grid-area: row3;
