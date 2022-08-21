@@ -1,6 +1,8 @@
 import React from "react";
 import * as Redux from "react-redux";
 
+import { tableFromIPC } from 'apache-arrow';
+
 import BytesTable from "components/BytesTable";
 import DeviceIcon from "icons/device.svg";
 import { Device, DisplayMethod, Message } from "store/state";
@@ -115,19 +117,33 @@ const DisplaySelection = ({ message }: MessageProps) => {
   );
 };
 
-const Payload = ({ message }: MessageProps) => (
-  <div id="message-payload">
+const Payload = ({ message }: MessageProps) => {
+
+  function serializePayload(msg: Message): string | undefined {
+    switch(msg.payloadSerialization) { 
+      case "ARROW": {
+        const table = tableFromIPC(msg.payload);
+         return table.toString();
+      } 
+      default: { 
+         return msg.payload;
+      } 
+   } 
+  }
+
+
+  return (<div id="message-payload">
     {message.payload ? (
       message.payloadDisplay === DisplayMethod.Default ? (
         <BytesTable bytes={message.payloadBytes} />
       ) : (
-        <span>{message.payload}</span>
+        <span>{serializePayload(message)}</span>
       )
     ) : (
       <BytesTable bytes={message.payloadBytes} />
     )}
-  </div>
-);
+  </div>);
+};
 
 const SimpleMessageView = ({ message }: MessageProps) => (
   <div id="message-view">

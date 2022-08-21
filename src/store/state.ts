@@ -5,6 +5,8 @@ enum DisplayMethod {
   Custom,
 }
 
+type PayloadSerializationMethod = "ROOT" | "ARROW"; 
+
 interface Message {
   id: string;
   sender: string;
@@ -20,7 +22,7 @@ interface Message {
   taskHash: number | undefined;
   payloadSize: number;
   payloadParts: number;
-  payloadSerialization: string;
+  payloadSerialization: PayloadSerializationMethod;
   payloadSplitIndex: number;
   payloadBytes: string;
   payload: string | undefined;
