@@ -20,7 +20,8 @@
   top: 2px;
 }
 
-#overview-device, #overview-empty-device {
+#overview-device,
+#overview-empty-device {
   grid-area: row2-col1;
 }
 
@@ -52,11 +53,11 @@
   border: 1px solid black;
   grid-area: col1;
   padding: 3px 15px 3px 7px;
-}    
+}
 
 #overview-messages span {
   font-size: 1.5em;
-  font-weight: bold;  
+  font-weight: bold;
 }
 
 #overview-messages label {
@@ -78,5 +79,3 @@
   font-size: 1.5em;
   grid-area: row2;
 }
-
-

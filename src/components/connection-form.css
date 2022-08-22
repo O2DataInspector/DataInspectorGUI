@@ -17,7 +17,8 @@
   margin-bottom: 60px;
 }
 
-#port-field input, #host-field input {
+#port-field input,
+#host-field input {
   border: 1px solid black;
   padding: 5px;
   margin-top: 5px;

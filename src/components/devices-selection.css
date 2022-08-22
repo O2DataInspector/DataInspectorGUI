@@ -56,11 +56,11 @@
 }
 
 #selection-save {
-  background-color: #00FF0030;
+  background-color: #00ff0030;
   grid-area: col1;
 }
 
 #selection-cancel {
-  background-color: #FF000030;
+  background-color: #ff000030;
   grid-area: col2;
 }

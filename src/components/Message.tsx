@@ -1,47 +1,50 @@
-import React from 'react'
-import * as Redux from 'react-redux'
+import React from "react";
+import * as Redux from "react-redux";
 
-import BytesTable from 'components/BytesTable'
-import DeviceIcon from 'icons/device.svg'
-import { Device, DisplayMethod, Message } from 'store/state'
+import { tableFromIPC } from 'apache-arrow';
 
-import 'components/message.css'
-import { setDisplayMethod } from 'store/actions'
+import BytesTable from "components/BytesTable";
+import DeviceIcon from "icons/device.svg";
+import { Device, DisplayMethod, Message } from "store/state";
+
+import "components/message.css";
+import { setDisplayMethod } from "store/actions";
 
 interface MessageHeaderProps {
-  device: Device
+  device: Device;
 }
 
 const MessageHeader = ({ device }: MessageHeaderProps) => (
-  <div id='device-header' className='flex-row'>
-    <img src={DeviceIcon} />
+  <div id="device-header" className="flex-row">
+    <img src={DeviceIcon} alt="DeviceIcon" />
     <span>{device.name}</span>
   </div>
-)
+);
 
 interface MessageProps {
-  message: Message
+  message: Message;
 }
 
 const MessageView = ({ message }: MessageProps) => (
-  <div id='message-view'>
+  <div id="message-view">
     {message.payload === undefined ? null : (
-      <div id='display-selection'>
+      <div id="display-selection">
         <span>Display method:</span>
         <hr />
         <DisplaySelection message={message} />
-      </div>)}
+      </div>
+    )}
     <span>Header</span>
     <hr />
     <Header message={message} />
     <span>Payload</span>
     <hr />
     <Payload message={message} />
-  </div >
-)
+  </div>
+);
 
 const Header = ({ message }: MessageProps) => (
-  <div id='header'>
+  <div id="header">
     <table>
       <tr>
         <td>Origin: {message.origin}</td>
@@ -53,21 +56,23 @@ const Header = ({ message }: MessageProps) => (
       </tr>
       <tr>
         <td>Sub-specification: {message.subSpecification}</td>
-        <td>Start time: {message.startTime ? message.startTime : 'N/A'}</td>
+        <td>Start time: {message.startTime ? message.startTime : "N/A"}</td>
       </tr>
       <tr>
         <td>Payload size: {message.payloadSize} B</td>
-        <td>Duration: {message.duration ? message.duration : 'N/A'}</td>
+        <td>Duration: {message.duration ? message.duration : "N/A"}</td>
       </tr>
       <tr>
         <td>Serialization: {message.payloadSerialization}</td>
         <td>
-          Creation time: {message.creationTime ? message.creationTime : 'N/A'}
+          Creation time: {message.creationTime ? message.creationTime : "N/A"}
         </td>
       </tr>
       <tr>
         <td>FirstTForbit: {message.firstTForbit}</td>
-        <td>Task's hash: {message.taskHash ? message.taskHash : 'N/A'}</td>
+        <td>
+          Task&apos;s hash: {message.taskHash ? message.taskHash : "N/A"}
+        </td>
       </tr>
       <tr>
         <td>Run numer: {message.runNumber}</td>
@@ -75,66 +80,84 @@ const Header = ({ message }: MessageProps) => (
       </tr>
     </table>
   </div>
-)
+);
 
 const DisplaySelection = ({ message }: MessageProps) => {
-  const store = Redux.useStore()
+  const store = Redux.useStore();
 
   function onClick(event: React.MouseEvent<HTMLInputElement, MouseEvent>) {
     const method =
-      event.currentTarget.name === 'default'
+      event.currentTarget.name === "default"
         ? DisplayMethod.Default
-        : DisplayMethod.Custom
-    store.dispatch(setDisplayMethod(message, method))
+        : DisplayMethod.Custom;
+    store.dispatch(setDisplayMethod(message, method));
   }
 
   return (
     <div>
       <label>
         <input
-          type='checkbox'
-          name='default'
+          type="checkbox"
+          name="default"
           onClick={onClick}
           checked={message.payloadDisplay === DisplayMethod.Default}
         />
-	  Default
-	</label>
+        Default
+      </label>
       <label>
         <input
-          type='checkbox'
-          name='custom'
+          type="checkbox"
+          name="custom"
           onClick={onClick}
           checked={message.payloadDisplay === DisplayMethod.Custom}
         />
         Custom ({message.payloadSerialization})
       </label>
     </div>
-  )
-}
+  );
+};
 
-const Payload = ({ message }: MessageProps) => (
-  <div id='message-payload'>
-    {message.payload
-      ? message.payloadDisplay === DisplayMethod.Default
-        ? <BytesTable bytes={message.payloadBytes} />
-        : <span>{message.payload}</span>
-      : <BytesTable bytes={message.payloadBytes} />}
-  </div>
-)
+const Payload = ({ message }: MessageProps) => {
+
+  function serializePayload(msg: Message): string | undefined {
+    switch(msg.payloadSerialization) { 
+      case "ARROW": {
+        const table = tableFromIPC(msg.payload);
+         return table.toString();
+      } 
+      default: { 
+         return msg.payload;
+      } 
+   } 
+  }
+
+
+  return (<div id="message-payload">
+    {message.payload ? (
+      message.payloadDisplay === DisplayMethod.Default ? (
+        <BytesTable bytes={message.payloadBytes} />
+      ) : (
+        <span>{serializePayload(message)}</span>
+      )
+    ) : (
+      <BytesTable bytes={message.payloadBytes} />
+    )}
+  </div>);
+};
 
 const SimpleMessageView = ({ message }: MessageProps) => (
-  <div id='message-view'>
+  <div id="message-view">
     <span>Header</span>
     <hr />
     <SimpleHeader message={message} />
     <span>Payload</span>
     <hr />
     <BytesTable bytes={message.payloadBytes} />
-  </div >
-)
+  </div>
+);
 
 const SimpleHeader = ({ message }: MessageProps) => (
-  <div id='simple-header'>
+  <div id="simple-header">
     <span>Origin: {message.origin}</span>
     <br />
     <span>Description: {message.description}</span>
@@ -143,6 +166,6 @@ const SimpleHeader = ({ message }: MessageProps) => (
     <br />
     <span>Serialization: {message.payloadSerialization}</span>
   </div>
-)
+);
 
-export { MessageHeader, MessageView, SimpleMessageView }
+export { MessageHeader, MessageView, SimpleMessageView };

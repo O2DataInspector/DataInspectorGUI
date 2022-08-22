@@ -1,75 +1,75 @@
-import { Device, DisplayMethod, Message, Url } from 'store/state'
+import { Device, DisplayMethod, Message, Url } from "store/state";
 
-const DISCONNECT = 'DISCONNECT'
-const SET_DEVICES = 'SET_DEVICES'
-const SET_MESSAGES = 'SET_MESSAGES'
-const SET_DISPLAYED = 'SET_DISPLAYED'
-const SET_DISPLAY_METHOD = 'SET_DISPLAY_METHOD'
-const SET_TOPOLOGY_DETAILS = 'SET_TOPOLOGY_DETAILS'
+const DISCONNECT = "DISCONNECT";
+const SET_DEVICES = "SET_DEVICES";
+const SET_MESSAGES = "SET_MESSAGES";
+const SET_DISPLAYED = "SET_DISPLAYED";
+const SET_DISPLAY_METHOD = "SET_DISPLAY_METHOD";
+const SET_TOPOLOGY_DETAILS = "SET_TOPOLOGY_DETAILS";
 
 interface Disconnect {
-  type: typeof DISCONNECT
+  type: typeof DISCONNECT;
 }
 
 interface SetDevices {
-  type: typeof SET_DEVICES
-  devices: Device[]
+  type: typeof SET_DEVICES;
+  devices: Device[];
 }
 
 interface SetMessages {
-  type: typeof SET_MESSAGES
-  messages: Message[]
+  type: typeof SET_MESSAGES;
+  messages: Message[];
 }
 
 interface SetDisplayed {
-  type: typeof SET_DISPLAYED
-  message: Message
+  type: typeof SET_DISPLAYED;
+  message: Message;
 }
 
 interface SetDisplayMethod {
-  type: typeof SET_DISPLAY_METHOD
-  message: Message
-  method: DisplayMethod
+  type: typeof SET_DISPLAY_METHOD;
+  message: Message;
+  method: DisplayMethod;
 }
 
 interface SetTopologyDetails {
-  type: typeof SET_TOPOLOGY_DETAILS
-  analysisHost: Url
-  devicesNames: string[]
+  type: typeof SET_TOPOLOGY_DETAILS;
+  analysisHost: Url;
+  devicesNames: string[];
 }
 
 type Action =
-  Disconnect
+  | Disconnect
   | SetDevices
   | SetMessages
   | SetDisplayed
   | SetDisplayMethod
-  | SetTopologyDetails
+  | SetTopologyDetails;
 
 const disconnect = (): Action => ({
-  type: DISCONNECT
-})
+  type: DISCONNECT,
+});
 
 const setDevices = (devices: Device[]): Action => ({
   type: SET_DEVICES,
-  devices: devices
-})
+  devices: devices,
+});
 
 const setMessages = (messages: Message[]): Action => ({
   type: SET_MESSAGES,
-  messages: messages
-})
+  messages: messages,
+});
 
 const setDisplayed = (message: Message): Action => ({
   type: SET_DISPLAYED,
-  message: message
-})
+  message: message,
+});
 
 const setDisplayMethod = (message: Message, method: DisplayMethod): Action => ({
   type: SET_DISPLAY_METHOD,
   message: message,
-  method: method
-})
+  method: method,
+});
 
 const setTopologyDetails = (
   analysisHost: Url,
@@ -77,10 +77,10 @@ const setTopologyDetails = (
 ): Action => ({
   type: SET_TOPOLOGY_DETAILS,
   analysisHost: analysisHost,
-  devicesNames: devicesNames
-})
+  devicesNames: devicesNames,
+});
 
-export default Action
+export default Action;
 export {
   DISCONNECT,
   SET_DEVICES,
@@ -93,5 +93,5 @@ export {
   setMessages,
   setDisplayed,
   setDisplayMethod,
-  setTopologyDetails
-}
+  setTopologyDetails,
+};
