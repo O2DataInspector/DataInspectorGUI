@@ -1,5 +1,6 @@
 import React from "react";
 import * as Redux from "react-redux";
+import { parse, draw } from "jsroot";
 
 import BytesTable from "components/BytesTable";
 import DeviceIcon from "icons/device.svg";
@@ -81,11 +82,12 @@ const Header = ({ message }: MessageProps) => (
 const DisplaySelection = ({ message }: MessageProps) => {
   const store = Redux.useStore();
 
+
   function onClick(event: React.MouseEvent<HTMLInputElement, MouseEvent>) {
     const method =
-      event.currentTarget.name === "default"
-        ? DisplayMethod.Default
-        : DisplayMethod.Custom;
+      event.currentTarget.name === "plot"
+        ? DisplayMethod.Plot
+        : DisplayMethod.Raw;
     store.dispatch(setDisplayMethod(message, method));
   }
 
@@ -98,31 +100,36 @@ const DisplaySelection = ({ message }: MessageProps) => {
           onClick={onClick}
           checked={message.payloadDisplay === DisplayMethod.Default}
         />
-        Default
+        Default ({message.payloadSerialization})
       </label>
       <label>
         <input
           type="checkbox"
-          name="custom"
+          name="raw"
           onClick={onClick}
-          checked={message.payloadDisplay === DisplayMethod.Custom}
+          checked={message.payloadDisplay === DisplayMethod.Raw}
         />
-        Custom ({message.payloadSerialization})
+        Raw
       </label>
+      <label>
+        <input
+          type={message.payloadSerialization === "ROOT" ? "checkbox" : "hidden"}
+          name="plot"
+          onClick={onClick}
+          checked={message.payloadDisplay === DisplayMethod.Plot}
+        />
+        Plot
+      </label>
+      
     </div>
   );
 };
 
 const Payload = ({ message }: MessageProps) => {
   return (
+    // TODO: Provide proper display method for payload
     <div id="message-payload">
-      {message.payload ? (
-        message.payloadDisplay === DisplayMethod.Default ? (
-          <BytesTable bytes={message.payloadBytes} />
-        ) : (
-          <span>{message.payload}</span>
-        )
-      ) : (
+      {message.payload ? displayPayload(message): (
         <BytesTable bytes={message.payloadBytes} />
       )}
     </div>
@@ -151,5 +158,20 @@ const SimpleHeader = ({ message }: MessageProps) => (
     <span>Serialization: {message.payloadSerialization}</span>
   </div>
 );
+
+function displayPayload(m: Message): JSX.Element {
+  switch (m.payloadDisplay) {
+    case DisplayMethod.Plot:
+      return plotPayload(m);
+    default:
+     return <span>{m.payload}</span>;
+  }
+}
+
+function plotPayload(m: Message): JSX.Element{
+  const obj = parse(m.payload);
+  draw("message-payload", obj, "colz");
+  return <div>Message type does not support drawing.</div>
+}
 
 export { MessageHeader, MessageView, SimpleMessageView };

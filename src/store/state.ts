@@ -2,10 +2,9 @@ type Url = string;
 
 enum DisplayMethod {
   Default,
-  Custom,
+  Raw,
+  Plot
 }
-
-type PayloadSerializationMethod = "ROOT" | "ARROW"; 
 
 interface Message {
   id: string;
@@ -22,7 +21,7 @@ interface Message {
   taskHash: number | undefined;
   payloadSize: number;
   payloadParts: number;
-  payloadSerialization: PayloadSerializationMethod;
+  payloadSerialization: string;
   payloadSplitIndex: number;
   payloadBytes: string;
   payload: string | undefined;
