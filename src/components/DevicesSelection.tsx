@@ -40,7 +40,10 @@ const DevicesSelection = ({ devices }: DevicesSelectionProps) => {
     const address = selectAddress(store.getState());
     Axios.get(address + "/select-devices", {
       headers: {
-        devices: state.filter(device => device.isSelected).map(d => d.name).join(","),
+        devices: state
+          .filter((device) => device.isSelected)
+          .map((d) => d.name)
+          .join(","),
       },
     })
       .then((_) => {
