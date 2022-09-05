@@ -120,7 +120,6 @@ const DisplaySelection = ({ message }: MessageProps) => {
         />
         Plot
       </label>
-      
     </div>
   );
 };
@@ -130,7 +129,7 @@ const Payload = ({ message }: MessageProps) => {
     // TODO: Provide proper display method for payload
     <div id="message-payload">
       {message.payload ? displayPayload(message): (
-        <BytesTable bytes={message.payloadBytes} />
+        <span>empty payload</span>
       )}
     </div>
   );
@@ -143,7 +142,7 @@ const SimpleMessageView = ({ message }: MessageProps) => (
     <SimpleHeader message={message} />
     <span>Payload</span>
     <hr />
-    <BytesTable bytes={message.payloadBytes} />
+    <span>empty payload</span>
   </div>
 );
 

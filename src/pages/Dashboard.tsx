@@ -61,7 +61,7 @@ const Dashboard = ({ devices }: DashboardProps) => {
 
 const EmptyDashboard = () => (
   <div id="dashboard-empty" className="row2">
-    <span>No messages to display</span>
+    <span>No devices to display</span>
     <br />
     <span>Refresh or select different devices to inspect</span>
   </div>
@@ -93,7 +93,6 @@ const DeviceView = ({ device }: DeviceViewProps) => {
   return (
     <div className="row3">
       <MessageHeader device={device} />
-      <SimpleMessageView message={message} />
       <button id="dashboard-device-view" onClick={onClick}>
         View
       </button>

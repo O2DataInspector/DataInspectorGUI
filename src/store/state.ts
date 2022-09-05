@@ -23,7 +23,6 @@ interface Message {
   payloadParts: number;
   payloadSerialization: string;
   payloadSplitIndex: number;
-  payloadBytes: string;
   payload: string | undefined;
   isDisplayed: boolean;
   payloadDisplay: DisplayMethod;
