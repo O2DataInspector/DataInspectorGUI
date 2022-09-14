@@ -82,7 +82,6 @@ const Header = ({ message }: MessageProps) => (
 const DisplaySelection = ({ message }: MessageProps) => {
   const store = Redux.useStore();
 
-
   function onClick(event: React.MouseEvent<HTMLInputElement, MouseEvent>) {
     const method =
       event.currentTarget.name === "plot"
@@ -128,9 +127,7 @@ const Payload = ({ message }: MessageProps) => {
   return (
     // TODO: Provide proper display method for payload
     <div id="message-payload">
-      {message.payload ? displayPayload(message): (
-        <span>empty payload</span>
-      )}
+      {message.payload ? displayPayload(message) : <span>empty payload</span>}
     </div>
   );
 };
@@ -163,14 +160,14 @@ function displayPayload(m: Message): JSX.Element {
     case DisplayMethod.Plot:
       return plotPayload(m);
     default:
-     return <span>{m.payload}</span>;
+      return <span>{m.payload}</span>;
   }
 }
 
-function plotPayload(m: Message): JSX.Element{
+function plotPayload(m: Message): JSX.Element {
   const obj = parse(m.payload);
   draw("message-payload", obj, "colz");
-  return <div>Message type does not support drawing.</div>
+  return <div>Message type does not support drawing.</div>;
 }
 
 export { MessageHeader, MessageView, SimpleMessageView };

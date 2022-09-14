@@ -11,6 +11,7 @@ import { setTopologyDetails } from "store/actions";
 
 import "components/common.css";
 import "pages/connection.css";
+import { Container, Box } from "@mui/material";
 
 const Connection = () => {
   const [isLoading, setIsLoading] = React.useState(false);
@@ -33,23 +34,17 @@ const Connection = () => {
   }
 
   return (
-    <div id="connection" className="row2">
+    <React.Fragment>
       <NavigationBar> </NavigationBar>
-      <div className="row3col3">
-        <ConnectionHeader />
-        <ConnectionForm onSubmit={onSubmit} />
-        {isLoading ? <Spinner /> : <br />}
-      </div>
-    </div>
+      <Container sx={{ height: "75%", mt: "5%" }}>
+        <Box height="100%" width="50%" sx={{ mx: "auto" }}>
+          <ConnectionForm onSubmit={onSubmit} />
+          {isLoading ? <Spinner /> : <br />}
+        </Box>
+      </Container>
+    </React.Fragment>
   );
 };
-
-const ConnectionHeader = () => (
-  <div id="connection-header" className="flex-row">
-    <span>Connect to Data Inspector</span>
-    <img src={WebIcon} alt="WebIcon" />
-  </div>
-);
 
 const Spinner = () => (
   <div id="loader">

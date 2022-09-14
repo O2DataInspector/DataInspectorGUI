@@ -7,10 +7,10 @@ import Router from "pages/Router";
 import reportWebVitals from "reportWebVitals";
 import reduce from "store/reducers";
 
-import '@fontsource/roboto/300.css';
-import '@fontsource/roboto/400.css';
-import '@fontsource/roboto/500.css';
-import '@fontsource/roboto/700.css';
+import "@fontsource/roboto/300.css";
+import "@fontsource/roboto/400.css";
+import "@fontsource/roboto/500.css";
+import "@fontsource/roboto/700.css";
 
 import "./index.css";
 

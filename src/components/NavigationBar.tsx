@@ -3,8 +3,9 @@ import React from "react";
 import * as Redux from "react-redux";
 import * as Router from "react-router-dom";
 import { Store } from "redux";
+import { Box, AppBar, Toolbar, Typography } from "@mui/material";
 
-import HomeIcon from "icons/home.svg";
+import LogoIcon from "icons/logo.svg";
 import { disconnect } from "store/actions";
 import { selectAddress } from "store/selectors";
 import State from "store/state";
@@ -13,21 +14,28 @@ type ContainerProps = {
   children: React.ReactNode;
 };
 
-import "./navigation-bar.css";
-import "components/common.css";
-
 const NavigationBar = (props: ContainerProps) => (
-  <div id="navigation-bar" className="inline-row">
+  <AppBar position="static">
+    <Toolbar sx={{ display: "flex" }}>
+      <Logo />
+      <Box sx={{ flexGrow: 1 }}>{props.children}</Box>
+    </Toolbar>
+  </AppBar>
+
+  /*   <div id="navigation-bar" className="inline-row">
     <Logo />
     <div id="navigation-buttons">{props.children}</div>
-  </div>
+  </div> */
 );
 
 const Logo = () => (
-  <div id="navigation-logo" className="flex-row">
-    <img src={HomeIcon} alt="HomeIcon" />
-    <span>Data Inspector</span>
-  </div>
+  <Box display="flex" sx={{ flexGrow: 1 }}>
+    <img src={LogoIcon} alt="Logo" width="5%" />
+    <Typography variant="h5" width="50%" sx={{ ml: "0.5em", my: "auto" }}>
+      Data Inspector
+    </Typography>
+  </Box>
+  //<div id="navigation-logo" className="flex-row">
 );
 
 const Disconnect = () => {

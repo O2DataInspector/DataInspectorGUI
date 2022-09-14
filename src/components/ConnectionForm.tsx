@@ -1,6 +1,15 @@
 import React from "react";
-import { ValidInvalid } from "components/common";
-import "./connection-form.css";
+import {
+  Container,
+  Button,
+  Paper,
+  TextField,
+  RadioGroup,
+  Radio,
+  FormLabel,
+  FormControl,
+  FormControlLabel,
+} from "@mui/material";
 
 interface ConnectionFormProps {
   onSubmit: (address: string) => void;
@@ -37,13 +46,26 @@ const ConnectionForm = ({ onSubmit }: ConnectionFormProps) => {
   };
 
   return (
-    <form id="connection-form" onSubmit={onSubmit_}>
-      <div className="row3">
-        <PortField key="port" onChange={setPort} />
-        <HostField onChange={setHost} />
-        <ConnectionButton hasError={state.hasError} />
-      </div>
-    </form>
+    <Paper
+      component="form"
+      onSubmit={onSubmit_}
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-evenly",
+        height: "50%",
+      }}
+    >
+      <HostField onChange={setHost} />
+      <PortField onChange={setPort} />
+      <Button
+        type="submit"
+        variant="contained"
+        sx={{ width: "50%", mx: "auto" }}
+      >
+        Connect
+      </Button>
+    </Paper>
   );
 };
 
@@ -71,13 +93,17 @@ const PortField = ({ onChange }: PortFieldProps) => {
   };
 
   return (
-    <div id="port-field">
-      <label>Enter analysis task&apos;s port:</label>
-      <ValidInvalid isValid={!hasError}>
-        <input type="text" placeholder="Port" onChange={onChange_} />
-      </ValidInvalid>
-      {hasError ? <span>Should be a number from 0 to 65535</span> : <br />}
-    </div>
+    <TextField
+      label="Port"
+      error={hasError}
+      onChange={onChange_}
+      helperText={
+        hasError ? "Should be a number from 0 to 65535" : "Analysis task's port"
+      }
+      variant="outlined"
+      inputProps={{ inputMode: "numeric", pattern: "[0-9]*" }}
+      sx={{ width: "50%", mx: "auto" }}
+    />
   );
 };
 
@@ -101,8 +127,8 @@ const HostField = ({ onChange }: HostFieldProps) => {
     address: localhost,
   });
 
-  const onChange_ = (event: React.ChangeEvent<HTMLInputElement>) => {
-    switch (event.currentTarget.name) {
+  const onRadioChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    switch (event.currentTarget.value) {
       case "local": {
         setState((state) => ({ ...state, hasError: false, isLocal: true }));
         onChange(localhost);
@@ -119,71 +145,42 @@ const HostField = ({ onChange }: HostFieldProps) => {
         onChange(hasNoError ? state.address : undefined);
         break;
       }
-      case "address": {
-        const value = event.currentTarget.value || undefined;
-        const hasNoError = value === undefined || IPregex.test(value);
-        setState((state) => ({
-          ...state,
-          hasError: !hasNoError,
-          address: value,
-        }));
-        onChange(hasNoError ? value : undefined);
-      }
     }
   };
 
+  const onAddressChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.currentTarget.value || undefined;
+    const hasNoError = value === undefined || IPregex.test(value);
+    setState((state) => ({
+      ...state,
+      hasError: !hasNoError,
+      address: value,
+    }));
+    onChange(hasNoError ? value : undefined);
+  };
+
   return (
-    <div id="host-field">
-      <label>Choose connection type:</label>
-      <RadioButton
-        name="local"
-        label="Local connection"
-        onChange={onChange_}
-        checked={state.isLocal}
-      />
-      <RadioButton
-        name="remote"
-        label="Remote connection"
-        onChange={onChange_}
-        checked={!state.isLocal}
-      />
-      <ValidInvalid isValid={!state.hasError}>
-        <input
-          type="text"
-          name="address"
-          placeholder="IPv4 address"
-          onChange={onChange_}
-          disabled={state.isLocal}
+    <Container sx={{ width: "75%" }}>
+      <FormControl>
+        <FormLabel>Connection Type</FormLabel>
+        <RadioGroup onChange={onRadioChange}>
+          <FormControlLabel value="local" control={<Radio />} label="Local" />
+          <FormControlLabel value="remote" control={<Radio />} label="Remote" />
+        </RadioGroup>
+      </FormControl>
+      <br />
+      {state.isLocal ? null : (
+        <TextField
+          label="Host address"
+          error={state.hasError}
+          onChange={onAddressChange}
+          helperText={state.hasError ? "Should be IPv4 address" : ""}
+          variant="outlined"
+          sx={{ width: "75%", ml: "12.5%" }}
         />
-      </ValidInvalid>
-      {state.hasError ? <span>Should be a valid IPv4 address</span> : <br />}
-    </div>
+      )}
+    </Container>
   );
 };
-
-interface ConnectionButtonProps {
-  hasError: boolean;
-}
-
-const ConnectionButton = ({ hasError }: ConnectionButtonProps) => (
-  <div id="connection-button">
-    {hasError ? <span>Improper values</span> : <br />}
-    <input type="submit" value="Connect" />
-  </div>
-);
-
-interface RadioButtonProps {
-  name: string;
-  label: string;
-  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  checked: boolean;
-}
-
-const RadioButton = ({ name, label, onChange, checked }: RadioButtonProps) => (
-  <label>
-    <input type="radio" name={name} onChange={onChange} checked={checked} />
-    {label}
-  </label>
-);
 
 export default ConnectionForm;

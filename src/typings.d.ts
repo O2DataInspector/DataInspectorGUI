@@ -1,1 +1,1 @@
-declare module "jsroot"
+declare module "jsroot";

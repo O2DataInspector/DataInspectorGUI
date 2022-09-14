@@ -3,7 +3,7 @@ type Url = string;
 enum DisplayMethod {
   Default,
   Raw,
-  Plot
+  Plot,
 }
 
 interface Message {
