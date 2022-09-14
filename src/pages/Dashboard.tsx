@@ -42,7 +42,7 @@ const Dashboard = ({ devices }: DashboardProps) => {
   }
 
   return (
-    <div id="dashboard" className="row2col2">
+    <div id="dashboard">
       <NavigationBar>
         <Buttons.SelectDevices />
         <Buttons.Disconnect />
