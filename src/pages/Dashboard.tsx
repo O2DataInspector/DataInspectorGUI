@@ -44,8 +44,8 @@ const Dashboard = ({ devices }: DashboardProps) => {
   return (
     <div id="dashboard">
       <NavigationBar>
-        <Buttons.SelectDevices />
         <Buttons.Disconnect />
+        <Buttons.SelectDevices />
       </NavigationBar>
       {devices.length ? (
         <NonEmptyDashboard devices={devices} />

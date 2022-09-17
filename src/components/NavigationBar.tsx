@@ -3,7 +3,7 @@ import React from "react";
 import * as Redux from "react-redux";
 import * as Router from "react-router-dom";
 import { Store } from "redux";
-import { Box, AppBar, Toolbar, Typography } from "@mui/material";
+import { Box, AppBar, Toolbar, Typography, Button, useTheme, createTheme, ThemeProvider } from "@mui/material";
 
 import LogoIcon from "icons/logo.svg";
 import { disconnect } from "store/actions";
@@ -14,19 +14,27 @@ type ContainerProps = {
   children: React.ReactNode;
 };
 
-const NavigationBar = (props: ContainerProps) => (
+const NavigationBar = (props: ContainerProps) => {
+  const theme = createTheme({
+    palette: {
+      primary: {
+        main: "#ffffff"
+      }
+    }
+  });
+
+
+  return (
   <AppBar position="static">
     <Toolbar sx={{ display: "flex" }}>
       <Logo />
-      <Box sx={{ flexGrow: 1 }}>{props.children}</Box>
+      <ThemeProvider theme={theme}>
+      <Box sx={{ flexGrow: 1, display: "flex", flexDirection: "row-reverse" }}>{props.children}</Box>
+      </ThemeProvider>
     </Toolbar>
   </AppBar>
-
-  /*   <div id="navigation-bar" className="inline-row">
-    <Logo />
-    <div id="navigation-buttons">{props.children}</div>
-  </div> */
 );
+};
 
 const Logo = () => (
   <Box display="flex" sx={{ flexGrow: 1 }}>
@@ -35,7 +43,6 @@ const Logo = () => (
       Data Inspector
     </Typography>
   </Box>
-  //<div id="navigation-logo" className="flex-row">
 );
 
 const Disconnect = () => {
@@ -52,9 +59,9 @@ const Disconnect = () => {
   }
 
   return (
-    <button id="disconnect" onClick={onClick}>
+    <Button variant="outlined" color="primary" onClick={onClick}>
       Disconnect
-    </button>
+    </Button>
   );
 };
 
@@ -66,9 +73,9 @@ const SelectDevices = () => {
   }
 
   return (
-    <button id="select-devices" onClick={onClick}>
+    <Button variant="outlined" onClick={onClick} sx={{mx: "1em"}}>
       Select Devices
-    </button>
+    </Button>
   );
 };
 
