@@ -5,14 +5,16 @@ import * as Router from "react-router-dom";
 
 import { MessageHeader, SimpleMessageView } from "components/Message";
 import NavigationBar, * as Buttons from "components/NavigationBar";
-import RefreshIcon from "icons/refresh.svg";
 import { setMessages } from "store/actions";
 import { selectAddress, selectSelectedDevices } from "store/selectors";
 import State, { Device, Message } from "store/state";
+import RefreshIcon from "@mui/icons-material/Refresh";
 
 import "components/common.css";
 import "pages/dashboard.css";
 import { Store } from "redux";
+import { Container, Box } from "@mui/system";
+import { Typography } from "@mui/material";
 
 interface DashboardProps {
   devices: Device[];
@@ -42,29 +44,35 @@ const Dashboard = ({ devices }: DashboardProps) => {
   }
 
   return (
-    <div id="dashboard">
+    <React.Fragment>
       <NavigationBar>
         <Buttons.Disconnect />
         <Buttons.SelectDevices />
       </NavigationBar>
-      {devices.length ? (
-        <NonEmptyDashboard devices={devices} />
-      ) : (
-        <EmptyDashboard />
-      )}
-      <div id="dashboard-refresh">
-        <img onClick={onRefresh} src={RefreshIcon} alt="RefreshIcon" />
-      </div>
-    </div>
+      <Container sx={{ height: "50%" }}>
+        {devices.length ? (
+          <NonEmptyDashboard devices={devices} />
+        ) : (
+          <EmptyDashboard />
+        )}
+        <RefreshIcon
+          onClick={onRefresh}
+          sx={{ fontSize: "5em", position: "absolute", top: "8%", right: "1%" }}
+        />
+      </Container>
+    </React.Fragment>
   );
 };
 
 const EmptyDashboard = () => (
-  <div id="dashboard-empty" className="row2">
-    <span>No devices to display</span>
-    <br />
-    <span>Refresh or select different devices to inspect</span>
-  </div>
+  <Box mt="20%">
+    <Typography align="center" variant="h2">
+      No devices to display
+    </Typography>
+    <Typography align="center" variant="h6" component="h3">
+      Refresh or select different devices to inspect
+    </Typography>
+  </Box>
 );
 
 const NonEmptyDashboard = ({ devices }: DashboardProps) => (

@@ -3,7 +3,16 @@ import React from "react";
 import * as Redux from "react-redux";
 import * as Router from "react-router-dom";
 import { Store } from "redux";
-import { Box, AppBar, Toolbar, Typography, Button, useTheme, createTheme, ThemeProvider } from "@mui/material";
+import {
+  Box,
+  AppBar,
+  Toolbar,
+  Typography,
+  Button,
+  useTheme,
+  createTheme,
+  ThemeProvider,
+} from "@mui/material";
 
 import LogoIcon from "icons/logo.svg";
 import { disconnect } from "store/actions";
@@ -18,22 +27,25 @@ const NavigationBar = (props: ContainerProps) => {
   const theme = createTheme({
     palette: {
       primary: {
-        main: "#ffffff"
-      }
-    }
+        main: "#ffffff",
+      },
+    },
   });
 
-
   return (
-  <AppBar position="static">
-    <Toolbar sx={{ display: "flex" }}>
-      <Logo />
-      <ThemeProvider theme={theme}>
-      <Box sx={{ flexGrow: 1, display: "flex", flexDirection: "row-reverse" }}>{props.children}</Box>
-      </ThemeProvider>
-    </Toolbar>
-  </AppBar>
-);
+    <AppBar position="static">
+      <Toolbar sx={{ display: "flex" }}>
+        <Logo />
+        <ThemeProvider theme={theme}>
+          <Box
+            sx={{ flexGrow: 1, display: "flex", flexDirection: "row-reverse" }}
+          >
+            {props.children}
+          </Box>
+        </ThemeProvider>
+      </Toolbar>
+    </AppBar>
+  );
 };
 
 const Logo = () => (
@@ -73,7 +85,7 @@ const SelectDevices = () => {
   }
 
   return (
-    <Button variant="outlined" onClick={onClick} sx={{mx: "1em"}}>
+    <Button variant="outlined" onClick={onClick} sx={{ mx: "1em" }}>
       Select Devices
     </Button>
   );

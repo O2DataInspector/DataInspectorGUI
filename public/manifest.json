@@ -7,10 +7,7 @@
       "sizes": "64x64 32x32 24x24 16x16",
       "type": "image/x-icon"
     },
-    { "src": "alice_favicon59.png",
-	"type": "image/png",
-	"sizes": "59x59"
-    },
+    { "src": "alice_favicon59.png", "type": "image/png", "sizes": "59x59" },
     {
       "src": "logo192.png",
       "type": "image/png",
