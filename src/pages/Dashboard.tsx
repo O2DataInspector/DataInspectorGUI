@@ -3,18 +3,16 @@ import React from "react";
 import * as Redux from "react-redux";
 import * as Router from "react-router-dom";
 
-import { MessageHeader, SimpleMessageView } from "components/Message";
 import NavigationBar, * as Buttons from "components/NavigationBar";
 import { setMessages } from "store/actions";
 import { selectAddress, selectSelectedDevices } from "store/selectors";
 import State, { Device, Message } from "store/state";
 import RefreshIcon from "@mui/icons-material/Refresh";
 
-import "components/common.css";
-import "pages/dashboard.css";
 import { Store } from "redux";
 import { Container, Box } from "@mui/system";
-import { Typography } from "@mui/material";
+import { Typography, Grid } from "@mui/material";
+import { Card, CardContent, CardActionArea } from "@mui/material";
 
 interface DashboardProps {
   devices: Device[];
@@ -76,11 +74,18 @@ const EmptyDashboard = () => (
 );
 
 const NonEmptyDashboard = ({ devices }: DashboardProps) => (
-  <div id="dashboard-non-empty" className="flex-row">
-    {devices.map((device) => (
-      <DeviceView key={device.name} device={device} />
+  <Grid
+    container
+    spacing={{ xs: 2, md: 3 }}
+    columns={{ xs: 4, sm: 8, md: 12 }}
+    pt="5%"
+  >
+    {devices.map((d) => (
+      <Grid item xs={2} sm={4} md={4} key={d.name}>
+        <DeviceView device={d} />
+      </Grid>
     ))}
-  </div>
+  </Grid>
 );
 
 interface DeviceViewProps {
@@ -99,12 +104,18 @@ const DeviceView = ({ device }: DeviceViewProps) => {
     return null;
   }
   return (
-    <div className="row3">
-      <MessageHeader device={device} />
-      <button id="dashboard-device-view" onClick={onClick}>
-        View
-      </button>
-    </div>
+    <Card>
+      <CardActionArea onClick={onClick}>
+        <CardContent>
+          <Typography gutterBottom variant="h5" component="div">
+            {device.name}
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            Device details placeholder
+          </Typography>
+        </CardContent>
+      </CardActionArea>
+    </Card>
   );
 };
 
