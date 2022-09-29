@@ -54,7 +54,9 @@
       "react-app/jest"
     ]
   },
-  "eslintIgnore": ["config-overrides.js"],
+  "eslintIgnore": [
+    "config-overrides.js"
+  ],
   "browserslist": {
     "production": [
       ">0.2%",

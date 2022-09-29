@@ -4,7 +4,8 @@ import * as Router from "react-router-dom";
 
 import { MessageHeader, MessageView } from "components/Message";
 import NavigationBar, * as Buttons from "components/NavigationBar";
-import ExitIcon from "icons/exit.svg";
+import ExitToAppIcon from "@mui/icons-material/ExitToApp";
+import { Box, Typography, Container, Paper, Divider } from "@mui/material";
 import { setDisplayed } from "store/actions";
 import State, { Device, Message } from "store/state";
 
@@ -23,16 +24,17 @@ const Overview = ({ maybeDevice }: OverviewProps) => {
   }
 
   return (
-    <div id="overview" className="row2col2">
+    <Box display="flex" flexDirection="column" height="100%">
       <NavigationBar>
-        <Buttons.SelectDevices />
         <Buttons.Disconnect />
+        <Buttons.SelectDevices />
       </NavigationBar>
       {maybeDevice ? <NonEmptyDevice device={maybeDevice} /> : <EmptyDevice />}
-      <div id="overview-exit">
-        <img onClick={onExit} src={ExitIcon} alt="ExitIcon" />
-      </div>
-    </div>
+      <ExitToAppIcon
+        onClick={onExit}
+        sx={{ fontSize: "5em", position: "absolute", top: "8%", right: "1%" }}
+      />
+    </Box>
   );
 };
 
@@ -50,23 +52,35 @@ const NonEmptyDevice = ({ device }: OverviewDeviceProps) => {
   }
 
   return (
-    <div id="overview-device" className="row2">
-      <MessageHeader device={device} />
-      <div id="overview-message" className="col2">
-        {message ? <MessageView message={message} /> : <EmptyMessage />}
-        <div id="overview-messages">
-          <span>Choose message:</span>
-          <br />
-          {device.messages.map((message) => (
-            <SelectionOption
-              key={message.id}
-              message={message}
-              onClick={onClick}
-            />
-          ))}
-        </div>
-      </div>
-    </div>
+    <Container sx={{ my: "2.5%", flex: 1 }}>
+      <Paper sx={{ height: "100%", display: "flex", flexDirection: "column" }}>
+        <MessageHeader device={device} />
+        <Container
+          sx={{
+            flex: 0.9,
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "stretch",
+            my: "2.5%",
+          }}
+        >
+          <Box flex="0.2">
+            <Typography align="center" variant="h5">
+              Select message:
+            </Typography>
+            {device.messages.map((message) => (
+              <SelectionOption
+                key={message.id}
+                message={message}
+                onClick={onClick}
+              />
+            ))}
+          </Box>
+          <hr style={{ flex: 0, marginLeft: "1em", marginRight: "2em" }} />
+          {message ? <MessageView message={message} /> : <EmptyMessage />}
+        </Container>
+      </Paper>
+    </Container>
   );
 };
 
@@ -87,14 +101,17 @@ const SelectionOption = ({ message, onClick }: SelectionOptionProps) => (
 );
 
 const EmptyDevice = () => (
-  <div id="overview-empty-device" className="row2">
-    <span>Device does not exist</span>
-    <br />
-    <span>Select a different device</span>
-  </div>
+  <Box mt="10%">
+    <Typography align="center" variant="h2">
+      Device does not exist
+    </Typography>
+    <Typography align="center" variant="h6" component="h3">
+      Please select different device to inspect
+    </Typography>
+  </Box>
 );
 
-const EmptyMessage = () => <div id="overview-empty-message"></div>;
+const EmptyMessage = () => <div />;
 
 interface DeviceNameProps {
   name: string;

@@ -2,10 +2,9 @@ import React from "react";
 import * as Redux from "react-redux";
 import { parse, draw } from "jsroot";
 
-import BytesTable from "components/BytesTable";
 import DeviceIcon from "icons/device.svg";
 import { Device, DisplayMethod, Message } from "store/state";
-
+import { Box, Typography, Toolbar } from "@mui/material";
 import "components/message.css";
 import { setDisplayMethod } from "store/actions";
 
@@ -14,10 +13,14 @@ interface MessageHeaderProps {
 }
 
 const MessageHeader = ({ device }: MessageHeaderProps) => (
-  <div id="device-header" className="flex-row">
-    <img src={DeviceIcon} alt="DeviceIcon" />
-    <span>{device.name}</span>
-  </div>
+  <Toolbar sx={{ backgroundColor: "#e0e0e0", flex: 0.1 }}>
+    <Box display="flex" width="100%">
+      <img src={DeviceIcon} alt="DeviceIcon" width="5%" />
+      <Typography variant="h5" width="50%" sx={{ ml: "0.5em", my: "auto" }}>
+        {device.name}
+      </Typography>
+    </Box>
+  </Toolbar>
 );
 
 interface MessageProps {
@@ -25,7 +28,7 @@ interface MessageProps {
 }
 
 const MessageView = ({ message }: MessageProps) => (
-  <div id="message-view">
+  <Box flex="0.8">
     {message.payload === undefined ? null : (
       <div id="display-selection">
         <span>Display method:</span>
@@ -33,17 +36,17 @@ const MessageView = ({ message }: MessageProps) => (
         <DisplaySelection message={message} />
       </div>
     )}
-    <span>Header</span>
+    <Typography variant="h5">Header</Typography>
     <hr />
     <Header message={message} />
-    <span>Payload</span>
+    <Typography variant="h5">Payload</Typography>
     <hr />
     <Payload message={message} />
-  </div>
+  </Box>
 );
 
 const Header = ({ message }: MessageProps) => (
-  <div id="header">
+  <div>
     <table>
       <tr>
         <td>Origin: {message.origin}</td>
@@ -126,34 +129,11 @@ const DisplaySelection = ({ message }: MessageProps) => {
 const Payload = ({ message }: MessageProps) => {
   return (
     // TODO: Provide proper display method for payload
-    <div id="message-payload">
+    <div>
       {message.payload ? displayPayload(message) : <span>empty payload</span>}
     </div>
   );
 };
-
-const SimpleMessageView = ({ message }: MessageProps) => (
-  <div id="message-view">
-    <span>Header</span>
-    <hr />
-    <SimpleHeader message={message} />
-    <span>Payload</span>
-    <hr />
-    <span>empty payload</span>
-  </div>
-);
-
-const SimpleHeader = ({ message }: MessageProps) => (
-  <div id="simple-header">
-    <span>Origin: {message.origin}</span>
-    <br />
-    <span>Description: {message.description}</span>
-    <br />
-    <span>Payload size: {message.payloadSize} B</span>
-    <br />
-    <span>Serialization: {message.payloadSerialization}</span>
-  </div>
-);
 
 function displayPayload(m: Message): JSX.Element {
   switch (m.payloadDisplay) {
@@ -170,4 +150,4 @@ function plotPayload(m: Message): JSX.Element {
   return <div>Message type does not support drawing.</div>;
 }
 
-export { MessageHeader, MessageView, SimpleMessageView };
+export { MessageHeader, MessageView };
