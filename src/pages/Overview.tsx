@@ -9,9 +9,6 @@ import { Box, Typography, Container, Paper, Divider } from "@mui/material";
 import { setDisplayed } from "store/actions";
 import State, { Device, Message } from "store/state";
 
-import "components/common.css";
-import "pages/overview.css";
-
 interface OverviewProps {
   maybeDevice: Device | undefined;
 }

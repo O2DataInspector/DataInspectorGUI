@@ -5,7 +5,6 @@ import { parse, draw } from "jsroot";
 import DeviceIcon from "icons/device.svg";
 import { Device, DisplayMethod, Message } from "store/state";
 import { Box, Typography, Toolbar } from "@mui/material";
-import "components/message.css";
 import { setDisplayMethod } from "store/actions";
 
 interface MessageHeaderProps {

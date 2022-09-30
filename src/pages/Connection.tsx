@@ -6,11 +6,8 @@ import * as Router from "react-router-dom";
 
 import ConnectionForm from "components/ConnectionForm";
 import NavigationBar from "components/NavigationBar";
-import WebIcon from "icons/web.svg";
 import { setTopologyDetails } from "store/actions";
 
-import "components/common.css";
-import "pages/connection.css";
 import { Container, Box } from "@mui/material";
 
 const Connection = () => {
