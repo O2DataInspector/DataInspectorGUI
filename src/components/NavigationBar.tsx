@@ -9,7 +9,6 @@ import {
   Toolbar,
   Typography,
   Button,
-  useTheme,
   createTheme,
   ThemeProvider,
 } from "@mui/material";

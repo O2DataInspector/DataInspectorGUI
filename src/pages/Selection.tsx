@@ -2,16 +2,15 @@ import React from "react";
 import DevicesSelection from "components/DevicesSelection";
 import NavigationBar, * as Buttons from "components/NavigationBar";
 
-import "components/common.css";
-import "pages/selection.css";
+import { Box } from "@mui/material";
 
 const Selection = () => (
-  <div id="selection" className="row2">
+  <Box display="flex" flexDirection="column" height="100%">
     <NavigationBar>
       <Buttons.Disconnect />
     </NavigationBar>
     <DevicesSelection />
-  </div>
+  </Box>
 );
 
 export default Selection;
