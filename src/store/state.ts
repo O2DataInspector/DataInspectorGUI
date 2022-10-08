@@ -23,7 +23,7 @@ interface Message {
   payloadParts: number;
   payloadSerialization: string;
   payloadSplitIndex: number;
-  payload: string | undefined;
+  payload: unknown;
   isDisplayed: boolean;
   payloadDisplay: DisplayMethod;
 }
@@ -32,6 +32,27 @@ interface Device {
   isSelected: boolean;
   name: string;
   messages: Message[];
+  ids: string[];
+  specs: DeviceSpec;
+}
+
+interface DeviceSpec {
+  rank: number,
+  nSlots: number,
+  inputTimesliceId: number, 
+  maxInputTimeslices: number,
+  inputs: DeviceIO[],
+  outputs: DeviceIO[],
+  forwards: DeviceIO[],
+}
+
+interface DeviceIO{
+  binding: string,
+  sourceChannel: string,
+  timeslice: number,
+  origin: string,
+  description: string,
+  subSpec: number
 }
 
 interface State {

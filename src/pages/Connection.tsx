@@ -6,17 +6,22 @@ import * as Router from "react-router-dom";
 import ConnectionForm from "components/ConnectionForm";
 import NavigationBar from "components/NavigationBar";
 import { setTopologyDetails } from "store/actions";
+import { Device } from "store/state";
 
 import { Container, Box } from "@mui/material";
+
+interface AvailableDevicesResponse {
+  devices: Device[]
+}
 
 const Connection = () => {
   const store = Redux.useStore();
   const history = Router.useHistory();
 
   function onSubmit(address: string) {
-    Axios.get(address + "/available-devices")
+    Axios.get<AvailableDevicesResponse>(address + "/available-devices")
       .then((response) => {
-        const devices = response.data.split("\n");
+        const devices = response.data.devices;
         store.dispatch(setTopologyDetails(address, devices));
         history.push("/dashboard");
       })

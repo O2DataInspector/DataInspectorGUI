@@ -18,22 +18,26 @@ interface DashboardProps {
   devices: Device[];
 }
 
+interface InspectedDataResponse {
+  messages: Message[]
+}
+
 const Dashboard = ({ devices }: DashboardProps) => {
   const store = Redux.useStore() as Store<State>;
 
   function onRefresh() {
     const address = selectAddress(store.getState());
     const selectedDevices = selectSelectedDevices(store.getState());
-    Axios.get(address + "/inspected-data", {
+    Axios.get<InspectedDataResponse>(address + "/inspected-data", {
       headers: {
         devices: selectedDevices.map((device) => device.name).join(","),
         count: "5",
       },
     })
-      .then((data) => {
-        if (data.data) {
-          console.log(data.data);
-          store.dispatch(setMessages(data.data as Message[]));
+      .then((response) => {
+        if (response.data.messages) {
+          console.log(response.data.messages);
+          store.dispatch(setMessages(response.data.messages));
         }
       })
       .catch((error) => {

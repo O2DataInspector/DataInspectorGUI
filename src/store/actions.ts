@@ -35,7 +35,7 @@ interface SetDisplayMethod {
 interface SetTopologyDetails {
   type: typeof SET_TOPOLOGY_DETAILS;
   analysisHost: Url;
-  devicesNames: string[];
+  devices: Device[];
 }
 
 type Action =
@@ -73,11 +73,11 @@ const setDisplayMethod = (message: Message, method: DisplayMethod): Action => ({
 
 const setTopologyDetails = (
   analysisHost: Url,
-  devicesNames: string[]
+  devices: Device[]
 ): Action => ({
   type: SET_TOPOLOGY_DETAILS,
   analysisHost: analysisHost,
-  devicesNames: devicesNames,
+  devices: devices,
 });
 
 export default Action;

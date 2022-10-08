@@ -72,11 +72,10 @@ function reduce(state = initialState, action: Action): State {
       return {
         ...state,
         analysisHost: action.analysisHost,
-        devices: action.devicesNames.map(
-          (name) =>
-            ({
+        devices: action.devices.map(
+          (device) =>
+            ({...device,
               isSelected: false,
-              name: name,
               messages: [],
             } as Device)
         ),

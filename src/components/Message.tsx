@@ -127,24 +127,23 @@ const DisplaySelection = ({ message }: MessageProps) => {
 
 const Payload = ({ message }: MessageProps) => {
   return (
-    // TODO: Provide proper display method for payload
-    <div>
-      {message.payload ? displayPayload(message) : <span>empty payload</span>}
+    <div id="message-payload">
+      <div>{message.payload ? displayPayload(message) : <span>empty payload</span>}</div>
     </div>
   );
 };
 
-function displayPayload(m: Message): JSX.Element {
+function displayPayload(m: Message) {
   switch (m.payloadDisplay) {
     case DisplayMethod.Plot:
       return plotPayload(m);
     default:
-      return <span>{m.payload}</span>;
+      return <span>{m.payload?.toString()}</span>;
   }
 }
 
 function plotPayload(m: Message): JSX.Element {
-  const obj = parse(m.payload);
+  const obj = parse(JSON.stringify(m.payload));
   draw("message-payload", obj, "colz");
   return <div>Message type does not support drawing.</div>;
 }
