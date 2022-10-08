@@ -71,10 +71,7 @@ const setDisplayMethod = (message: Message, method: DisplayMethod): Action => ({
   method: method,
 });
 
-const setTopologyDetails = (
-  analysisHost: Url,
-  devices: Device[]
-): Action => ({
+const setTopologyDetails = (analysisHost: Url, devices: Device[]): Action => ({
   type: SET_TOPOLOGY_DETAILS,
   analysisHost: analysisHost,
   devices: devices,

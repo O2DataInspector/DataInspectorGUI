@@ -5,7 +5,17 @@ import * as Router from "react-router-dom";
 import { MessageHeader, MessageView } from "components/Message";
 import NavigationBar, * as Buttons from "components/NavigationBar";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
-import { Box, Typography, Container, Paper, Divider } from "@mui/material";
+import {
+  Box,
+  Typography,
+  Container,
+  Paper,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemText,
+  Divider,
+} from "@mui/material";
 import { setDisplayed } from "store/actions";
 import State, { Device, Message } from "store/state";
 
@@ -47,7 +57,7 @@ const NonEmptyDevice = ({ device }: OverviewDeviceProps) => {
   function onClick(message: Message) {
     store.dispatch(setDisplayed(message));
   }
-
+  //TODO: Virtualize message selection list
   return (
     <Container sx={{ my: "2.5%", flex: 1 }}>
       <Paper sx={{ height: "100%", display: "flex", flexDirection: "column" }}>
@@ -65,13 +75,15 @@ const NonEmptyDevice = ({ device }: OverviewDeviceProps) => {
             <Typography align="center" variant="h5">
               Select message:
             </Typography>
-            {device.messages.map((message) => (
-              <SelectionOption
-                key={message.id}
-                message={message}
-                onClick={onClick}
-              />
-            ))}
+            <List>
+              {device.messages.map((message) => (
+                <SelectionOption
+                  key={message.id}
+                  message={message}
+                  onClick={onClick}
+                />
+              ))}
+            </List>
           </Box>
           <hr style={{ flex: 0, marginLeft: "1em", marginRight: "2em" }} />
           {message ? <MessageView message={message} /> : <EmptyMessage />}
@@ -87,14 +99,17 @@ interface SelectionOptionProps {
 }
 
 const SelectionOption = ({ message, onClick }: SelectionOptionProps) => (
-  <label className="block">
-    <input
-      type="checkbox"
-      onChange={() => onClick(message)}
-      checked={message.isDisplayed}
-    />
-    {message.id}
-  </label>
+  <React.Fragment>
+    <ListItem onClick={() => onClick(message)} disablePadding>
+      <ListItemButton>
+        <ListItemText
+          primary={message.id}
+          secondary={message.payloadSerialization}
+        />
+      </ListItemButton>
+    </ListItem>
+    <Divider />
+  </React.Fragment>
 );
 
 const EmptyDevice = () => (

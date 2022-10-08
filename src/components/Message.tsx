@@ -128,7 +128,9 @@ const DisplaySelection = ({ message }: MessageProps) => {
 const Payload = ({ message }: MessageProps) => {
   return (
     <div id="message-payload">
-      <div>{message.payload ? displayPayload(message) : <span>empty payload</span>}</div>
+      <div>
+        {message.payload ? displayPayload(message) : <span>empty payload</span>}
+      </div>
     </div>
   );
 };

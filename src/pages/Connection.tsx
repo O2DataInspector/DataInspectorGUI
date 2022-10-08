@@ -11,7 +11,7 @@ import { Device } from "store/state";
 import { Container, Box } from "@mui/material";
 
 interface AvailableDevicesResponse {
-  devices: Device[]
+  devices: Device[];
 }
 
 const Connection = () => {

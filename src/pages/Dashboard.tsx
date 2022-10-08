@@ -19,7 +19,7 @@ interface DashboardProps {
 }
 
 interface InspectedDataResponse {
-  messages: Message[]
+  messages: Message[];
 }
 
 const Dashboard = ({ devices }: DashboardProps) => {

@@ -29,30 +29,31 @@ interface Message {
 }
 
 interface Device {
-  isSelected: boolean;
+  isSelected: boolean; //remove
   name: string;
-  messages: Message[];
+  messages: Message[]; //remove
   ids: string[];
   specs: DeviceSpec;
+  displayedMessage: string;
 }
 
 interface DeviceSpec {
-  rank: number,
-  nSlots: number,
-  inputTimesliceId: number, 
-  maxInputTimeslices: number,
-  inputs: DeviceIO[],
-  outputs: DeviceIO[],
-  forwards: DeviceIO[],
+  rank: number;
+  nSlots: number;
+  inputTimesliceId: number;
+  maxInputTimeslices: number;
+  inputs: DeviceIO[];
+  outputs: DeviceIO[];
+  forwards: DeviceIO[];
 }
 
-interface DeviceIO{
-  binding: string,
-  sourceChannel: string,
-  timeslice: number,
-  origin: string,
-  description: string,
-  subSpec: number
+interface DeviceIO {
+  binding: string;
+  sourceChannel: string;
+  timeslice: number;
+  origin: string;
+  description: string;
+  subSpec: number;
 }
 
 interface State {

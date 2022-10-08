@@ -73,11 +73,7 @@ function reduce(state = initialState, action: Action): State {
         ...state,
         analysisHost: action.analysisHost,
         devices: action.devices.map(
-          (device) =>
-            ({...device,
-              isSelected: false,
-              messages: [],
-            } as Device)
+          (device) => ({ ...device, isSelected: false, messages: [] } as Device)
         ),
       };
     default:
