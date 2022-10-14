@@ -1,11 +1,16 @@
 import React from "react";
-import * as Redux from "react-redux";
-import { parse, draw } from "jsroot";
+import { parse, draw, cleanup, resize } from "jsroot";
 
 import DeviceIcon from "icons/device.svg";
 import { Device, DisplayMethod, Message } from "store/state";
-import { Box, Typography, Toolbar } from "@mui/material";
-import { setDisplayMethod } from "store/actions";
+import {
+  Box,
+  Typography,
+  Toolbar,
+  ToggleButton,
+  ToggleButtonGroup,
+  Stack,
+} from "@mui/material";
 
 interface MessageHeaderProps {
   device: Device;
@@ -26,23 +31,18 @@ interface MessageProps {
   message: Message;
 }
 
-const MessageView = ({ message }: MessageProps) => (
-  <Box flex="0.8">
-    {message.payload === undefined ? null : (
-      <div id="display-selection">
-        <span>Display method:</span>
-        <hr />
-        <DisplaySelection message={message} />
-      </div>
-    )}
-    <Typography variant="h5">Header</Typography>
-    <hr />
-    <Header message={message} />
-    <Typography variant="h5">Payload</Typography>
-    <hr />
-    <Payload message={message} />
-  </Box>
-);
+const MessageView = ({ message }: MessageProps) => {
+  return (
+    <Box flex="0.8">
+      <Typography variant="h5">Header</Typography>
+      <hr />
+      <Header message={message} />
+      <Typography variant="h5">Payload</Typography>
+      <hr />
+      <Payload message={message} />
+    </Box>
+  );
+};
 
 const Header = ({ message }: MessageProps) => (
   <div>
@@ -81,62 +81,133 @@ const Header = ({ message }: MessageProps) => (
   </div>
 );
 
-const DisplaySelection = ({ message }: MessageProps) => {
-  const store = Redux.useStore();
+interface DisplaySelectionProps {
+  message: Message;
+  displayMethod: DisplayMethod;
+  setDisplayMethod: React.Dispatch<React.SetStateAction<DisplayMethod>>;
+}
 
-  function onClick(event: React.MouseEvent<HTMLInputElement, MouseEvent>) {
-    const method =
-      event.currentTarget.name === "plot"
-        ? DisplayMethod.Plot
-        : DisplayMethod.Raw;
-    store.dispatch(setDisplayMethod(message, method));
-  }
+const DisplaySelection = ({
+  message,
+  displayMethod,
+  setDisplayMethod,
+}: DisplaySelectionProps) => {
+  const handleChange = (
+    event: React.MouseEvent<HTMLElement>,
+    newValue: string
+  ) => {
+    if (displayMethod === DisplayMethod.Plot) {
+      cleanup("message-payload");
+    }
+
+    let newDisplayMethod = DisplayMethod.Default;
+    switch (newValue) {
+      case "raw":
+        newDisplayMethod = DisplayMethod.Raw;
+        break;
+      case "plot":
+        newDisplayMethod = DisplayMethod.Plot;
+        break;
+    }
+    setDisplayMethod(newDisplayMethod);
+  };
 
   return (
-    <div>
-      <label>
-        <input
-          type="checkbox"
-          name="default"
-          onClick={onClick}
-          checked={message.payloadDisplay === DisplayMethod.Default}
-        />
+    <ToggleButtonGroup
+      color="primary"
+      value={displayMethod}
+      exclusive
+      onChange={handleChange}
+      aria-label="Display Method"
+      fullWidth
+    >
+      <ToggleButton value="default">
         Default ({message.payloadSerialization})
-      </label>
-      <label>
-        <input
-          type="checkbox"
-          name="raw"
-          onClick={onClick}
-          checked={message.payloadDisplay === DisplayMethod.Raw}
-        />
-        Raw
-      </label>
-      <label>
-        <input
-          type={message.payloadSerialization === "ROOT" ? "checkbox" : "hidden"}
-          name="plot"
-          onClick={onClick}
-          checked={message.payloadDisplay === DisplayMethod.Plot}
-        />
-        Plot
-      </label>
-    </div>
+      </ToggleButton>
+      <ToggleButton value="raw">Raw</ToggleButton>
+      {message.payloadSerialization === "ROOT" ? (
+        <ToggleButton value="plot">Plot</ToggleButton>
+      ) : null}
+    </ToggleButtonGroup>
   );
 };
+
+interface PayloadProps {
+  message: Message;
+  displayMethod: DisplayMethod;
+  setDisplayMethod: React.Dispatch<React.SetStateAction<DisplayMethod>>;
+}
 
 const Payload = ({ message }: MessageProps) => {
-  return (
-    <div id="message-payload">
-      <div>
-        {message.payload ? displayPayload(message) : <span>empty payload</span>}
-      </div>
-    </div>
+  const [displayMethod, setDisplayMethod] = React.useState(DisplayMethod.Plot);
+  React.useEffect(() => {
+    const obj = parse(JSON.stringify(message.payload));
+    draw("message-payload", obj, "colz");
+    resize("message-payload");
+    console.log("xD");
+  }, []);
+
+  const handleChange = (
+    event: React.MouseEvent<HTMLElement>,
+    newValue: string
+  ) => {
+    let newDisplayMethod = DisplayMethod.Default;
+    switch (newValue) {
+      case "raw":
+        newDisplayMethod = DisplayMethod.Raw;
+        break;
+      case "plot":
+        newDisplayMethod = DisplayMethod.Plot;
+        break;
+    }
+    setDisplayMethod(newDisplayMethod);
+  };
+
+  return message.payload === undefined || message.payload === null ? (
+    <span>Empty payload</span>
+  ) : (
+    <Stack height="50%" spacing={4}>
+      <ToggleButtonGroup
+        color="primary"
+        value={displayMethod}
+        exclusive
+        onChange={handleChange}
+        aria-label="Display Method"
+        fullWidth
+      >
+        <ToggleButton value="default">
+          Default ({message.payloadSerialization})
+        </ToggleButton>
+        <ToggleButton value="raw">Raw</ToggleButton>
+        {message.payloadSerialization === "ROOT" ? (
+          <ToggleButton value="plot">Plot</ToggleButton>
+        ) : null}
+      </ToggleButtonGroup>
+      <Box
+        maxWidth="75%"
+        overflow="scroll"
+        display={displayMethod === DisplayMethod.Default ? "block" : "none"}
+      >
+        {JSON.stringify(message.payload)}
+      </Box>
+      <Box display={displayMethod === DisplayMethod.Raw ? "block" : "none"}>
+        RAW
+      </Box>
+      <Box
+        height="50%"
+        width="auto"
+        id="message-payload"
+        display={displayMethod === DisplayMethod.Plot ? "block" : "none"}
+        sx={{ flex: 1 }}
+      >
+        Message type does not support plotting.
+      </Box>
+    </Stack>
   );
 };
 
-function displayPayload(m: Message) {
-  switch (m.payloadDisplay) {
+function displayPayload(m: Message, displayMethod: DisplayMethod) {
+  switch (displayMethod) {
     case DisplayMethod.Plot:
       return plotPayload(m);
     default:

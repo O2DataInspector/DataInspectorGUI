@@ -59,7 +59,7 @@ const NonEmptyDevice = ({ device }: OverviewDeviceProps) => {
   }
   //TODO: Virtualize message selection list
   return (
-    <Container sx={{ my: "2.5%", flex: 1 }}>
+    <Container sx={{ my: "2.5%", flex: 1, maxHeight: "80%" }}>
       <Paper sx={{ height: "100%", display: "flex", flexDirection: "column" }}>
         <MessageHeader device={device} />
         <Container
@@ -69,13 +69,14 @@ const NonEmptyDevice = ({ device }: OverviewDeviceProps) => {
             flexDirection: "row",
             alignItems: "stretch",
             my: "2.5%",
+            maxHeight: "80%",
           }}
         >
-          <Box flex="0.2">
+          <Box flex="0.2" maxHeight="90%">
             <Typography align="center" variant="h5">
               Select message:
             </Typography>
-            <List>
+            <List sx={{ my: "1em", maxHeight: "90%", overflow: "scroll" }}>
               {device.messages.map((message) => (
                 <SelectionOption
                   key={message.id}
