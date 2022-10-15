@@ -1,9 +1,15 @@
 import Action, * as Actions from "store/actions";
-import State, { Device, DisplayMethod, Message } from "store/state";
+import State, {
+  Device,
+  DisplayMethod,
+  Message,
+  MessageSummary,
+} from "store/state";
 
 const initialState: State = {
   analysisHost: undefined,
   devices: [],
+  lastMessageId: undefined,
 };
 
 function reduce(state = initialState, action: Action): State {
@@ -13,23 +19,22 @@ function reduce(state = initialState, action: Action): State {
     case Actions.SET_DEVICES:
       return { ...state, devices: action.devices };
     case Actions.SET_MESSAGES: {
-      const messagesMap = mapToDevicesNames(action.messages);
-      return {
-        ...state,
-        devices: state.devices.map(
-          (device) =>
-            ({
+      if (action.messages.length > 0) {
+        const messagesMap = mapToDevicesNames(action.messages);
+        return {
+          ...state,
+          lastMessageId: action.messages.at(-1)?.id,
+          devices: state.devices.map((device) => {
+            const newMessages = messagesMap.get(device.name);
+            return {
               ...device,
-              messages: [
-                ...device.messages.map((message) => ({
-                  ...message,
-                  isDisplayed: false,
-                })),
-                ...(messagesMap.get(device.name) || []),
-              ],
-            } as Device)
-        ),
-      };
+              ids: device.ids.concat(
+                newMessages === undefined ? [] : newMessages
+              ),
+            } as Device;
+          }),
+        };
+      } else return state;
     }
     case Actions.SET_DISPLAYED:
       return {
@@ -81,27 +86,14 @@ function reduce(state = initialState, action: Action): State {
   }
 }
 
-function mapToDevicesNames(messages: Message[]): Map<string, Message[]> {
-  const result = new Map<string, Message[]>();
-  const countersMap = new Map<string, number>();
-  messages.forEach((message) => {
-    const counter = countersMap.get(message.sender) || 0;
-    countersMap.set(message.sender, counter + 1);
-    const currentMessages = result.get(message.sender) || [];
-    const timestamp = Date.now().toString() + "_" + counter.toString();
-    result.set(message.sender, [
-      ...currentMessages.map((currentMessage) => ({
-        ...currentMessage,
-        isDisplayed: false,
-      })),
-      {
-        ...message,
-        id: timestamp,
-        isDisplayed: true,
-        payloadDisplay: DisplayMethod.Default,
-      } as Message,
-    ]);
-  });
+// returns mapping from device name to array of message ids
+function mapToDevicesNames(messages: MessageSummary[]): Map<string, string[]> {
+  const result = new Map<string, string[]>();
+  messages.forEach((m) =>
+    result.has(m.device)
+      ? result.get(m.device)?.push(m.id)
+      : result.set(m.device, [m.id])
+  );
   return result;
 }
 

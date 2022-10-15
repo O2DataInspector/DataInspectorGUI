@@ -1,4 +1,10 @@
-import { Device, DisplayMethod, Message, Url } from "store/state";
+import {
+  Device,
+  DisplayMethod,
+  Message,
+  Url,
+  MessageSummary,
+} from "store/state";
 
 const DISCONNECT = "DISCONNECT";
 const SET_DEVICES = "SET_DEVICES";
@@ -18,7 +24,7 @@ interface SetDevices {
 
 interface SetMessages {
   type: typeof SET_MESSAGES;
-  messages: Message[];
+  messages: MessageSummary[];
 }
 
 interface SetDisplayed {
@@ -55,7 +61,7 @@ const setDevices = (devices: Device[]): Action => ({
   devices: devices,
 });
 
-const setMessages = (messages: Message[]): Action => ({
+const setMessages = (messages: MessageSummary[]): Action => ({
   type: SET_MESSAGES,
   messages: messages,
 });

@@ -1,49 +1,22 @@
-import Axios from "axios";
 import React from "react";
 import * as Redux from "react-redux";
 
 import NavigationBar, * as Buttons from "components/NavigationBar";
 import DeviceView from "components/DeviceView";
-import { setMessages } from "store/actions";
-import { selectAddress, selectSelectedDevices } from "store/selectors";
 import State, { Device, Message } from "store/state";
-import RefreshIcon from "@mui/icons-material/Refresh";
 
 import { Store } from "redux";
 import { Container, Box } from "@mui/system";
 import { Typography, Grid } from "@mui/material";
 import MenuTabs from "components/MenuTabs";
+import UpdateButtons from "components/UpdateButtons";
 
 interface DashboardProps {
   devices: Device[];
 }
 
-interface InspectedDataResponse {
-  messages: Message[];
-}
-
 const Dashboard = ({ devices }: DashboardProps) => {
   const store = Redux.useStore() as Store<State>;
-
-  function onRefresh() {
-    const address = selectAddress(store.getState());
-    const selectedDevices = selectSelectedDevices(store.getState());
-    Axios.get<InspectedDataResponse>(address + "/inspected-data", {
-      headers: {
-        devices: selectedDevices.map((device) => device.name).join(","),
-        count: "5",
-      },
-    })
-      .then((response) => {
-        if (response.data.messages) {
-          console.log(response.data.messages);
-          store.dispatch(setMessages(response.data.messages));
-        }
-      })
-      .catch((error) => {
-        alert("Failed to refresh the messages: " + error);
-      });
-  }
 
   return (
     <React.Fragment>
@@ -58,10 +31,7 @@ const Dashboard = ({ devices }: DashboardProps) => {
         ) : (
           <EmptyDashboard />
         )}
-        <RefreshIcon
-          onClick={onRefresh}
-          sx={{ fontSize: "5em", position: "absolute", top: "8%", right: "1%" }}
-        />
+        <UpdateButtons />
       </Container>
     </React.Fragment>
   );
@@ -94,7 +64,7 @@ const NonEmptyDashboard = ({ devices }: DashboardProps) => (
 );
 
 const mapState = (state: State) => ({
-  devices: state.devices.filter((device) => device.messages.length),
+  devices: state.devices.filter(d => d.isSelected)
 });
 
 export default Redux.connect(mapState)(Dashboard);
