@@ -3,6 +3,7 @@ import State, {
   Device,
   DisplayMethod,
   Message,
+  MessageMap,
   MessageSummary,
 } from "store/state";
 
@@ -36,51 +37,32 @@ function reduce(state = initialState, action: Action): State {
         };
       } else return state;
     }
-    case Actions.SET_DISPLAYED:
-      return {
-        ...state,
-        devices: state.devices.map((device) => {
-          if (device.name !== action.message.sender) {
-            return device;
-          }
-          return {
-            ...device,
-            messages: device.messages.map((message) => ({
-              ...message,
-              isDisplayed: message === action.message,
-            })),
-          };
-        }),
-      };
-    case Actions.SET_DISPLAY_METHOD:
-      return {
-        ...state,
-        devices: state.devices.map((device) => {
-          if (device.name !== action.message.sender) {
-            return device;
-          }
-          return {
-            ...device,
-            messages: device.messages.map((message) => {
-              if (message !== action.message) {
-                return message;
-              }
-              return {
-                ...message,
-                payloadDisplay: action.method,
-              };
-            }),
-          };
-        }),
-      };
     case Actions.SET_TOPOLOGY_DETAILS:
       return {
         ...state,
         analysisHost: action.analysisHost,
         devices: action.devices.map(
-          (device) => ({ ...device, isSelected: false, messages: [] } as Device)
+          (device) => ({ ...device, isSelected: false, messages: {} as MessageMap, ids: []} as Device)
         ),
       };
+    case Actions.UPDATE_DEVICE_MESSAGE:
+      return {
+        ...state,
+        devices: state.devices.map((device) => {
+          if (device.name !== action.deviceName) {
+            return device;
+          }
+          else{
+            const messageId = action.messageId;
+            const updatedMessages = {...device.messages, messageId: action.message} as MessageMap;
+                      return {
+            ...device,
+            displayedMessage: action.message,
+            messages: updatedMessages
+            };
+          }
+          })
+          };
     default:
       return state;
   }

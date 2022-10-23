@@ -36,10 +36,10 @@ interface MessageSummary {
 interface Device {
   isSelected: boolean; //remove
   name: string;
-  messages: Message[]; //remove
+  messages: MessageMap;
   ids: string[];
   specs: DeviceSpec;
-  displayedMessage: string;
+  displayedMessage: Message;
 }
 
 interface DeviceSpec {
@@ -61,6 +61,10 @@ interface DeviceIO {
   subSpec: number;
 }
 
+type MessageMap = {
+    [key: string]: Message;
+};
+
 interface State {
   analysisHost: Url | undefined;
   devices: Device[];
@@ -69,4 +73,4 @@ interface State {
 
 export default State;
 export { DisplayMethod };
-export type { Device, Message, Url, MessageSummary };
+export type { Device, Message, Url, MessageSummary, MessageMap };
