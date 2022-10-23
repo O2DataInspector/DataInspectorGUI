@@ -1,5 +1,5 @@
 import React from "react";
-import { parse, draw, cleanup, resize } from "jsroot";
+import { parse, redraw, cleanup, resize } from "jsroot";
 
 import DeviceIcon from "icons/device.svg";
 import { Device, DisplayMethod, Message } from "store/state";
@@ -7,10 +7,11 @@ import {
   Box,
   Typography,
   Toolbar,
-  ToggleButton,
-  ToggleButtonGroup,
+  ButtonGroup,
   Stack,
+  Button,
 } from "@mui/material";
+import { RootModal } from "./RootPlot";
 
 interface MessageHeaderProps {
   device: Device;
@@ -81,108 +82,43 @@ const Header = ({ message }: MessageProps) => (
   </div>
 );
 
-interface DisplaySelectionProps {
-  message: Message;
-  displayMethod: DisplayMethod;
-  setDisplayMethod: React.Dispatch<React.SetStateAction<DisplayMethod>>;
-}
-
-const DisplaySelection = ({
-  message,
-  displayMethod,
-  setDisplayMethod,
-}: DisplaySelectionProps) => {
-  const handleChange = (
-    event: React.MouseEvent<HTMLElement>,
-    newValue: string
-  ) => {
-    if (displayMethod === DisplayMethod.Plot) {
-      cleanup("message-payload");
-    }
-
-    let newDisplayMethod = DisplayMethod.Default;
-    switch (newValue) {
-      case "raw":
-        newDisplayMethod = DisplayMethod.Raw;
-        break;
-      case "plot":
-        newDisplayMethod = DisplayMethod.Plot;
-        break;
-    }
-    setDisplayMethod(newDisplayMethod);
-  };
-
-  return (
-    <ToggleButtonGroup
-      color="primary"
-      value={displayMethod}
-      exclusive
-      onChange={handleChange}
-      aria-label="Display Method"
-      fullWidth
-    >
-      <ToggleButton value="default">
-        Default ({message.payloadSerialization})
-      </ToggleButton>
-      <ToggleButton value="raw">Raw</ToggleButton>
-      {message.payloadSerialization === "ROOT" ? (
-        <ToggleButton value="plot">Plot</ToggleButton>
-      ) : null}
-    </ToggleButtonGroup>
-  );
-};
-
-interface PayloadProps {
-  message: Message;
-  displayMethod: DisplayMethod;
-  setDisplayMethod: React.Dispatch<React.SetStateAction<DisplayMethod>>;
-}
-
 const Payload = ({ message }: MessageProps) => {
-  const [displayMethod, setDisplayMethod] = React.useState(DisplayMethod.Plot);
-  React.useEffect(() => {
-    const obj = parse(JSON.stringify(message.payload));
-    draw("message-payload", obj, "colz");
-    resize("message-payload");
-    console.log("xD");
-  }, []);
+  const [displayMethod, setDisplayMethod] = React.useState(
+    DisplayMethod.Default
+  );
+  const [open, setOpen] = React.useState(false);
 
-  const handleChange = (
-    event: React.MouseEvent<HTMLElement>,
-    newValue: string
-  ) => {
-    let newDisplayMethod = DisplayMethod.Default;
-    switch (newValue) {
-      case "raw":
-        newDisplayMethod = DisplayMethod.Raw;
-        break;
-      case "plot":
-        newDisplayMethod = DisplayMethod.Plot;
-        break;
+  const handleOpen = () => {
+    setOpen(true);
+    const obj = parse(JSON.stringify(message.payload));
+    console.log(document.getElementById("root-plot"));
+    try {
+      redraw("root-plot", obj, "colz");
+      resize("root-plot");
+    } catch (error) {
+      console.log(error);
     }
-    setDisplayMethod(newDisplayMethod);
+  };
+  const handleClose = () => {
+    cleanup("root-plot");
+    setOpen(false);
   };
 
   return message.payload === undefined || message.payload === null ? (
     <span>Empty payload</span>
   ) : (
     <Stack height="50%" spacing={4}>
-      <ToggleButtonGroup
-        color="primary"
-        value={displayMethod}
-        exclusive
-        onChange={handleChange}
-        aria-label="Display Method"
-        fullWidth
-      >
-        <ToggleButton value="default">
+      <ButtonGroup color="inherit" fullWidth>
+        <Button onClick={() => setDisplayMethod(DisplayMethod.Default)}>
           Default ({message.payloadSerialization})
-        </ToggleButton>
-        <ToggleButton value="raw">Raw</ToggleButton>
-        {message.payloadSerialization === "ROOT" ? (
-          <ToggleButton value="plot">Plot</ToggleButton>
-        ) : null}
-      </ToggleButtonGroup>
+        </Button>
+        <Button onClick={() => setDisplayMethod(DisplayMethod.Raw)}>Raw</Button>
+        {message.payloadSerialization === "ROOT" && (
+          <Button variant="outlined" onClick={handleOpen}>
+            Plot
+          </Button>
+        )}
+      </ButtonGroup>
       <Box
         maxWidth="75%"
         overflow="scroll"
@@ -193,32 +129,9 @@ const Payload = ({ message }: MessageProps) => {
       <Box display={displayMethod === DisplayMethod.Raw ? "block" : "none"}>
         RAW
       </Box>
-      <Box
-        height="50%"
-        width="auto"
-        id="message-payload"
-        display={displayMethod === DisplayMethod.Plot ? "block" : "none"}
-        sx={{ flex: 1 }}
-      >
-        Message type does not support plotting.
-      </Box>
+      <RootModal message={message} open={open} handleClose={handleClose} />
     </Stack>
   );
 };
-
-function displayPayload(m: Message, displayMethod: DisplayMethod) {
-  switch (displayMethod) {
-    case DisplayMethod.Plot:
-      return plotPayload(m);
-    default:
-      return <span>{m.payload?.toString()}</span>;
-  }
-}
-
-function plotPayload(m: Message): JSX.Element {
-  const obj = parse(JSON.stringify(m.payload));
-  draw("message-payload", obj, "colz");
-  return <div>Message type does not support drawing.</div>;
-}
 
 export { MessageHeader, MessageView };
