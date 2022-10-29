@@ -122,9 +122,8 @@ const Payload = ({ message }: MessageProps) => {
       <Box
         overflow="scroll"
         display={displayMethod === DisplayMethod.Default ? "block" : "none"}
-      ><pre>
-        {JSON.stringify(message.payload, null, '\t')}
-      </pre>
+      >
+        <pre>{JSON.stringify(message.payload, null, "\t")}</pre>
       </Box>
       <Box display={displayMethod === DisplayMethod.Raw ? "block" : "none"}>
         RAW

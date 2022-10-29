@@ -1,9 +1,9 @@
 import Axios from "axios";
 import React from "react";
 import * as Redux from "react-redux";
-import * as Router from "react-router-dom";
 
 import NavigationBar, * as Buttons from "components/NavigationBar";
+import DeviceView from "components/DeviceView";
 import { setMessages } from "store/actions";
 import { selectAddress, selectSelectedDevices } from "store/selectors";
 import State, { Device, Message } from "store/state";
@@ -12,7 +12,6 @@ import RefreshIcon from "@mui/icons-material/Refresh";
 import { Store } from "redux";
 import { Container, Box } from "@mui/system";
 import { Typography, Grid } from "@mui/material";
-import { Card, CardContent, CardActionArea } from "@mui/material";
 
 interface DashboardProps {
   devices: Device[];
@@ -91,37 +90,6 @@ const NonEmptyDashboard = ({ devices }: DashboardProps) => (
     ))}
   </Grid>
 );
-
-interface DeviceViewProps {
-  device: Device;
-}
-
-const DeviceView = ({ device }: DeviceViewProps) => {
-  const message = device.messages.find((message) => message.isDisplayed);
-  const history = Router.useHistory();
-
-  function onClick() {
-    history.push(`/overview/${device.name}`);
-  }
-
-  if (message === undefined) {
-    return null;
-  }
-  return (
-    <Card>
-      <CardActionArea onClick={onClick}>
-        <CardContent>
-          <Typography gutterBottom variant="h5" component="div">
-            {device.name}
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
-            Device details placeholder
-          </Typography>
-        </CardContent>
-      </CardActionArea>
-    </Card>
-  );
-};
 
 const mapState = (state: State) => ({
   devices: state.devices.filter((device) => device.messages.length),
