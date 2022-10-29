@@ -59,7 +59,7 @@ const NonEmptyDevice = ({ device }: OverviewDeviceProps) => {
     let newMessage = device.messages.messageId;
     if (newMessage === undefined){
       const address = selectAddress(store.getState());
-    Axios.get(address + "/message", {
+    Axios.get(address + "/messages", {
       headers: {
         id: messageId
       },

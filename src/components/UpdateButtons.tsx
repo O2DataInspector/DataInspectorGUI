@@ -35,7 +35,7 @@ export default function UpdateButtons() {
     const address = selectAddress(store.getState());
     const selectedDevices = selectSelectedDevices(store.getState());
     const lastMessageId = selectLastMessageId(store.getState());
-    Axios.get(address + "/update-messages", {
+    Axios.get(address + "/messages/newer", {
       headers: {
         devices: selectedDevices.map((device) => device.name).join(","),
         id: lastMessageId ? lastMessageId : 0,
@@ -56,7 +56,7 @@ export default function UpdateButtons() {
     const address = selectAddress(store.getState());
     const selectedDevices = selectSelectedDevices(store.getState());
     const lastMessageId = selectLastMessageId(store.getState());
-    Axios.get(address + "/step-update-messages", {
+    Axios.get(address + "/messages/newer", {
       headers: {
         devices: selectedDevices.map((device) => device.name).join(","),
         id: lastMessageId ? lastMessageId : 0,
