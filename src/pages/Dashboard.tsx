@@ -12,6 +12,7 @@ import RefreshIcon from "@mui/icons-material/Refresh";
 import { Store } from "redux";
 import { Container, Box } from "@mui/system";
 import { Typography, Grid } from "@mui/material";
+import MenuTabs from "components/MenuTabs";
 
 interface DashboardProps {
   devices: Device[];
@@ -51,6 +52,7 @@ const Dashboard = ({ devices }: DashboardProps) => {
         <Buttons.SelectDevices />
       </NavigationBar>
       <Container sx={{ height: "50%" }}>
+      <MenuTabs />
         {devices.length ? (
           <NonEmptyDashboard devices={devices} />
         ) : (

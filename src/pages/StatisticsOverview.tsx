@@ -2,6 +2,7 @@ import React from "react";
 
 import NavigationBar, * as Buttons from "components/NavigationBar";
 import { Stack, Container } from "@mui/material";
+import MenuTabs from "components/MenuTabs";
 
 const StatisticsOverview = () => {
   return (
@@ -11,7 +12,7 @@ const StatisticsOverview = () => {
         <Buttons.SelectDevices />
       </NavigationBar>
       <Container sx={{flex:1}}>
-
+      <MenuTabs/>
       </Container>
     </Stack>
   );
