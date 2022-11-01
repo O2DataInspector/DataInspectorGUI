@@ -52,7 +52,7 @@ const Dashboard = ({ devices }: DashboardProps) => {
         <Buttons.SelectDevices />
       </NavigationBar>
       <Container sx={{ height: "50%" }}>
-      <MenuTabs />
+        <MenuTabs />
         {devices.length ? (
           <NonEmptyDashboard devices={devices} />
         ) : (

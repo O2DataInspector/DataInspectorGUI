@@ -15,14 +15,24 @@ import { Tabs, Tab } from "@mui/material";
 import { Card, CardContent, CardActionArea } from "@mui/material";
 
 const MenuTabs = () => {
-    const location = Router.useLocation();
+  const location = Router.useLocation();
 
-    return (
-<Tabs value={location.pathname} variant="fullWidth">
-    <Tab label="Dashboard" value="/dashboard" to="/dashboard" component={Router.Link} />
-    <Tab label="Statistics" value="/stats" to="/stats" component={Router.Link} />
-</Tabs>
-    );
-  };
+  return (
+    <Tabs value={location.pathname} variant="fullWidth">
+      <Tab
+        label="Dashboard"
+        value="/dashboard"
+        to="/dashboard"
+        component={Router.Link}
+      />
+      <Tab
+        label="Statistics"
+        value="/stats"
+        to="/stats"
+        component={Router.Link}
+      />
+    </Tabs>
+  );
+};
 
 export default MenuTabs;
