@@ -1,6 +1,7 @@
 import React from "react";
 import * as Redux from "react-redux";
 import * as Router from "react-router-dom";
+import { Store } from "redux";
 
 import { MessageHeader, MessageView } from "components/Message";
 import NavigationBar, * as Buttons from "components/NavigationBar";
@@ -16,8 +17,10 @@ import {
   ListItemText,
   Divider,
 } from "@mui/material";
-import { setDisplayed } from "store/actions";
+import { updateDeviceMessage } from "store/actions";
 import State, { Device, Message } from "store/state";
+import { selectAddress } from "store/selectors";
+import Axios from "axios";
 
 interface OverviewProps {
   maybeDevice: Device | undefined;
@@ -50,12 +53,28 @@ interface OverviewDeviceProps {
 }
 
 const NonEmptyDevice = ({ device }: OverviewDeviceProps) => {
-  const store = Redux.useStore();
+  const store = Redux.useStore() as Store<State>;
 
-  const message = device.messages.find((message) => message.isDisplayed);
-
-  function onClick(message: Message) {
-    store.dispatch(setDisplayed(message));
+  function onClick(messageId: string) {
+    const newMessage = device.messages[messageId];
+    if (newMessage === undefined){
+      const address = selectAddress(store.getState());
+    Axios.get(address + "/messages", {
+      headers: {
+        id: messageId
+      },
+    })
+      .then((response) => {
+        store.dispatch(updateDeviceMessage(device.name, response.data as Message, messageId));
+      }
+      )
+      .catch((error) => {
+        alert("Failed to download the message: " + error);
+      });
+    }
+    else{
+      store.dispatch(updateDeviceMessage(device.name, newMessage, messageId));
+    }
   }
   //TODO: Virtualize message selection list
   return (
@@ -77,17 +96,17 @@ const NonEmptyDevice = ({ device }: OverviewDeviceProps) => {
               Select message:
             </Typography>
             <List sx={{ my: "1em", maxHeight: "90%", overflow: "scroll" }}>
-              {device.messages.map((message) => (
+              {device.ids.map((id) => (
                 <SelectionOption
-                  key={message.id}
-                  message={message}
+                  id={id}
+                  key={id}
                   onClick={onClick}
                 />
               ))}
             </List>
           </Box>
           <hr style={{ flex: 0, marginLeft: "1em", marginRight: "2em" }} />
-          {message ? <MessageView message={message} /> : <EmptyMessage />}
+          {device.displayedMessage ? <MessageView message={device.displayedMessage} /> : <EmptyMessage />}
         </Container>
       </Paper>
     </Container>
@@ -95,17 +114,16 @@ const NonEmptyDevice = ({ device }: OverviewDeviceProps) => {
 };
 
 interface SelectionOptionProps {
-  message: Message;
-  onClick: (message: Message) => void;
+  id: string
+  onClick: (arg: string) => void;
 }
 
-const SelectionOption = ({ message, onClick }: SelectionOptionProps) => (
+const SelectionOption = ({ id, onClick }: SelectionOptionProps) => (
   <React.Fragment>
-    <ListItem onClick={() => onClick(message)} disablePadding>
+    <ListItem onClick={() => onClick(id)} disablePadding>
       <ListItemButton>
         <ListItemText
-          primary={message.id}
-          secondary={message.payloadSerialization}
+          primary={id}
         />
       </ListItemButton>
     </ListItem>

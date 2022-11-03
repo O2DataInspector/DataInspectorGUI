@@ -28,13 +28,18 @@ interface Message {
   payloadDisplay: DisplayMethod;
 }
 
+interface MessageSummary {
+  id: string;
+  device: string;
+}
+
 interface Device {
   isSelected: boolean; //remove
   name: string;
-  messages: Message[]; //remove
+  messages: MessageMap;
   ids: string[];
   specs: DeviceSpec;
-  displayedMessage: string;
+  displayedMessage: Message;
 }
 
 interface DeviceSpec {
@@ -56,11 +61,16 @@ interface DeviceIO {
   subSpec: number;
 }
 
+type MessageMap = {
+    [key: string]: Message;
+};
+
 interface State {
   analysisHost: Url | undefined;
   devices: Device[];
+  lastMessageId: string | undefined;
 }
 
 export default State;
 export { DisplayMethod };
-export type { Device, Message, Url };
+export type { Device, Message, Url, MessageSummary, MessageMap };
