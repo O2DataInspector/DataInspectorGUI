@@ -56,7 +56,7 @@ const NonEmptyDevice = ({ device }: OverviewDeviceProps) => {
   const store = Redux.useStore() as Store<State>;
 
   function onClick(messageId: string) {
-    let newMessage = device.messages.messageId;
+    const newMessage = device.messages[messageId];
     if (newMessage === undefined){
       const address = selectAddress(store.getState());
     Axios.get(address + "/messages", {
@@ -65,16 +65,16 @@ const NonEmptyDevice = ({ device }: OverviewDeviceProps) => {
       },
     })
       .then((response) => {
-        if (response.data.message) {
-          console.log(response.data.message);
-          newMessage = response.data.message;
-        }
-      })
+        store.dispatch(updateDeviceMessage(device.name, response.data as Message, messageId));
+      }
+      )
       .catch((error) => {
         alert("Failed to download the message: " + error);
       });
     }
-    store.dispatch(updateDeviceMessage(device.name, newMessage, messageId));
+    else{
+      store.dispatch(updateDeviceMessage(device.name, newMessage, messageId));
+    }
   }
   //TODO: Virtualize message selection list
   return (

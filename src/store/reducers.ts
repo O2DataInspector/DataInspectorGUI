@@ -53,8 +53,8 @@ function reduce(state = initialState, action: Action): State {
             return device;
           }
           else{
-            const messageId = action.messageId;
-            const updatedMessages = {...device.messages, messageId: action.message} as MessageMap;
+            const updatedMessages = {...device.messages} as MessageMap;
+            updatedMessages[action.messageId] = action.message;
                       return {
             ...device,
             displayedMessage: action.message,
