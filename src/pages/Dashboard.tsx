@@ -64,7 +64,7 @@ const NonEmptyDashboard = ({ devices }: DashboardProps) => (
 );
 
 const mapState = (state: State) => ({
-  devices: state.devices.filter(d => d.isSelected)
+  devices: state.devices.filter((d) => d.isSelected),
 });
 
 export default Redux.connect(mapState)(Dashboard);

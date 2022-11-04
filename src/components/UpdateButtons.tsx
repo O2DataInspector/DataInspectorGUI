@@ -105,10 +105,7 @@ export default function UpdateButtons() {
       spacing={2}
       sx={{ position: "absolute", top: "10%", right: "2.5%" }}
     >
-      <RefreshIcon
-        onClick={onRefresh}
-        sx={{fontSize: "3em"}}
-      />
+      <RefreshIcon onClick={onRefresh} sx={{ fontSize: "3em" }} />
       <ButtonGroup
         variant="contained"
         ref={anchorRef}

@@ -24,19 +24,27 @@ interface Message {
   payloadSerialization: string;
   payloadSplitIndex: number;
   payload: unknown;
-  isDisplayed: boolean;
+  binPayload: string;
+  payloadEndiannes: string;
   payloadDisplay: DisplayMethod;
 }
 
 interface MessageSummary {
-  id: string;
+  creationTimer: string;
+  description: string;
   device: string;
+  duration: number;
+  id: string;
+  origin: string;
+  payloadSerialization: string;
+  payloadSize: number;
+  startTime: number;
 }
 
 interface Device {
-  isSelected: boolean; //remove
   name: string;
   messages: MessageMap;
+  isSelected: boolean;
   ids: string[];
   specs: DeviceSpec;
   displayedMessage: Message;
@@ -62,7 +70,7 @@ interface DeviceIO {
 }
 
 type MessageMap = {
-    [key: string]: Message;
+  [key: string]: Message;
 };
 
 interface State {

@@ -42,7 +42,13 @@ function reduce(state = initialState, action: Action): State {
         ...state,
         analysisHost: action.analysisHost,
         devices: action.devices.map(
-          (device) => ({ ...device, isSelected: false, messages: {} as MessageMap, ids: []} as Device)
+          (device) =>
+            ({
+              ...device,
+              isSelected: false,
+              messages: {} as MessageMap,
+              ids: [],
+            } as Device)
         ),
       };
     case Actions.UPDATE_DEVICE_MESSAGE:
@@ -51,18 +57,17 @@ function reduce(state = initialState, action: Action): State {
         devices: state.devices.map((device) => {
           if (device.name !== action.deviceName) {
             return device;
-          }
-          else{
-            const updatedMessages = {...device.messages} as MessageMap;
+          } else {
+            const updatedMessages = { ...device.messages } as MessageMap;
             updatedMessages[action.messageId] = action.message;
-                      return {
-            ...device,
-            displayedMessage: action.message,
-            messages: updatedMessages
+            return {
+              ...device,
+              displayedMessage: action.message,
+              messages: updatedMessages,
             };
           }
-          })
-          };
+        }),
+      };
     default:
       return state;
   }

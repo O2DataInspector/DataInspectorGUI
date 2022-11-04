@@ -34,7 +34,7 @@ interface MessageProps {
 
 const MessageView = ({ message }: MessageProps) => {
   return (
-    <Box flex="0.8">
+    <Box flex="0.8" maxWidth="80%">
       <Typography variant="h5">Header</Typography>
       <hr />
       <Header message={message} />
@@ -125,8 +125,20 @@ const Payload = ({ message }: MessageProps) => {
       >
         <pre>{JSON.stringify(message.payload, null, "\t")}</pre>
       </Box>
-      <Box display={displayMethod === DisplayMethod.Raw ? "block" : "none"}>
-        RAW
+      <Box
+        display={displayMethod === DisplayMethod.Raw ? "block" : "none"}
+        width="100%"
+        overflow="scroll"
+      >
+        <Typography
+          sx={{
+            display: "block",
+            maxWidth: "100%",
+            wordWrap: "break-word",
+          }}
+        >
+          {JSON.stringify(message.binPayload, null, "\t")}
+        </Typography>
       </Box>
       <RootModal message={message} open={open} handleClose={handleClose} />
     </Stack>

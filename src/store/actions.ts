@@ -79,7 +79,7 @@ const setMessages = (messages: MessageSummary[]): Action => ({
 const setDisplayed = (deviceName: string, messageId: string): Action => ({
   type: SET_DISPLAYED,
   deviceName: deviceName,
-  messageId: messageId
+  messageId: messageId,
 });
 
 const setDisplayMethod = (message: Message, method: DisplayMethod): Action => ({
@@ -94,7 +94,11 @@ const setTopologyDetails = (analysisHost: Url, devices: Device[]): Action => ({
   devices: devices,
 });
 
-const updateDeviceMessage = (deviceName: string, message: Message, messageId: string): Action => ({
+const updateDeviceMessage = (
+  deviceName: string,
+  message: Message,
+  messageId: string
+): Action => ({
   type: UPDATE_DEVICE_MESSAGE,
   deviceName: deviceName,
   message: message,
@@ -116,5 +120,5 @@ export {
   setDisplayed,
   setDisplayMethod,
   setTopologyDetails,
-  updateDeviceMessage
+  updateDeviceMessage,
 };

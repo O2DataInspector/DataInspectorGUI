@@ -57,22 +57,26 @@ const NonEmptyDevice = ({ device }: OverviewDeviceProps) => {
 
   function onClick(messageId: string) {
     const newMessage = device.messages[messageId];
-    if (newMessage === undefined){
+    if (newMessage === undefined) {
       const address = selectAddress(store.getState());
-    Axios.get(address + "/messages", {
-      headers: {
-        id: messageId
-      },
-    })
-      .then((response) => {
-        store.dispatch(updateDeviceMessage(device.name, response.data as Message, messageId));
-      }
-      )
-      .catch((error) => {
-        alert("Failed to download the message: " + error);
-      });
-    }
-    else{
+      Axios.get(address + "/messages", {
+        headers: {
+          id: messageId,
+        },
+      })
+        .then((response) => {
+          store.dispatch(
+            updateDeviceMessage(
+              device.name,
+              response.data as Message,
+              messageId
+            )
+          );
+        })
+        .catch((error) => {
+          alert("Failed to download the message: " + error);
+        });
+    } else {
       store.dispatch(updateDeviceMessage(device.name, newMessage, messageId));
     }
   }
@@ -97,16 +101,16 @@ const NonEmptyDevice = ({ device }: OverviewDeviceProps) => {
             </Typography>
             <List sx={{ my: "1em", maxHeight: "90%", overflow: "scroll" }}>
               {device.ids.map((id) => (
-                <SelectionOption
-                  id={id}
-                  key={id}
-                  onClick={onClick}
-                />
+                <SelectionOption id={id} key={id} onClick={onClick} />
               ))}
             </List>
           </Box>
           <hr style={{ flex: 0, marginLeft: "1em", marginRight: "2em" }} />
-          {device.displayedMessage ? <MessageView message={device.displayedMessage} /> : <EmptyMessage />}
+          {device.displayedMessage ? (
+            <MessageView message={device.displayedMessage} />
+          ) : (
+            <EmptyMessage />
+          )}
         </Container>
       </Paper>
     </Container>
@@ -114,7 +118,7 @@ const NonEmptyDevice = ({ device }: OverviewDeviceProps) => {
 };
 
 interface SelectionOptionProps {
-  id: string
+  id: string;
   onClick: (arg: string) => void;
 }
 
@@ -122,9 +126,7 @@ const SelectionOption = ({ id, onClick }: SelectionOptionProps) => (
   <React.Fragment>
     <ListItem onClick={() => onClick(id)} disablePadding>
       <ListItemButton>
-        <ListItemText
-          primary={id}
-        />
+        <ListItemText primary={id} />
       </ListItemButton>
     </ListItem>
     <Divider />
