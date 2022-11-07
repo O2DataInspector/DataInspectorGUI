@@ -22,11 +22,11 @@ import State, { Device, Message } from "store/state";
 import { selectAddress } from "store/selectors";
 import Axios from "axios";
 
-interface OverviewProps {
+interface DeviceOverviewProps {
   maybeDevice: Device | undefined;
 }
 
-const Overview = ({ maybeDevice }: OverviewProps) => {
+const DeviceOverview = ({ maybeDevice }: DeviceOverviewProps) => {
   const history = Router.useHistory();
 
   function onExit() {
@@ -48,11 +48,11 @@ const Overview = ({ maybeDevice }: OverviewProps) => {
   );
 };
 
-interface OverviewDeviceProps {
+interface DeviceProps {
   device: Device;
 }
 
-const NonEmptyDevice = ({ device }: OverviewDeviceProps) => {
+const NonEmptyDevice = ({ device }: DeviceProps) => {
   const store = Redux.useStore() as Store<State>;
 
   function onClick(messageId: string) {
@@ -159,4 +159,4 @@ const mapState = (
   ),
 });
 
-export default Redux.connect(mapState)(Overview);
+export default Redux.connect(mapState)(DeviceOverview);
