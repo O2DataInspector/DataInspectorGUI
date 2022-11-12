@@ -12,6 +12,7 @@ import {
   Box,
 } from "@mui/material";
 import MenuTabs from "components/MenuTabs";
+import { StatisticsForm } from "components/StatisticsForm";
 
 enum GroupingMethod {
   None = "",
@@ -38,10 +39,7 @@ const StatisticsOverview = () => {
       </NavigationBar>
       <Container sx={{ flex: 1 }}>
         <MenuTabs />
-        <GroupingSelection
-          groupingMethod={groupingMethod}
-          onChange={handleChange}
-        />
+        <StatisticsForm />
       </Container>
     </Stack>
   );
