@@ -10,6 +10,12 @@ import {
   ButtonGroup,
   Stack,
   Button,
+  TableContainer,
+  Table,
+  TableRow,
+  TableCell,
+  TableBody,
+  Paper,
 } from "@mui/material";
 import { RootModal } from "./RootPlot";
 import ArrowTable from "./ArrowTable";
@@ -46,42 +52,55 @@ const MessageView = ({ message }: MessageProps) => {
   );
 };
 
-const Header = ({ message }: MessageProps) => (
-  <div>
-    <table>
-      <tr>
-        <td>Origin: {message.origin}</td>
-        <td>Payload parts: {message.payloadParts}</td>
-      </tr>
-      <tr>
-        <td>Description: {message.description}</td>
-        <td>Payload split index: {message.payloadSplitIndex}</td>
-      </tr>
-      <tr>
-        <td>Sub-specification: {message.subSpecification}</td>
-        <td>Start time: {message.startTime ? message.startTime : "N/A"}</td>
-      </tr>
-      <tr>
-        <td>Payload size: {message.payloadSize} B</td>
-        <td>Duration: {message.duration ? message.duration : "N/A"}</td>
-      </tr>
-      <tr>
-        <td>Serialization: {message.payloadSerialization}</td>
-        <td>
-          Creation time: {message.creationTime ? message.creationTime : "N/A"}
-        </td>
-      </tr>
-      <tr>
-        <td>FirstTForbit: {message.firstTForbit}</td>
-        <td>Task&apos;s hash: {message.taskHash ? message.taskHash : "N/A"}</td>
-      </tr>
-      <tr>
-        <td>Run numer: {message.runNumber}</td>
-        <td></td>
-      </tr>
-    </table>
-  </div>
-);
+const Header = ({ message }: MessageProps) => {
+  const displayProperty = (p: string | number | undefined) => {
+    if (p === undefined || p === "") return "N/A";
+    return p;
+  };
+
+  return (
+    <TableContainer>
+      <Table>
+        <TableBody>
+          <TableRow>
+            <TableCell>Origin</TableCell>
+            <TableCell>{displayProperty(message.origin)}</TableCell>
+            <TableCell>Description</TableCell>
+            <TableCell>{displayProperty(message.description)}</TableCell>
+            <TableCell>Sub-specification</TableCell>
+            <TableCell>{displayProperty(message.subSpecification)}</TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell>Payload size</TableCell>
+            <TableCell>{displayProperty(message.payloadSize)}</TableCell>
+            <TableCell>Payload parts</TableCell>
+            <TableCell>{displayProperty(message.payloadParts)}</TableCell>
+            <TableCell>Payload split index</TableCell>
+            <TableCell>{displayProperty(message.payloadSplitIndex)}</TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell>Start time</TableCell>
+            <TableCell>{displayProperty(message.startTime)}</TableCell>
+            <TableCell>Creation time</TableCell>
+            <TableCell>{displayProperty(message.creationTime)}</TableCell>
+            <TableCell>Duration</TableCell>
+            <TableCell>{displayProperty(message.duration)}</TableCell>
+          </TableRow>
+          <TableRow>
+            <TableCell>Serialization</TableCell>
+            <TableCell>
+              {displayProperty(message.payloadSerialization)}
+            </TableCell>
+            <TableCell>FirstTForbit</TableCell>
+            <TableCell>{displayProperty(message.firstTForbit)}</TableCell>
+            <TableCell>Task&apos;s hash</TableCell>
+            <TableCell>{displayProperty(message.taskHash)}</TableCell>
+          </TableRow>
+        </TableBody>
+      </Table>
+    </TableContainer>
+  );
+};
 
 const Payload = ({ message }: MessageProps) => {
   const [displayMethod, setDisplayMethod] = React.useState(
