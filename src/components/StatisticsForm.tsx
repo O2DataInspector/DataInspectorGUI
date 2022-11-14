@@ -17,8 +17,56 @@ import {
   Button,
   ButtonGroup,
 } from "@mui/material";
+import { StatisticsResponse } from "pages/StatisticsOverview";
 
-const StatisticsForm = () => {
+interface StatisticsQuery {
+  device?: string;
+  origin?: string;
+  description?: string;
+  subSpecification?: number;
+  firstTForbit?: number;
+  tfCounter?: number;
+  runNumber?: number;
+  taskHash?: string;
+  payloadSerialization?: string;
+  payloadParts?: number;
+  payloadSplitIndex?: number;
+  minStartTime?: number;
+  maxStartTime?: number;
+  minCreationTime?: number;
+  maxCreationTime?: number;
+  minDuration?: number;
+  maxDuration?: number;
+  minPayloadSize?: number;
+  maxPayloadSize?: number;
+  count?: number;
+  [key: string]: string | number | undefined;
+}
+
+interface StatisticsFormProps {
+  response: StatisticsResponse | undefined;
+  setResponse: React.Dispatch<
+    React.SetStateAction<StatisticsResponse | undefined>
+  >;
+}
+
+const StatisticsForm = ({ response, setResponse }: StatisticsFormProps) => {
+  const [query, setQuery] = React.useState({} as StatisticsQuery);
+
+  const handleTextFieldChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const target = event.target;
+    const value = target.value;
+    const name = target.name;
+    if (value === "") {
+      const newQuery = { ...query };
+      delete newQuery[name];
+      setQuery(newQuery);
+    } else {
+      setQuery({ ...query, [name]: value });
+    }
+  };
   return (
     <Paper sx={{ my: "5%", width: "80%", mx: "auto" }}>
       <Grid
@@ -29,13 +77,31 @@ const StatisticsForm = () => {
         sx={{ width: "80%", mx: "auto" }}
       >
         <Grid item xs={3}>
-          <TextField label="Device" placeholder="any" />
+          <TextField
+            label="Device"
+            placeholder="any"
+            value={query.device}
+            name="device"
+            onChange={handleTextFieldChange}
+          />
         </Grid>
         <Grid item xs={3}>
-          <TextField label="Origin" placeholder="any" />
+          <TextField
+            label="Origin"
+            placeholder="any"
+            value={query.origin}
+            name="origin"
+            onChange={handleTextFieldChange}
+          />
         </Grid>
         <Grid item xs={3}>
-          <TextField label="Description" placeholder="any" />
+          <TextField
+            label="Description"
+            placeholder="any"
+            value={query.description}
+            name="description"
+            onChange={handleTextFieldChange}
+          />
         </Grid>
         <Grid item xs={3}>
           <TextField
@@ -43,6 +109,9 @@ const StatisticsForm = () => {
             inputProps={{ min: 0 }}
             label="Subspecification"
             placeholder="any"
+            value={query.subSpecification}
+            name="subSpecification"
+            onChange={handleTextFieldChange}
           />
         </Grid>
         <Grid item xs={3}>
@@ -51,6 +120,9 @@ const StatisticsForm = () => {
             inputProps={{ min: 0 }}
             label="First TF orbit"
             placeholder="any"
+            value={query.firstTForbit}
+            name="firstTForbit"
+            onChange={handleTextFieldChange}
           />
         </Grid>
         <Grid item xs={3}>
@@ -59,6 +131,9 @@ const StatisticsForm = () => {
             inputProps={{ min: 0 }}
             label="TF counter"
             placeholder="any"
+            value={query.tfCounter}
+            name="tfCounter"
+            onChange={handleTextFieldChange}
           />
         </Grid>
         <Grid item xs={3}>
@@ -67,13 +142,22 @@ const StatisticsForm = () => {
             inputProps={{ min: 0 }}
             label="Run number"
             placeholder="any"
+            value={query.runNumber}
+            name="runNumber"
+            onChange={handleTextFieldChange}
           />
         </Grid>
         <Grid item xs={3}>
-          <TextField label="Task hash" placeholder="any" />
+          <TextField
+            label="Task hash"
+            placeholder="any"
+            value={query.taskHash}
+            name="taskHash"
+            onChange={handleTextFieldChange}
+          />
         </Grid>
         <Grid item xs={4}>
-          <SerializationSelect />
+          <SerializationSelect query={query} setQuery={setQuery} />
         </Grid>
         <Grid item xs={4}>
           <TextField
@@ -81,6 +165,9 @@ const StatisticsForm = () => {
             inputProps={{ min: 0 }}
             label="Payload parts"
             placeholder="any"
+            value={query.payloadParts}
+            name="payloadParts"
+            onChange={handleTextFieldChange}
           />
         </Grid>
         <Grid item xs={4}>
@@ -89,23 +176,60 @@ const StatisticsForm = () => {
             inputProps={{ min: 0 }}
             label="Payload split index"
             placeholder="any"
+            value={query.payloadSplitIndex}
+            name="payloadSplitIndex"
+            onChange={handleTextFieldChange}
           />
         </Grid>
         <Grid item xs={12}>
           <Stack direction="row" justifyContent="space-around">
-            <RangeInput title="Start time" />
-            <RangeInput title="Creation time" />
+            <RangeInput
+              query={query}
+              setQuery={setQuery}
+              handleTextFieldChange={handleTextFieldChange}
+              minValueName="minStartTime"
+              maxValueName="maxStartTime"
+              title="Start time"
+            />
+            <RangeInput
+              query={query}
+              setQuery={setQuery}
+              handleTextFieldChange={handleTextFieldChange}
+              minValueName="minCreationTime"
+              maxValueName="maxCreationTime"
+              title="Creation time"
+            />
           </Stack>
         </Grid>
         <Grid item xs={12}>
           <Stack direction="row" justifyContent="space-around">
-            <RangeInput title="Duration" />
-            <RangeInput title="Payload size" />
+            <RangeInput
+              query={query}
+              setQuery={setQuery}
+              handleTextFieldChange={handleTextFieldChange}
+              minValueName="minDuration"
+              maxValueName="maxDuration"
+              title="Duration"
+            />
+            <RangeInput
+              query={query}
+              setQuery={setQuery}
+              handleTextFieldChange={handleTextFieldChange}
+              minValueName="minPayloadSize"
+              maxValueName="maxPayloadSize"
+              title="Payload size"
+            />
           </Stack>
         </Grid>
         <Grid item xs={12} mb="1em">
           <Stack direction="row" justifyContent="space-evenly">
-            <Button variant="contained" sx={{ flex: 0.3 }}>
+            <Button
+              variant="contained"
+              onClick={() => {
+                console.log(query);
+              }}
+              sx={{ flex: 0.3 }}
+            >
               Search
             </Button>
             <NumberedButton />
@@ -124,14 +248,35 @@ enum RangeRule {
 }
 
 interface RangeInputProps {
+  query: StatisticsQuery;
+  setQuery: React.Dispatch<React.SetStateAction<StatisticsQuery>>;
+  handleTextFieldChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  minValueName: string;
+  maxValueName: string;
   title: string;
 }
 
-const RangeInput = ({ title }: RangeInputProps) => {
+const RangeInput = ({
+  query,
+  setQuery,
+  handleTextFieldChange,
+  minValueName,
+  maxValueName,
+  title,
+}: RangeInputProps) => {
   const [rule, setRule] = React.useState(RangeRule.ANY);
 
   const handleChange = (event: SelectChangeEvent) => {
-    setRule(event.target.value as RangeRule);
+    const newRule = event.target.value as RangeRule;
+    const newQuery = { ...query };
+    if (newRule === RangeRule.ANY || newRule === RangeRule.LESS) {
+      delete newQuery[minValueName];
+    }
+    if (newRule === RangeRule.ANY || newRule === RangeRule.MORE) {
+      delete newQuery[maxValueName];
+    }
+    setQuery(newQuery);
+    setRule(newRule);
   };
 
   return (
@@ -145,8 +290,22 @@ const RangeInput = ({ title }: RangeInputProps) => {
           <MenuItem value={RangeRule.BETWEEN}>Between</MenuItem>
         </Select>
       </FormControl>
-      {rule === RangeRule.LESS && <TextField sx={{ flex: 0.3 }} />}
-      {rule === RangeRule.MORE && <TextField sx={{ flex: 0.3 }} />}
+      {rule === RangeRule.LESS && (
+        <TextField
+          sx={{ flex: 0.3 }}
+          value={query[maxValueName]}
+          name={maxValueName}
+          onChange={handleTextFieldChange}
+        />
+      )}
+      {rule === RangeRule.MORE && (
+        <TextField
+          sx={{ flex: 0.3 }}
+          value={query[minValueName]}
+          name={minValueName}
+          onChange={handleTextFieldChange}
+        />
+      )}
       {rule === RangeRule.BETWEEN && (
         <Stack
           direction="row"
@@ -154,8 +313,17 @@ const RangeInput = ({ title }: RangeInputProps) => {
           alignItems="center"
           sx={{ flex: 0.4 }}
         >
-          <TextField /> <Typography variant="body1">and</Typography>
-          <TextField />
+          <TextField
+            value={query[minValueName]}
+            name={minValueName}
+            onChange={handleTextFieldChange}
+          />{" "}
+          <Typography variant="body1">and</Typography>
+          <TextField
+            value={query[maxValueName]}
+            name={maxValueName}
+            onChange={handleTextFieldChange}
+          />
         </Stack>
       )}
     </Stack>
@@ -169,13 +337,26 @@ enum SerializationMethod {
   ARROW = "ARROW",
 }
 
-const SerializationSelect = () => {
+interface SerializationSelectProps {
+  query: StatisticsQuery;
+  setQuery: React.Dispatch<React.SetStateAction<StatisticsQuery>>;
+}
+
+const SerializationSelect = ({ query, setQuery }: SerializationSelectProps) => {
   const [serializationMethod, setSerializationMethod] = React.useState(
     SerializationMethod.ANY
   );
 
   const handleChange = (event: SelectChangeEvent) => {
-    setSerializationMethod(event.target.value as SerializationMethod);
+    const newSerialization = event.target.value as SerializationMethod;
+    const newQuery = { ...query };
+    if (newSerialization === SerializationMethod.ANY) {
+      delete newQuery["payloadSerialization"];
+    } else {
+      newQuery.payloadSerialization = newSerialization;
+    }
+    setQuery(newQuery);
+    setSerializationMethod(newSerialization);
   };
 
   return (

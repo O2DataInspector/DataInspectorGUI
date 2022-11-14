@@ -17,11 +17,28 @@ import {
 import MenuTabs from "components/MenuTabs";
 import { StatisticsForm } from "components/StatisticsForm";
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-interface StatisticsData {}
+export interface StatisticsResponse {
+  x: number[];
+  yNumbers: number[];
+  yData: number[];
+  totalMessages: number;
+  totalData: number;
+  minMsgSize: number;
+  avgMsgSize: number;
+  maxMsgSize: number;
+  minDuration: number;
+  avgDuration: number;
+  maxDuration: number;
+  minStartTime: number;
+  maxStartTime: number;
+  minCreationTime: number;
+  maxCreationTime: number;
+}
 
 const StatisticsOverview = () => {
-  const [statisticsData, setStatisticsData] = React.useState(undefined);
+  const [response, setResponse] = React.useState<
+    StatisticsResponse | undefined
+  >();
 
   return (
     <Stack direction="column">
@@ -31,7 +48,7 @@ const StatisticsOverview = () => {
       </NavigationBar>
       <Container sx={{ flex: 1 }}>
         <MenuTabs />
-        <StatisticsForm />
+        <StatisticsForm response={response} setResponse={setResponse} />
         <TimeSeriesPlot />
         <SummaryTable />
       </Container>
