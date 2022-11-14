@@ -1,6 +1,7 @@
 import React from "react";
+import * as Redux from "react-redux";
 
-import { Message } from "store/state";
+import State, { Message } from "store/state";
 import {
   Grid,
   TextField,
@@ -18,6 +19,9 @@ import {
   ButtonGroup,
 } from "@mui/material";
 import { StatisticsResponse } from "pages/StatisticsOverview";
+import { selectAddress } from "store/selectors";
+import Axios, { AxiosRequestHeaders } from "axios";
+import { Store } from "redux";
 
 interface StatisticsQuery {
   device?: string;
@@ -51,7 +55,21 @@ interface StatisticsFormProps {
 }
 
 const StatisticsForm = ({ response, setResponse }: StatisticsFormProps) => {
+  const store = Redux.useStore() as Store<State>;
   const [query, setQuery] = React.useState({} as StatisticsQuery);
+
+  const fetchData = () => {
+    const address = selectAddress(store.getState());
+    Axios.get(address + "/stats", {
+      headers: query as AxiosRequestHeaders,
+    })
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((error) => {
+        alert("Failed to fetch statistics: " + error);
+      });
+  }
 
   const handleTextFieldChange = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -227,6 +245,7 @@ const StatisticsForm = ({ response, setResponse }: StatisticsFormProps) => {
               variant="contained"
               onClick={() => {
                 console.log(query);
+                fetchData();
               }}
               sx={{ flex: 0.3 }}
             >
@@ -376,6 +395,11 @@ const SerializationSelect = ({ query, setQuery }: SerializationSelectProps) => {
     </FormControl>
   );
 };
+
+interface NumberedButtonProps {
+  query: StatisticsQuery;
+  setQuery: React.Dispatch<React.SetStateAction<StatisticsQuery>>;
+}
 
 const NumberedButton = () => {
   const [quantity, setQuantity] = React.useState(1);
