@@ -35,11 +35,13 @@ export default function UpdateButtons() {
     const address = selectAddress(store.getState());
     const selectedDevices = selectSelectedDevices(store.getState());
     const lastMessageId = selectLastMessageId(store.getState());
-    const headers = { devices: selectedDevices.map((device) => device.name).join(",")} as AxiosRequestHeaders;
-    if(lastMessageId) headers['lastMessageId'] = lastMessageId;
-    
+    const headers = {
+      devices: selectedDevices.map((device) => device.name).join(","),
+    } as AxiosRequestHeaders;
+    if (lastMessageId) headers["lastMessageId"] = lastMessageId;
+
     Axios.get(address + "/messages/newer", {
-      headers: headers
+      headers: headers,
     })
       .then((response) => {
         if (response.data.messages) {
@@ -56,11 +58,14 @@ export default function UpdateButtons() {
     const address = selectAddress(store.getState());
     const selectedDevices = selectSelectedDevices(store.getState());
     const lastMessageId = selectLastMessageId(store.getState());
-    const headers = { devices: selectedDevices.map((device) => device.name).join(","), count: parameters[selectedIndex]} as AxiosRequestHeaders;
-    if(lastMessageId) headers['lastMessageId'] = lastMessageId;
+    const headers = {
+      devices: selectedDevices.map((device) => device.name).join(","),
+      count: parameters[selectedIndex],
+    } as AxiosRequestHeaders;
+    if (lastMessageId) headers["lastMessageId"] = lastMessageId;
 
     Axios.get(address + "/messages/newer", {
-      headers: headers
+      headers: headers,
     })
       .then((response) => {
         if (response.data.messages) {

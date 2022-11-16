@@ -49,7 +49,7 @@ const StatisticsOverview = () => {
       <Container sx={{ flex: 1 }}>
         <MenuTabs />
         <StatisticsForm statsData={statsData} setStatsData={setStatsData} />
-        {statsData && <TimeSeriesPlot statsData={statsData}/>}
+        {statsData && <TimeSeriesPlot statsData={statsData} />}
         {statsData && <SummaryTable statsData={statsData} />}
       </Container>
     </Stack>
@@ -60,7 +60,7 @@ interface StatisticsProps {
   statsData: StatisticsResponse;
 }
 
-const TimeSeriesPlot = ({statsData}: StatisticsProps) => {
+const TimeSeriesPlot = ({ statsData }: StatisticsProps) => {
   return (
     <Paper sx={{ width: "80%", mx: "auto" }}>
       <Container sx={{ width: "80%", mx: "auto" }}>
@@ -74,7 +74,7 @@ const TimeSeriesPlot = ({statsData}: StatisticsProps) => {
   );
 };
 
-const SummaryTable = ({statsData}: StatisticsProps) => {
+const SummaryTable = ({ statsData }: StatisticsProps) => {
   return (
     <Paper sx={{ width: "80%", mx: "auto", my: "5%" }}>
       <TableContainer>

@@ -60,8 +60,8 @@ const StatisticsForm = ({ statsData, setStatsData }: StatisticsFormProps) => {
   const [query, setQuery] = React.useState({} as StatisticsQuery);
 
   const fetchData = (count?: number) => {
-    const finalQuery = {...query};
-    if(count) finalQuery.count = count;
+    const finalQuery = { ...query };
+    if (count) finalQuery.count = count;
     console.log("query:");
     console.log(finalQuery);
     const address = selectAddress(store.getState());
@@ -69,13 +69,13 @@ const StatisticsForm = ({ statsData, setStatsData }: StatisticsFormProps) => {
       headers: finalQuery as AxiosRequestHeaders,
     })
       .then((response) => {
-        console.log("response:")
+        console.log("response:");
         console.log(response);
       })
       .catch((error) => {
         alert("Failed to fetch statistics: " + error);
       });
-  }
+  };
 
   const handleTextFieldChange = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -412,7 +412,7 @@ interface NumberedButtonProps {
   fetchData: (count?: number) => void;
 }
 
-const NumberedButton = ({fetchData}: NumberedButtonProps) => {
+const NumberedButton = ({ fetchData }: NumberedButtonProps) => {
   const [quantity, setQuantity] = React.useState(1);
 
   return (
@@ -424,7 +424,9 @@ const NumberedButton = ({fetchData}: NumberedButtonProps) => {
       >
         -
       </Button>
-      <Button fullWidth onClick={() => fetchData(quantity)}>Search last {quantity > 1 ? quantity : ""}</Button>
+      <Button fullWidth onClick={() => fetchData(quantity)}>
+        Search last {quantity > 1 ? quantity : ""}
+      </Button>
       <Button onClick={() => setQuantity(quantity + 1)}>+</Button>
     </ButtonGroup>
   );
