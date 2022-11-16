@@ -38,7 +38,7 @@ export default function UpdateButtons() {
     const headers = {
       devices: selectedDevices.map((device) => device.name).join(","),
     } as AxiosRequestHeaders;
-    if (lastMessageId) headers["lastMessageId"] = lastMessageId;
+    if (lastMessageId) headers["id"] = lastMessageId;
 
     Axios.get(address + "/messages/newer", {
       headers: headers,
@@ -62,13 +62,14 @@ export default function UpdateButtons() {
       devices: selectedDevices.map((device) => device.name).join(","),
       count: parameters[selectedIndex],
     } as AxiosRequestHeaders;
-    if (lastMessageId) headers["lastMessageId"] = lastMessageId;
+    if (lastMessageId) headers["id"] = lastMessageId;
 
     Axios.get(address + "/messages/newer", {
       headers: headers,
     })
       .then((response) => {
         if (response.data.messages) {
+          console.log(headers);
           console.log(response.data.messages);
           store.dispatch(setMessages(response.data.messages));
         }
