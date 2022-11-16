@@ -1,6 +1,6 @@
 import * as React from "react";
 import * as Redux from "react-redux";
-import Axios from "axios";
+import Axios, { AxiosRequestHeaders } from "axios";
 import { Store } from "redux";
 import State, { Device, Message } from "store/state";
 import { setMessages } from "store/actions";
@@ -35,11 +35,11 @@ export default function UpdateButtons() {
     const address = selectAddress(store.getState());
     const selectedDevices = selectSelectedDevices(store.getState());
     const lastMessageId = selectLastMessageId(store.getState());
+    const headers = { devices: selectedDevices.map((device) => device.name).join(",")} as AxiosRequestHeaders;
+    if(lastMessageId) headers['lastMessageId'] = lastMessageId;
+    
     Axios.get(address + "/messages/newer", {
-      headers: {
-        devices: selectedDevices.map((device) => device.name).join(","),
-        id: lastMessageId ? lastMessageId : 0,
-      },
+      headers: headers
     })
       .then((response) => {
         if (response.data.messages) {
@@ -56,12 +56,11 @@ export default function UpdateButtons() {
     const address = selectAddress(store.getState());
     const selectedDevices = selectSelectedDevices(store.getState());
     const lastMessageId = selectLastMessageId(store.getState());
+    const headers = { devices: selectedDevices.map((device) => device.name).join(","), count: parameters[selectedIndex]} as AxiosRequestHeaders;
+    if(lastMessageId) headers['lastMessageId'] = lastMessageId;
+
     Axios.get(address + "/messages/newer", {
-      headers: {
-        devices: selectedDevices.map((device) => device.name).join(","),
-        id: lastMessageId ? lastMessageId : 0,
-        count: parameters[selectedIndex],
-      },
+      headers: headers
     })
       .then((response) => {
         if (response.data.messages) {
