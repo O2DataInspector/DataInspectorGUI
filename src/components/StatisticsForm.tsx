@@ -25,7 +25,7 @@ import { Store } from "redux";
 
 interface StatisticsQuery {
   device?: string;
-  origin?: string;
+  messageOrigin?: string;
   description?: string;
   subSpecification?: number;
   firstTForbit?: number;
@@ -43,27 +43,33 @@ interface StatisticsQuery {
   maxDuration?: number;
   minPayloadSize?: number;
   maxPayloadSize?: number;
+  runId?: number;
   count?: number;
   [key: string]: string | number | undefined;
 }
 
 interface StatisticsFormProps {
-  response: StatisticsResponse | undefined;
-  setResponse: React.Dispatch<
+  statsData: StatisticsResponse | undefined;
+  setStatsData: React.Dispatch<
     React.SetStateAction<StatisticsResponse | undefined>
   >;
 }
 
-const StatisticsForm = ({ response, setResponse }: StatisticsFormProps) => {
+const StatisticsForm = ({ statsData, setStatsData }: StatisticsFormProps) => {
   const store = Redux.useStore() as Store<State>;
   const [query, setQuery] = React.useState({} as StatisticsQuery);
 
-  const fetchData = () => {
+  const fetchData = (count?: number) => {
+    const finalQuery = {...query};
+    if(count) finalQuery.count = count;
+    console.log("query:");
+    console.log(finalQuery);
     const address = selectAddress(store.getState());
     Axios.get(address + "/stats", {
-      headers: query as AxiosRequestHeaders,
+      headers: finalQuery as AxiosRequestHeaders,
     })
       .then((response) => {
+        console.log("response:")
         console.log(response);
       })
       .catch((error) => {
@@ -107,8 +113,8 @@ const StatisticsForm = ({ response, setResponse }: StatisticsFormProps) => {
           <TextField
             label="Origin"
             placeholder="any"
-            value={query.origin}
-            name="origin"
+            value={query.messageOrigin}
+            name="messageOrigin"
             onChange={handleTextFieldChange}
           />
         </Grid>
@@ -174,10 +180,10 @@ const StatisticsForm = ({ response, setResponse }: StatisticsFormProps) => {
             onChange={handleTextFieldChange}
           />
         </Grid>
-        <Grid item xs={4}>
+        <Grid item xs={3}>
           <SerializationSelect query={query} setQuery={setQuery} />
         </Grid>
-        <Grid item xs={4}>
+        <Grid item xs={3}>
           <TextField
             type="number"
             inputProps={{ min: 0 }}
@@ -188,14 +194,23 @@ const StatisticsForm = ({ response, setResponse }: StatisticsFormProps) => {
             onChange={handleTextFieldChange}
           />
         </Grid>
-        <Grid item xs={4}>
+        <Grid item xs={3}>
           <TextField
             type="number"
             inputProps={{ min: 0 }}
-            label="Payload split index"
+            label="Split index"
             placeholder="any"
             value={query.payloadSplitIndex}
             name="payloadSplitIndex"
+            onChange={handleTextFieldChange}
+          />
+        </Grid>
+        <Grid item xs={3}>
+          <TextField
+            label="Run ID"
+            placeholder="any"
+            value={query.runId}
+            name="runId"
             onChange={handleTextFieldChange}
           />
         </Grid>
@@ -243,15 +258,12 @@ const StatisticsForm = ({ response, setResponse }: StatisticsFormProps) => {
           <Stack direction="row" justifyContent="space-evenly">
             <Button
               variant="contained"
-              onClick={() => {
-                console.log(query);
-                fetchData();
-              }}
+              onClick={() => fetchData()}
               sx={{ flex: 0.3 }}
             >
               Search
             </Button>
-            <NumberedButton />
+            <NumberedButton fetchData={fetchData} />
           </Stack>
         </Grid>
       </Grid>
@@ -397,11 +409,10 @@ const SerializationSelect = ({ query, setQuery }: SerializationSelectProps) => {
 };
 
 interface NumberedButtonProps {
-  query: StatisticsQuery;
-  setQuery: React.Dispatch<React.SetStateAction<StatisticsQuery>>;
+  fetchData: (count?: number) => void;
 }
 
-const NumberedButton = () => {
+const NumberedButton = ({fetchData}: NumberedButtonProps) => {
   const [quantity, setQuantity] = React.useState(1);
 
   return (
@@ -413,7 +424,7 @@ const NumberedButton = () => {
       >
         -
       </Button>
-      <Button fullWidth>Search last {quantity > 1 ? quantity : ""}</Button>
+      <Button fullWidth onClick={() => fetchData(quantity)}>Search last {quantity > 1 ? quantity : ""}</Button>
       <Button onClick={() => setQuantity(quantity + 1)}>+</Button>
     </ButtonGroup>
   );

@@ -36,7 +36,7 @@ export interface StatisticsResponse {
 }
 
 const StatisticsOverview = () => {
-  const [response, setResponse] = React.useState<
+  const [statsData, setStatsData] = React.useState<
     StatisticsResponse | undefined
   >();
 
@@ -48,15 +48,19 @@ const StatisticsOverview = () => {
       </NavigationBar>
       <Container sx={{ flex: 1 }}>
         <MenuTabs />
-        <StatisticsForm response={response} setResponse={setResponse} />
-        <TimeSeriesPlot />
-        <SummaryTable />
+        <StatisticsForm statsData={statsData} setStatsData={setStatsData} />
+        {statsData && <TimeSeriesPlot statsData={statsData}/>}
+        {statsData && <SummaryTable statsData={statsData} />}
       </Container>
     </Stack>
   );
 };
 
-const TimeSeriesPlot = () => {
+interface StatisticsProps {
+  statsData: StatisticsResponse;
+}
+
+const TimeSeriesPlot = ({statsData}: StatisticsProps) => {
   return (
     <Paper sx={{ width: "80%", mx: "auto" }}>
       <Container sx={{ width: "80%", mx: "auto" }}>
@@ -70,7 +74,7 @@ const TimeSeriesPlot = () => {
   );
 };
 
-const SummaryTable = () => {
+const SummaryTable = ({statsData}: StatisticsProps) => {
   return (
     <Paper sx={{ width: "80%", mx: "auto", my: "5%" }}>
       <TableContainer>
