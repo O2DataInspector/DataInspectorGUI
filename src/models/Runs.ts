@@ -7,6 +7,7 @@ export interface Analysis {
 
 export interface Run {
   id: string,
+  status: string,
   config: string,
   workflow: string,
   analysis: Analysis;

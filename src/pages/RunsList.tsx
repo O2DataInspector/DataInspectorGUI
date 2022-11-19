@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React from "react";
 import NavigationBar, * as Buttons from "components/NavigationBar";
 
 import { Box } from "@mui/material";
@@ -9,7 +9,7 @@ import Axios from 'axios';
 import {setDevices} from "../store/actions";
 import {DeviceSpec} from "store/state";
 import RunsSelection from "../components/RunsSelection";
-import {Runs} from "../models/Runs";
+import StartRun from "../components/StartRun";
 
 interface AvailableDevice {
   name: string;
@@ -24,17 +24,6 @@ const RunsList = () => {
   const store = useStore();
   const history = useHistory();
   const address = useSelector(selectAddress);
-  const [runs, setRuns] = useState<Runs>({runs: []});
-
-  useEffect(() => {
-    Axios.get<Runs>(`${address}/runs`)
-      .then((response) => {
-        setRuns(response.data);
-      })
-      .catch((_) => {
-        alert("Failed to retrieve active runs. Is proxy running?");
-      });
-  }, []);
 
   const onSelect = (runId: string) => {
     Axios.get<AvailableDevicesResponse>(`${address}/available-devices`, {
@@ -57,7 +46,8 @@ const RunsList = () => {
       <NavigationBar>
         <Buttons.Disconnect />
       </NavigationBar>
-      <RunsSelection runs={runs} onSelect={onSelect}/>
+      <StartRun/>
+      <RunsSelection onSelect={onSelect}/>
     </Box>
   )
 };

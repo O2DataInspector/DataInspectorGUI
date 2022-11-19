@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 
 import {
   Button,
@@ -12,14 +12,31 @@ import {
 } from "@mui/material";
 import {Run, Runs} from "../models/Runs";
 import {useHistory} from "react-router-dom";
+import Axios from "axios";
+import {useSelector} from "react-redux";
+import {selectAddress} from "../store/selectors";
 
 interface RunsSelectionProps {
-  runs: Runs,
   onSelect: (runId: string) => void;
 }
 
-const RunsSelection = ({ runs, onSelect }: RunsSelectionProps) => {
-  const history = useHistory();
+const RunsSelection = ({ onSelect }: RunsSelectionProps) => {
+  const address = useSelector(selectAddress);
+  const [runs, setRuns] = useState<Runs>({runs: []});
+
+  const refresh = () => {
+    Axios.get<Runs>(`${address}/runs`)
+      .then((response) => {
+        setRuns(response.data);
+      })
+      .catch((_) => {
+        alert("Failed to retrieve active runs. Is proxy running?");
+      });
+  }
+
+  useEffect(() => {
+    refresh();
+  }, []);
 
   const theme = createTheme({
     palette: {
@@ -32,10 +49,6 @@ const RunsSelection = ({ runs, onSelect }: RunsSelectionProps) => {
     },
   });
 
-  function onCancel() {
-    history.goBack();
-  }
-
   return (
     <Container sx={{ my: "2.5%", maxWidth: "50%" }}>
       <Paper
@@ -46,7 +59,7 @@ const RunsSelection = ({ runs, onSelect }: RunsSelectionProps) => {
         }}
       >
         <Box m="2em">
-          <Typography variant="h3">Active runs</Typography>
+          <Typography variant="h3">Runs</Typography>
           <Stack>
             {runs.runs.map((run) => (
               <SelectionOption
@@ -63,10 +76,10 @@ const RunsSelection = ({ runs, onSelect }: RunsSelectionProps) => {
               variant="outlined"
               color="primary"
               size="large"
-              onClick={onCancel}
+              onClick={refresh}
               sx={{ flex: 1 }}
             >
-              Cancel
+              Refresh
             </Button>
           </Stack>
         </ThemeProvider>
@@ -80,15 +93,25 @@ interface SelectionOptionProps {
   onClick: (runId: string) => void;
 }
 
-const SelectionOption = ({ run, onClick }: SelectionOptionProps) => (
-  <Paper onClick={() => onClick(run.id)}>
-    <div>
-      <Typography variant="h3">Run {run.id}</Typography>
-      <Typography variant="h5">Analysis {run.analysis.name}</Typography>
-      <Typography variant="h5">Workflow {run.workflow}</Typography>
-      <Typography variant="h5">Config {run.config}</Typography>
-    </div>
-  </Paper>
-);
+const SelectionOption = ({ run, onClick }: SelectionOptionProps) => {
+  const _onClick = () => {
+    if(run.status == "RUNNING")
+      onClick(run.id);
+    else
+      alert("Run has already finished or has not yet started");
+  }
+
+  return (
+    <Paper onClick={_onClick}>
+      <div>
+        <Typography variant="h3">Run {run.id}</Typography>
+        <Typography variant="h5">Status {run.status}</Typography>
+        <Typography variant="h5">Analysis {run.analysis.name}</Typography>
+        <Typography variant="h5">Workflow {run.workflow}</Typography>
+        <Typography variant="h5">Config {run.config}</Typography>
+      </div>
+    </Paper>
+  )
+};
 
 export default RunsSelection;
