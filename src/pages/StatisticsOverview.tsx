@@ -49,7 +49,7 @@ const StatisticsOverview = () => {
       <Container sx={{ flex: 1 }}>
         <MenuTabs />
         <StatisticsForm statsData={statsData} setStatsData={setStatsData} />
-        {statsData && <TimeSeriesPlot statsData={statsData} />}
+        {(statsData && statsData.x.length > 0) && <TimeSeriesPlot statsData={statsData} />}
         {statsData && <SummaryTable statsData={statsData} />}
       </Container>
     </Stack>
@@ -63,10 +63,15 @@ interface StatisticsProps {
 const TimeSeriesPlot = ({ statsData }: StatisticsProps) => {
   return (
     <Paper sx={{ width: "80%", mx: "auto" }}>
-      <Container sx={{ width: "80%", mx: "auto" }}>
-        <Plot
-          data={[{ type: "bar", x: [1, 2, 3], y: [2, 5, 3] }]}
-          layout={{ title: "A Fancy Plot" }}
+      <Container sx={{ width: "80%", mx: "auto" , height: "80%"}}>
+          <Plot
+            data={[{ type: "bar", x: statsData.x, y: statsData.yNumbers}]}
+            layout={{}}
+            config={{ responsive: true }}
+          /> 
+          <Plot
+          data={[{ type: "bar", x: statsData.x, y: statsData.yData}]}
+          layout={{}}
           config={{ responsive: true }}
         />
       </Container>
@@ -86,11 +91,11 @@ const SummaryTable = ({ statsData }: StatisticsProps) => {
           <TableBody>
             <TableRow>
               <TableCell>Messages</TableCell>
-              <TableCell align="right">1292</TableCell>
+              <TableCell align="right">{statsData.totalMessages}</TableCell>
             </TableRow>
             <TableRow>
               <TableCell>Data</TableCell>
-              <TableCell align="right">1292328 B</TableCell>
+              <TableCell align="right">{statsData.totalData} B</TableCell>
             </TableRow>
           </TableBody>
         </Table>
@@ -108,15 +113,15 @@ const SummaryTable = ({ statsData }: StatisticsProps) => {
           <TableBody>
             <TableRow>
               <TableCell>Message size</TableCell>
-              <TableCell align="right">328</TableCell>
-              <TableCell align="right">458</TableCell>
-              <TableCell align="right">528</TableCell>
+              <TableCell align="right">{statsData.minMsgSize} B</TableCell>
+              <TableCell align="right">{statsData.avgMsgSize} B</TableCell>
+              <TableCell align="right">{statsData.maxMsgSize} B</TableCell>
             </TableRow>
             <TableRow>
               <TableCell>Duration</TableCell>
-              <TableCell align="right">1</TableCell>
-              <TableCell align="right">1.2</TableCell>
-              <TableCell align="right">3</TableCell>
+              <TableCell align="right">{statsData.minDuration}</TableCell>
+              <TableCell align="right">{statsData.avgDuration}</TableCell>
+              <TableCell align="right">{statsData.maxDuration}</TableCell>
             </TableRow>
           </TableBody>
         </Table>
@@ -134,13 +139,13 @@ const SummaryTable = ({ statsData }: StatisticsProps) => {
           <TableBody>
             <TableRow>
               <TableCell>Start time</TableCell>
-              <TableCell align="right">328</TableCell>
-              <TableCell align="right">458</TableCell>
+              <TableCell align="right">{statsData.minStartTime}</TableCell>
+              <TableCell align="right">{statsData.maxStartTime}</TableCell>
             </TableRow>
             <TableRow>
               <TableCell>Creation time</TableCell>
-              <TableCell align="right">1</TableCell>
-              <TableCell align="right">1.2</TableCell>
+              <TableCell align="right">{statsData.minCreationTime}</TableCell>
+              <TableCell align="right">{statsData.maxCreationTime}</TableCell>
             </TableRow>
           </TableBody>
         </Table>
