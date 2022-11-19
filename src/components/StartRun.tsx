@@ -17,15 +17,15 @@ import {useSelector} from "react-redux";
 import {selectAddress} from "../store/selectors";
 import {setDevices} from "../store/actions";
 
-interface Analysis {
+interface Build {
   id: string,
   url: string,
   name: string,
   branch: string;
 }
 
-interface Analyses {
-  analyses: Analysis[];
+interface Builds {
+  builds: Build[];
 }
 
 interface Datasets {
@@ -43,22 +43,22 @@ interface RunIdResponse {
 const StartRun = () => {
   const history = useHistory();
   const address = useSelector(selectAddress);
-  const [analyses, setAnalyses] = useState<Analyses>({analyses: []});
+  const [builds, setBuilds] = useState<Builds>({builds: []});
   const [datasets, setDatasets] = useState<Datasets>({datasets: []});
   const [workflows, setWorkflows] = useState<Workflows>({workflows: []});
 
-  const [selectedAnalysis, setSelectedAnalysis] = useState<string>("");
+  const [selectedBuild, setSelectedBuild] = useState<string>("");
   const [selectedDataset, setSelectedDataset] = useState<string>("");
   const [selectedWorkflow, setSelectedWorkflow] = useState<string>("");
   const [config, setConfig] = useState<string>("");
 
   useEffect(() => {
-    Axios.get<Analyses>(`${address}/analyses`)
+    Axios.get<Builds>(`${address}/builds`)
       .then((response) => {
-        setAnalyses(response.data);
+        setBuilds(response.data);
       })
       .catch((error) => {
-        alert("Failed to retrieve analyses: " + error);
+        alert("Failed to retrieve builds: " + error);
       });
 
     Axios.get<Datasets>(`${address}/runs/datasets`)
@@ -71,12 +71,12 @@ const StartRun = () => {
   }, []);
 
   useEffect(() => {
-    if(selectedAnalysis.length == 0)
+    if(selectedBuild.length == 0)
       return;
 
-    Axios.get<Workflows>(`${address}/analyses/workflows`, {
+    Axios.get<Workflows>(`${address}/builds/workflows`, {
       headers: {
-        analysisId: selectedAnalysis
+        buildId: selectedBuild
       }
     })
       .then((response) => {
@@ -85,11 +85,11 @@ const StartRun = () => {
       .catch((error) => {
         alert("Failed to retrieve workflows: " + error);
       });
-  }, [selectedAnalysis]);
+  }, [selectedBuild]);
 
-  const analysisChanged = (e: SelectChangeEvent) => {
+  const buildChanged = (e: SelectChangeEvent) => {
     e.preventDefault();
-    setSelectedAnalysis(e.target.value);
+    setSelectedBuild(e.target.value);
   }
 
   const workflowChanged = (e: SelectChangeEvent) => {
@@ -110,7 +110,7 @@ const StartRun = () => {
   const createRun = () => {
     Axios.post<RunIdResponse>(`${address}/runs`, null, {
       headers: {
-        analysisId: selectedAnalysis,
+        buildId: selectedBuild,
         dataset: selectedDataset,
         config: config,
         workflow: selectedWorkflow
@@ -138,14 +138,14 @@ const StartRun = () => {
           <Typography variant="h3">New run</Typography>
           <FormControl fullWidth>
             <Box>
-              <InputLabel>Analysis</InputLabel>
+              <InputLabel>Build</InputLabel>
               <Select
-                id="analysis-select"
-                labelId="analysis-select"
-                label="Analysis"
-                onChange={analysisChanged}
+                id="build-select"
+                labelId="build-select"
+                label="Build"
+                onChange={buildChanged}
               >
-                {analyses.analyses.map((analysis) => <MenuItem key={analysis.id} value={analysis.id}>{analysis.name}</MenuItem>)}
+                {builds.builds.map((build) => <MenuItem key={build.id} value={build.id}>{build.name}</MenuItem>)}
               </Select>
             </Box>
             {workflows.workflows.length > 0 && (

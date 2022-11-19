@@ -11,7 +11,6 @@ import {
   Stack,
 } from "@mui/material";
 import {Run, Runs} from "../models/Runs";
-import {useHistory} from "react-router-dom";
 import Axios from "axios";
 import {useSelector} from "react-redux";
 import {selectAddress} from "../store/selectors";
@@ -106,7 +105,7 @@ const SelectionOption = ({ run, onClick }: SelectionOptionProps) => {
       <div>
         <Typography variant="h3">Run {run.id}</Typography>
         <Typography variant="h5">Status {run.status}</Typography>
-        <Typography variant="h5">Analysis {run.analysis.name}</Typography>
+        <Typography variant="h5">Build {run.build.name}</Typography>
         <Typography variant="h5">Workflow {run.workflow}</Typography>
         <Typography variant="h5">Config {run.config}</Typography>
       </div>

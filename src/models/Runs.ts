@@ -1,4 +1,4 @@
-export interface Analysis {
+export interface Build {
   id: string,
   url: string,
   name: string,
@@ -10,7 +10,7 @@ export interface Run {
   status: string,
   config: string,
   workflow: string,
-  analysis: Analysis;
+  build: Build;
 }
 
 export interface Runs {
