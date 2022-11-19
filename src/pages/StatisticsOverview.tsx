@@ -16,6 +16,7 @@ import {
 } from "@mui/material";
 import MenuTabs from "components/MenuTabs";
 import { StatisticsForm } from "components/StatisticsForm";
+import {useParams} from "react-router-dom";
 
 export interface StatisticsResponse {
   x: number[];
@@ -35,20 +36,25 @@ export interface StatisticsResponse {
   maxCreationTime: number;
 }
 
+interface RunIdParam {
+  runId: string
+}
+
 const StatisticsOverview = () => {
   const [statsData, setStatsData] = React.useState<
     StatisticsResponse | undefined
   >();
+  const params = useParams<RunIdParam>();
 
   return (
     <Stack direction="column">
       <NavigationBar>
         <Buttons.Disconnect />
-        <Buttons.SelectDevices />
+        <Buttons.SelectDevices runId={params.runId} />
       </NavigationBar>
       <Container sx={{ flex: 1 }}>
-        <MenuTabs />
-        <StatisticsForm statsData={statsData} setStatsData={setStatsData} />
+        <MenuTabs runId={params.runId} />
+        <StatisticsForm statsData={statsData} setStatsData={setStatsData} runId={params.runId} />
         {(statsData && statsData.x.length > 0) && <TimeSeriesPlot statsData={statsData} />}
         {statsData && <SummaryTable statsData={statsData} />}
       </Container>

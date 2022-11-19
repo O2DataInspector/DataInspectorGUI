@@ -21,23 +21,29 @@ import { updateDeviceMessage } from "store/actions";
 import State, { Device, Message } from "store/state";
 import { selectAddress } from "store/selectors";
 import Axios from "axios";
+import {useParams} from "react-router-dom";
 
 interface DeviceOverviewProps {
   maybeDevice: Device | undefined;
 }
 
+interface RunIdParam {
+  runId: string
+}
+
 const DeviceOverview = ({ maybeDevice }: DeviceOverviewProps) => {
   const history = Router.useHistory();
+  const params = useParams<RunIdParam>();
 
   function onExit() {
-    history.push("/dashboard");
+    history.push(`/runs/${params.runId}/dashboard`);
   }
 
   return (
     <Box display="flex" flexDirection="column" height="100%">
       <NavigationBar>
         <Buttons.Disconnect />
-        <Buttons.SelectDevices />
+        <Buttons.SelectDevices runId={params.runId} />
       </NavigationBar>
       {maybeDevice ? <NonEmptyDevice device={maybeDevice} /> : <EmptyDevice />}
       <ExitToAppIcon

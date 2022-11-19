@@ -47,7 +47,7 @@ interface Device {
   isSelected: boolean;
   ids: string[];
   specs: DeviceSpec;
-  displayedMessage: Message;
+  displayedMessage: Message | undefined;
 }
 
 interface DeviceSpec {
@@ -55,18 +55,38 @@ interface DeviceSpec {
   nSlots: number;
   inputTimesliceId: number;
   maxInputTimeslices: number;
-  inputs: DeviceIO[];
-  outputs: DeviceIO[];
-  forwards: DeviceIO[];
+  inputs: DeviceInput[];
+  outputs: DeviceOutput[];
+  forwards: DeviceForward[];
 }
 
-interface DeviceIO {
+interface DeviceInput {
   binding: string;
   sourceChannel: string;
   timeslice: number;
+  origin: string | undefined;
+  description: string | undefined;
+  subSpec: number | undefined;
+}
+
+interface DeviceOutput {
+  binding: string;
+  channel: string;
+  timeslice: number;
+  maxTimeslices: number;
   origin: string;
   description: string;
-  subSpec: number;
+  subSpec: number | undefined;
+}
+
+interface DeviceForward {
+  binding: string;
+  channel: string;
+  timeslice: number;
+  maxTimeslices: number;
+  origin: string | undefined;
+  description: string | undefined;
+  subSpec: number | undefined;
 }
 
 type MessageMap = {
@@ -81,4 +101,4 @@ interface State {
 
 export default State;
 export { DisplayMethod };
-export type { Device, Message, Url, MessageSummary, MessageMap };
+export type { Device, DeviceSpec, Message, Url, MessageSummary, MessageMap };

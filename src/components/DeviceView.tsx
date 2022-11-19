@@ -1,21 +1,24 @@
-import Axios from "axios";
 import React from "react";
-import * as Redux from "react-redux";
-import * as Router from "react-router-dom";
 
 import { Device } from "store/state";
 import { Typography } from "@mui/material";
 import { Card, CardContent, CardActionArea } from "@mui/material";
+import {useHistory, useParams} from "react-router-dom";
 
 interface DeviceProps {
   device: Device;
 }
 
+interface RunIdParam {
+  runId: string;
+}
+
 const DeviceView = ({ device }: DeviceProps) => {
-  const history = Router.useHistory();
+  const history = useHistory();
+  const params = useParams<RunIdParam>();
 
   function onClick() {
-    history.push(`/overview/${device.name}`);
+    history.push(`/runs/${params.runId}/overview/${device.name}`);
   }
 
   return (

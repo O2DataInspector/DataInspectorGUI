@@ -22,14 +22,22 @@ import {
   Stack,
   Divider,
 } from "@mui/material";
+import {useParams} from "react-router-dom";
+import {useSelector} from "react-redux";
 
 interface DevicesSelectionProps {
   devices: Device[];
 }
 
-const DevicesSelection = ({ devices }: DevicesSelectionProps) => {
+interface RunIdParam {
+  runId: string;
+}
+
+const DevicesSelection = ({ devices}: DevicesSelectionProps) => {
   const [state, setState] = React.useState(devices);
+  const params = useParams<RunIdParam>();
   const store = Redux.useStore() as Store<State>;
+  const address = useSelector(selectAddress);
   const history = Router.useHistory();
 
   const theme = createTheme({
@@ -60,9 +68,9 @@ const DevicesSelection = ({ devices }: DevicesSelectionProps) => {
   }
 
   function onSave() {
-    const address = selectAddress(store.getState());
     Axios.get(address + "/select-devices", {
       headers: {
+        runId: params.runId,
         devices: state
           .filter((device) => device.isSelected)
           .map((d) => d.name)
@@ -71,7 +79,7 @@ const DevicesSelection = ({ devices }: DevicesSelectionProps) => {
     })
       .then((_) => {
         store.dispatch(setDevices(state));
-        history.push("/dashboard");
+        history.push(`/runs/${params.runId}/dashboard`);
       })
       .catch((error) => {
         alert("Failed to refresh the messages: " + error);

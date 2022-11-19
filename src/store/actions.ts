@@ -11,7 +11,7 @@ const SET_DEVICES = "SET_DEVICES";
 const SET_MESSAGES = "SET_MESSAGES";
 const SET_DISPLAYED = "SET_DISPLAYED";
 const SET_DISPLAY_METHOD = "SET_DISPLAY_METHOD";
-const SET_TOPOLOGY_DETAILS = "SET_TOPOLOGY_DETAILS";
+const SET_ADDRESS = "SET_ADDRESS";
 const UPDATE_DEVICE_MESSAGE = "UPDATE_DEVICE_MESSAGE";
 
 interface Disconnect {
@@ -40,10 +40,9 @@ interface SetDisplayMethod {
   method: DisplayMethod;
 }
 
-interface SetTopologyDetails {
-  type: typeof SET_TOPOLOGY_DETAILS;
+interface SetAddress {
+  type: typeof SET_ADDRESS;
   analysisHost: Url;
-  devices: Device[];
 }
 
 interface UpdateDeviceMessage {
@@ -59,7 +58,7 @@ type Action =
   | SetMessages
   | SetDisplayed
   | SetDisplayMethod
-  | SetTopologyDetails
+  | SetAddress
   | UpdateDeviceMessage;
 
 const disconnect = (): Action => ({
@@ -88,10 +87,9 @@ const setDisplayMethod = (message: Message, method: DisplayMethod): Action => ({
   method: method,
 });
 
-const setTopologyDetails = (analysisHost: Url, devices: Device[]): Action => ({
-  type: SET_TOPOLOGY_DETAILS,
-  analysisHost: analysisHost,
-  devices: devices,
+const setAddress = (analysisHost: Url): Action => ({
+  type: SET_ADDRESS,
+  analysisHost: analysisHost
 });
 
 const updateDeviceMessage = (
@@ -112,13 +110,13 @@ export {
   SET_MESSAGES,
   SET_DISPLAYED,
   SET_DISPLAY_METHOD,
-  SET_TOPOLOGY_DETAILS,
+  SET_ADDRESS,
   UPDATE_DEVICE_MESSAGE,
   disconnect,
   setDevices,
   setMessages,
   setDisplayed,
   setDisplayMethod,
-  setTopologyDetails,
+  setAddress,
   updateDeviceMessage,
 };

@@ -37,19 +37,10 @@ function reduce(state = initialState, action: Action): State {
         };
       } else return state;
     }
-    case Actions.SET_TOPOLOGY_DETAILS:
+    case Actions.SET_ADDRESS:
       return {
         ...state,
-        analysisHost: action.analysisHost,
-        devices: action.devices.map(
-          (device) =>
-            ({
-              ...device,
-              isSelected: false,
-              messages: {} as MessageMap,
-              ids: [],
-            } as Device)
-        ),
+        analysisHost: action.analysisHost
       };
     case Actions.UPDATE_DEVICE_MESSAGE:
       return {

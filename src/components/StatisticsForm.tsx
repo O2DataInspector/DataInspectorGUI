@@ -43,7 +43,6 @@ interface StatisticsQuery {
   maxDuration?: number;
   minPayloadSize?: number;
   maxPayloadSize?: number;
-  runId?: number;
   count?: number;
   [key: string]: string | number | undefined;
 }
@@ -52,15 +51,16 @@ interface StatisticsFormProps {
   statsData: StatisticsResponse | undefined;
   setStatsData: React.Dispatch<
     React.SetStateAction<StatisticsResponse | undefined>
-  >;
+  >,
+  runId: string;
 }
 
-const StatisticsForm = ({ statsData, setStatsData }: StatisticsFormProps) => {
+const StatisticsForm = ({ statsData, setStatsData, runId }: StatisticsFormProps) => {
   const store = Redux.useStore() as Store<State>;
   const [query, setQuery] = React.useState({} as StatisticsQuery);
 
   const fetchData = (count?: number) => {
-    const finalQuery = { ...query };
+    const finalQuery = { ...query, runId: runId };
     if (count) finalQuery.count = count;
     console.log("query:");
     console.log(finalQuery);
@@ -202,15 +202,6 @@ const StatisticsForm = ({ statsData, setStatsData }: StatisticsFormProps) => {
             placeholder="any"
             value={query.payloadSplitIndex}
             name="payloadSplitIndex"
-            onChange={handleTextFieldChange}
-          />
-        </Grid>
-        <Grid item xs={3}>
-          <TextField
-            label="Run ID"
-            placeholder="any"
-            value={query.runId}
-            name="runId"
             onChange={handleTextFieldChange}
           />
         </Grid>

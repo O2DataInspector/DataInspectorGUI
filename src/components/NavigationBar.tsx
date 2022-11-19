@@ -76,11 +76,15 @@ const Disconnect = () => {
   );
 };
 
-const SelectDevices = () => {
+interface SelectDevicesProps {
+  runId: string;
+}
+
+const SelectDevices = ({ runId }: SelectDevicesProps) => {
   const history = Router.useHistory();
 
   function onClick() {
-    history.push("/selection");
+    history.push(`/runs/${runId}/selection`);
   }
 
   return (
