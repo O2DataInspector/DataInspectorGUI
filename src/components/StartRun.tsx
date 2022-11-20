@@ -8,7 +8,7 @@ import {
   Paper,
   createTheme,
   ThemeProvider,
-  Stack, FormControl, InputLabel, Select, MenuItem, SelectChangeEvent, TextField, Divider,
+  Stack, FormControl, InputLabel, Select, MenuItem, SelectChangeEvent, TextField, Divider, FormControlLabel, Checkbox,
 } from "@mui/material";
 import {Run, Runs} from "../models/Runs";
 import {useHistory} from "react-router-dom";
@@ -48,6 +48,7 @@ const StartRun = () => {
   const [workflows, setWorkflows] = useState<Workflows>({workflows: []});
 
   const [selectedBuild, setSelectedBuild] = useState<string>("");
+  const [includeDataset, setIncludeDataset] = useState<boolean>(false);
   const [selectedDataset, setSelectedDataset] = useState<string>("");
   const [selectedWorkflow, setSelectedWorkflow] = useState<string>("");
   const [config, setConfig] = useState<string>("");
@@ -162,15 +163,27 @@ const StartRun = () => {
               </Box>
             )}
             <Box>
-              <InputLabel>Dataset</InputLabel>
-              <Select
-                id="dataset-select"
-                labelId="dataset-select"
-                label="Dataset"
-                onChange={datasetChanged}
-              >
-                {datasets.datasets.map((dataset, i) => <MenuItem key={i} value={dataset}>{dataset}</MenuItem>)}
-              </Select>
+              <FormControlLabel
+                control={
+                  <Checkbox onChange={() => setIncludeDataset(!includeDataset)} checked={includeDataset} />
+                }
+                label={"Include Dataset"}
+              />
+            </Box>
+            {includeDataset && (
+              <Box>
+                <InputLabel>Dataset</InputLabel>
+                <Select
+                  id="dataset-select"
+                  labelId="dataset-select"
+                  label="Dataset"
+                  onChange={datasetChanged}
+                >
+                  {datasets.datasets.map((dataset, i) => <MenuItem key={i} value={dataset}>{dataset}</MenuItem>)}
+                </Select>
+              </Box>
+            )}
+            <Box>
               <TextField label="Config" variant="outlined" onChange={configChanged}/>
               <Button onClick={createRun}>Run</Button>
             </Box>

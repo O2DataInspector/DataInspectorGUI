@@ -61,10 +61,6 @@ const Disconnect = () => {
   const history = Router.useHistory();
 
   function onClick() {
-    const address = selectAddress(store.getState());
-    Axios.get(address + "/stop").catch((_) => {
-      /* */
-    });
     store.dispatch(disconnect());
     history.push("/");
   }
