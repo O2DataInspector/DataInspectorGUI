@@ -13,6 +13,7 @@ import StartRun from "../components/StartRun";
 
 interface AvailableDevice {
   name: string;
+  isSelected: boolean,
   specs: DeviceSpec;
 }
 
@@ -33,7 +34,7 @@ const RunsList = () => {
     })
       .then((response) => {
         const devices = response.data.devices;
-        store.dispatch(setDevices(devices.map((device) => ({name: device.name, specs: device.specs, messages: {}, isSelected: false, ids: [], displayedMessage: undefined}))));
+        store.dispatch(setDevices(devices.map((device) => ({name: device.name, specs: device.specs, messages: {}, isSelected: device.isSelected, ids: [], displayedMessage: undefined}))));
         history.push(`/runs/${runId}/dashboard`);
       })
       .catch((_) => {
