@@ -17,6 +17,8 @@ function reduce(state = initialState, action: Action): State {
   switch (action.type) {
     case Actions.DISCONNECT:
       return initialState;
+    case Actions.CLEAN_RUN_DATA:
+      return {...initialState, analysisHost: state.analysisHost};
     case Actions.SET_DEVICES:
       return { ...state, devices: action.devices };
     case Actions.SET_MESSAGES: {

@@ -51,6 +51,8 @@ const StatisticsOverview = () => {
       <NavigationBar>
         <Buttons.Disconnect />
         <Buttons.SelectDevices runId={params.runId} />
+        <Buttons.StopRun runId={params.runId} />
+        <Buttons.SelectRun />
       </NavigationBar>
       <Container sx={{ flex: 1 }}>
         <MenuTabs runId={params.runId} />

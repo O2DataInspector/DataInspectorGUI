@@ -44,6 +44,8 @@ const DeviceOverview = ({ maybeDevice }: DeviceOverviewProps) => {
       <NavigationBar>
         <Buttons.Disconnect />
         <Buttons.SelectDevices runId={params.runId} />
+        <Buttons.StopRun runId={params.runId} />
+        <Buttons.SelectRun />
       </NavigationBar>
       {maybeDevice ? <NonEmptyDevice device={maybeDevice} /> : <EmptyDevice />}
       <ExitToAppIcon

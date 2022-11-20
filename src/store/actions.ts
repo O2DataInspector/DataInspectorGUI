@@ -7,6 +7,7 @@ import {
 } from "store/state";
 
 const DISCONNECT = "DISCONNECT";
+const CLEAN_RUN_DATA = "CLEAN_RUN_DATA";
 const SET_DEVICES = "SET_DEVICES";
 const SET_MESSAGES = "SET_MESSAGES";
 const SET_DISPLAYED = "SET_DISPLAYED";
@@ -16,6 +17,10 @@ const UPDATE_DEVICE_MESSAGE = "UPDATE_DEVICE_MESSAGE";
 
 interface Disconnect {
   type: typeof DISCONNECT;
+}
+
+interface CleanRunData {
+  type: typeof CLEAN_RUN_DATA;
 }
 
 interface SetDevices {
@@ -54,6 +59,7 @@ interface UpdateDeviceMessage {
 
 type Action =
   | Disconnect
+  | CleanRunData
   | SetDevices
   | SetMessages
   | SetDisplayed
@@ -63,6 +69,10 @@ type Action =
 
 const disconnect = (): Action => ({
   type: DISCONNECT,
+});
+
+const cleanRunData = (): Action => ({
+  type: CLEAN_RUN_DATA,
 });
 
 const setDevices = (devices: Device[]): Action => ({
@@ -106,6 +116,7 @@ const updateDeviceMessage = (
 export default Action;
 export {
   DISCONNECT,
+  CLEAN_RUN_DATA,
   SET_DEVICES,
   SET_MESSAGES,
   SET_DISPLAYED,
@@ -113,6 +124,7 @@ export {
   SET_ADDRESS,
   UPDATE_DEVICE_MESSAGE,
   disconnect,
+  cleanRunData,
   setDevices,
   setMessages,
   setDisplayed,

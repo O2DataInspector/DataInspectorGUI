@@ -29,6 +29,8 @@ const Dashboard = ({ devices }: DashboardProps) => {
       <NavigationBar>
         <Buttons.Disconnect />
         <Buttons.SelectDevices runId={params.runId} />
+        <Buttons.StopRun runId={params.runId} />
+        <Buttons.SelectRun />
       </NavigationBar>
       <Container sx={{ height: "50%" }}>
         <MenuTabs runId={params.runId} />

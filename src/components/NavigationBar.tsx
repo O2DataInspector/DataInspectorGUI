@@ -14,9 +14,10 @@ import {
 } from "@mui/material";
 
 import LogoIcon from "icons/logo.svg";
-import { disconnect } from "store/actions";
+import {cleanRunData, disconnect} from "store/actions";
 import { selectAddress } from "store/selectors";
 import State from "store/state";
+import {useSelector, useStore} from "react-redux";
 
 type ContainerProps = {
   children: React.ReactNode;
@@ -72,6 +73,22 @@ const Disconnect = () => {
   );
 };
 
+const SelectRun = () => {
+  const store = Redux.useStore() as Store<State>;
+  const history = Router.useHistory();
+
+  function onClick() {
+    store.dispatch(cleanRunData());
+    history.push("/runs");
+  }
+
+  return (
+    <Button variant="outlined" color="primary" onClick={onClick}>
+      Select run
+    </Button>
+  );
+};
+
 interface SelectDevicesProps {
   runId: string;
 }
@@ -90,5 +107,37 @@ const SelectDevices = ({ runId }: SelectDevicesProps) => {
   );
 };
 
+interface StopRunProps {
+  runId: string;
+}
+
+const StopRun = ({ runId }: StopRunProps) => {
+  const history = Router.useHistory();
+  const store = useStore();
+  const address = useSelector(selectAddress);
+
+  function onClick() {
+    Axios.post<object>(`${address}/runs/stop`, null, {
+      headers: {
+        runId: runId
+      }
+    })
+      .then((result) => {
+        alert("Workflow stopped");
+        store.dispatch(cleanRunData());
+        history.push(`/runs`);
+      })
+      .catch((reason) => {
+        alert("Failed to stop running workflow.");
+      })
+  }
+
+  return (
+    <Button variant="outlined" onClick={onClick} sx={{ mx: "1em" }}>
+      Stop run
+    </Button>
+  );
+};
+
 export default NavigationBar;
-export { Disconnect, SelectDevices };
+export { Disconnect, SelectDevices, StopRun, SelectRun };
