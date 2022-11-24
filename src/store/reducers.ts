@@ -10,6 +10,7 @@ import State, {
 const initialState: State = {
   analysisHost: undefined,
   devices: [],
+  isRunActive: false,
   lastMessageId: undefined,
 };
 
@@ -21,6 +22,8 @@ function reduce(state = initialState, action: Action): State {
       return {...initialState, analysisHost: state.analysisHost};
     case Actions.SET_DEVICES:
       return { ...state, devices: action.devices };
+    case Actions.SET_IS_RUN_ACTIVE:
+      return { ...state, isRunActive: action.isRunActive };
     case Actions.SET_MESSAGES: {
       if (action.messages.length > 0) {
         const messagesMap = mapToDevicesNames(action.messages);

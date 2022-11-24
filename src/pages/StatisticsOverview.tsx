@@ -17,6 +17,8 @@ import {
 import MenuTabs from "components/MenuTabs";
 import { StatisticsForm } from "components/StatisticsForm";
 import {useParams} from "react-router-dom";
+import {useSelector} from "react-redux";
+import {selectIsRunActive} from "../store/selectors";
 
 export interface StatisticsResponse {
   x: number[];
@@ -41,6 +43,7 @@ interface RunIdParam {
 }
 
 const StatisticsOverview = () => {
+  const isRunActive = useSelector(selectIsRunActive);
   const [statsData, setStatsData] = React.useState<
     StatisticsResponse | undefined
   >();
@@ -51,7 +54,7 @@ const StatisticsOverview = () => {
       <NavigationBar>
         <Buttons.Disconnect />
         <Buttons.SelectDevices runId={params.runId} />
-        <Buttons.StopRun runId={params.runId} />
+        {isRunActive && <Buttons.StopRun runId={params.runId} />}
         <Buttons.SelectRun />
       </NavigationBar>
       <Container sx={{ flex: 1 }}>

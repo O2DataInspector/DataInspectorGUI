@@ -9,6 +9,7 @@ import {
 const DISCONNECT = "DISCONNECT";
 const CLEAN_RUN_DATA = "CLEAN_RUN_DATA";
 const SET_DEVICES = "SET_DEVICES";
+const SET_IS_RUN_ACTIVE = "SET_IS_RUN_ACTIVE";
 const SET_MESSAGES = "SET_MESSAGES";
 const SET_DISPLAYED = "SET_DISPLAYED";
 const SET_DISPLAY_METHOD = "SET_DISPLAY_METHOD";
@@ -26,6 +27,11 @@ interface CleanRunData {
 interface SetDevices {
   type: typeof SET_DEVICES;
   devices: Device[];
+}
+
+interface SetIsRunActive {
+  type: typeof SET_IS_RUN_ACTIVE;
+  isRunActive: boolean;
 }
 
 interface SetMessages {
@@ -61,6 +67,7 @@ type Action =
   | Disconnect
   | CleanRunData
   | SetDevices
+  | SetIsRunActive
   | SetMessages
   | SetDisplayed
   | SetDisplayMethod
@@ -78,6 +85,11 @@ const cleanRunData = (): Action => ({
 const setDevices = (devices: Device[]): Action => ({
   type: SET_DEVICES,
   devices: devices,
+});
+
+const setIsRunActive = (isRunActive: boolean): Action => ({
+  type: SET_IS_RUN_ACTIVE,
+  isRunActive: isRunActive,
 });
 
 const setMessages = (messages: MessageSummary[]): Action => ({
@@ -118,6 +130,7 @@ export {
   DISCONNECT,
   CLEAN_RUN_DATA,
   SET_DEVICES,
+  SET_IS_RUN_ACTIVE,
   SET_MESSAGES,
   SET_DISPLAYED,
   SET_DISPLAY_METHOD,
@@ -126,6 +139,7 @@ export {
   disconnect,
   cleanRunData,
   setDevices,
+  setIsRunActive,
   setMessages,
   setDisplayed,
   setDisplayMethod,

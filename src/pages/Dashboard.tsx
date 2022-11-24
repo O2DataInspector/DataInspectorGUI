@@ -11,6 +11,8 @@ import { Typography, Grid } from "@mui/material";
 import MenuTabs from "components/MenuTabs";
 import UpdateButtons from "components/UpdateButtons";
 import {useParams} from "react-router-dom";
+import {useSelector} from "react-redux";
+import {selectIsRunActive} from "../store/selectors";
 
 interface DashboardProps {
   devices: Device[];
@@ -21,6 +23,7 @@ interface RunIdParam {
 }
 
 const Dashboard = ({ devices }: DashboardProps) => {
+  const isRunActive = useSelector(selectIsRunActive);
   const store = Redux.useStore() as Store<State>;
   const params = useParams<RunIdParam>();
 
@@ -29,7 +32,7 @@ const Dashboard = ({ devices }: DashboardProps) => {
       <NavigationBar>
         <Buttons.Disconnect />
         <Buttons.SelectDevices runId={params.runId} />
-        <Buttons.StopRun runId={params.runId} />
+        {isRunActive && <Buttons.StopRun runId={params.runId} />}
         <Buttons.SelectRun />
       </NavigationBar>
       <Container sx={{ height: "50%" }}>

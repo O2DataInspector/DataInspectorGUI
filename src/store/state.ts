@@ -96,6 +96,7 @@ type MessageMap = {
 interface State {
   analysisHost: Url | undefined;
   devices: Device[];
+  isRunActive: boolean;
   lastMessageId: string | undefined;
 }
 

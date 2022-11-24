@@ -6,7 +6,7 @@ import {useHistory} from "react-router-dom";
 import {useSelector, useStore} from "react-redux";
 import {selectAddress} from "../store/selectors";
 import Axios from 'axios';
-import {setDevices} from "../store/actions";
+import {setDevices, setIsRunActive} from "../store/actions";
 import {DeviceSpec} from "store/state";
 import RunsSelection from "../components/RunsSelection";
 import StartRun from "../components/StartRun";
@@ -26,7 +26,7 @@ const RunsList = () => {
   const history = useHistory();
   const address = useSelector(selectAddress);
 
-  const onSelect = (runId: string) => {
+  const onSelect = (runId: string, active: boolean) => {
     Axios.get<AvailableDevicesResponse>(`${address}/available-devices`, {
       headers: {
         runId: runId
@@ -35,6 +35,7 @@ const RunsList = () => {
       .then((response) => {
         const devices = response.data.devices;
         store.dispatch(setDevices(devices.map((device) => ({name: device.name, specs: device.specs, messages: {}, isSelected: device.isSelected, ids: [], displayedMessage: undefined}))));
+        store.dispatch(setIsRunActive(active));
         history.push(`/runs/${runId}/dashboard`);
       })
       .catch((_) => {

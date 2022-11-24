@@ -6,7 +6,7 @@ import { Store } from "redux";
 
 import State, { Device } from "store/state";
 import { setDevices } from "store/actions";
-import { selectAddress } from "store/selectors";
+import {selectAddress, selectIsRunActive} from "store/selectors";
 
 import {
   Button,
@@ -34,6 +34,7 @@ interface RunIdParam {
 }
 
 const DevicesSelection = ({ devices}: DevicesSelectionProps) => {
+  const isRunActive = useSelector(selectIsRunActive);
   const [state, setState] = React.useState(devices);
   const params = useParams<RunIdParam>();
   const store = Redux.useStore() as Store<State>;
@@ -68,24 +69,29 @@ const DevicesSelection = ({ devices}: DevicesSelectionProps) => {
   }
 
   function onSave() {
-    Axios.get(address + "/select-devices", {
-      headers: {
-        runId: params.runId,
-        devices: state
-          .filter((device) => device.isSelected)
-          .map((d) => d.name)
-          .join(","),
-      },
-    })
-      .then((_) => {
-        store.dispatch(setDevices(state));
-        history.push(`/runs/${params.runId}/dashboard`);
+    if(isRunActive) {
+      Axios.get(address + "/select-devices", {
+        headers: {
+          runId: params.runId,
+          devices: state
+            .filter((device) => device.isSelected)
+            .map((d) => d.name)
+            .join(","),
+        },
       })
-      .catch((error) => {
-        alert("Failed to refresh the messages: " + error);
-        store.dispatch(setDevices(state));
-        history.goBack();
-      });
+        .then((_) => {
+          store.dispatch(setDevices(state));
+          history.push(`/runs/${params.runId}/dashboard`);
+        })
+        .catch((error) => {
+          alert("Failed to refresh the messages: " + error);
+          store.dispatch(setDevices(state));
+          history.goBack();
+        });
+    } else {
+      store.dispatch(setDevices(state));
+      history.push(`/runs/${params.runId}/dashboard`);
+    }
   }
 
   function onCancel() {

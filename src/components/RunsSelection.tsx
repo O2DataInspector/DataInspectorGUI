@@ -16,7 +16,7 @@ import {useSelector} from "react-redux";
 import {selectAddress} from "../store/selectors";
 
 interface RunsSelectionProps {
-  onSelect: (runId: string) => void;
+  onSelect: (runId: string, active: boolean) => void;
 }
 
 const RunsSelection = ({ onSelect }: RunsSelectionProps) => {
@@ -93,15 +93,12 @@ const RunsSelection = ({ onSelect }: RunsSelectionProps) => {
 
 interface SelectionOptionProps {
   run: Run;
-  onClick: (runId: string) => void;
+  onClick: (runId: string, active: boolean) => void;
 }
 
 const SelectionOption = ({ run, onClick }: SelectionOptionProps) => {
   const _onClick = () => {
-    if(run.status == "RUNNING")
-      onClick(run.id);
-    else
-      alert("Run has already finished or has not yet started");
+    onClick(run.id, run.status == "RUNNING");
   }
 
   const statusColor = (() => {
