@@ -8,7 +8,17 @@ import {
   Paper,
   createTheme,
   ThemeProvider,
-  Stack, FormControl, InputLabel, Select, MenuItem, SelectChangeEvent, TextField, Divider, FormControlLabel, Checkbox,
+  Stack,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  SelectChangeEvent,
+  TextField,
+  Divider,
+  FormControlLabel,
+  Checkbox,
+  Autocomplete,
 } from "@mui/material";
 import {Run, Runs} from "../models/Runs";
 import {useHistory} from "react-router-dom";
@@ -93,9 +103,11 @@ const StartRun = () => {
     setSelectedBuild(e.target.value);
   }
 
-  const workflowChanged = (e: SelectChangeEvent) => {
-    e.preventDefault();
-    setSelectedWorkflow(e.target.value);
+  const workflowChanged = (e: any, newWorkflow: string | null) => {
+    if(newWorkflow == null)
+      return;
+
+    setSelectedWorkflow(newWorkflow);
   }
 
   const datasetChanged = (e: SelectChangeEvent) => {
@@ -138,55 +150,56 @@ const StartRun = () => {
         <Box m="2em">
           <Typography variant="h3">New run</Typography>
           <FormControl fullWidth>
-            <Box>
-              <InputLabel>Build</InputLabel>
-              <Select
-                id="build-select"
-                labelId="build-select"
-                label="Build"
-                onChange={buildChanged}
-              >
-                {builds.builds.map((build) => <MenuItem key={build.id} value={build.id}>{build.name}</MenuItem>)}
-              </Select>
-            </Box>
-            {workflows.workflows.length > 0 && (
-              <Box>
-                <InputLabel>Workflow</InputLabel>
-                <Select
-                  id={"workflow-select"}
-                  labelId="workflow-select"
-                  label="Workflow"
-                  onChange={workflowChanged}
-                >
-                  {workflows.workflows.map((workflow, i) => <MenuItem key={i} value={workflow}>{workflow}</MenuItem>)}
-                </Select>
-              </Box>
-            )}
-            <Box>
-              <FormControlLabel
-                control={
-                  <Checkbox onChange={() => setIncludeDataset(!includeDataset)} checked={includeDataset} />
-                }
-                label={"Include Dataset"}
+            <InputLabel>Build</InputLabel>
+            <Select
+              id="build-select"
+              labelId="build-select"
+              label="Build"
+              onChange={buildChanged}
+              sx={{width: '100%'}}
+            >
+              {builds.builds.map((build) => <MenuItem key={build.id} value={build.id}>{build.name}</MenuItem>)}
+            </Select>
+          </FormControl>
+          {workflows.workflows.length > 0 && (
+            <FormControl fullWidth>
+              <Autocomplete
+                disablePortal
+                id="combo-box-demo"
+                options={workflows.workflows}
+                getOptionLabel={(option) => option}
+                sx={{ width: 300 }}
+                renderOption={(props, option) => <Box component="li" {...props}> {option} </Box>}
+                renderInput={(params) => <TextField {...params} label="Workflow"/>}
+                onChange={workflowChanged}
               />
-            </Box>
-            {includeDataset && (
-              <Box>
-                <InputLabel>Dataset</InputLabel>
-                <Select
-                  id="dataset-select"
-                  labelId="dataset-select"
-                  label="Dataset"
-                  onChange={datasetChanged}
-                >
-                  {datasets.datasets.map((dataset, i) => <MenuItem key={i} value={dataset}>{dataset}</MenuItem>)}
-                </Select>
-              </Box>
-            )}
-            <Box>
-              <TextField label="Config" variant="outlined" onChange={configChanged}/>
-              <Button onClick={createRun}>Run</Button>
-            </Box>
+            </FormControl>
+          )}
+          <FormControl fullWidth>
+            <FormControlLabel
+              control={
+              <Checkbox onChange={() => setIncludeDataset(!includeDataset)} checked={includeDataset} />
+            }
+              label={"Include Dataset"}
+            />
+          </FormControl>
+          {includeDataset && (
+            <FormControl fullWidth>
+              <InputLabel>Dataset</InputLabel>
+              <Select
+                id="dataset-select"
+                labelId="dataset-select"
+                label="Dataset"
+                onChange={datasetChanged}
+                sx={{width: '100%'}}
+              >
+                {datasets.datasets.map((dataset, i) => <MenuItem key={i} value={dataset}>{dataset}</MenuItem>)}
+              </Select>
+            </FormControl>
+          )}
+          <FormControl fullWidth>
+            <TextField label="Config" variant="outlined" onChange={configChanged}/>
+            <Button onClick={createRun}>Run</Button>
           </FormControl>
         </Box>
       </Paper>

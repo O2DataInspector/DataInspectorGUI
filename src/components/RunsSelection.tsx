@@ -8,7 +8,7 @@ import {
   Paper,
   createTheme,
   ThemeProvider,
-  Stack,
+  Stack, Divider,
 } from "@mui/material";
 import {Run, Runs} from "../models/Runs";
 import Axios from "axios";
@@ -58,8 +58,12 @@ const RunsSelection = ({ onSelect }: RunsSelectionProps) => {
         }}
       >
         <Box m="2em">
-          <Typography variant="h3">Runs</Typography>
-          <Stack>
+          <Typography variant="h3" sx={{marginBottom: 7}}>Runs</Typography>
+          <Stack
+            spacing={0}
+            direction="column"
+            justifyContent="center"
+          >
             {runs.runs.map((run) => (
               <SelectionOption
                 key={run.id}
@@ -100,14 +104,31 @@ const SelectionOption = ({ run, onClick }: SelectionOptionProps) => {
       alert("Run has already finished or has not yet started");
   }
 
+  const statusColor = (() => {
+    if(run.status == "RUNNING")
+      return "green";
+    else
+      return "red";
+  })();
+
+  const headerValue = (header: string, value: string) => (
+    <Box sx={{marginBottom: 1}}>
+      <Typography sx={{ fontSize: 14, marginBottom: 0 }} color="text.secondary" gutterBottom>
+        {header}
+      </Typography>
+      <Typography variant="h5">{value}</Typography>
+    </Box>
+  )
+
   return (
-    <Paper onClick={_onClick}>
+    <Paper onClick={_onClick} sx={{margin: 3, padding: 5, width: '100%', boxShadow: 5}}>
       <div>
-        <Typography variant="h3">Run {run.id}</Typography>
-        <Typography variant="h5">Status {run.status}</Typography>
-        <Typography variant="h5">Build {run.build.name}</Typography>
-        <Typography variant="h5">Workflow {run.workflow}</Typography>
-        <Typography variant="h5">Config {run.config}</Typography>
+        <Typography variant="h3" sx={{marginBottom: 1}}>{run.id}</Typography>
+        <Typography variant="h5" color={statusColor}>{run.status}</Typography>
+        <Divider sx={{margin: 2}}/>
+        {headerValue("Build", run.build.name)}
+        {headerValue("Workflow", run.workflow)}
+        {run.config.length > 0 && headerValue("Config", run.config)}
       </div>
     </Paper>
   )

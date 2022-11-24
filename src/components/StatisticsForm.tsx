@@ -65,12 +65,11 @@ const StatisticsForm = ({ statsData, setStatsData, runId }: StatisticsFormProps)
     console.log("query:");
     console.log(finalQuery);
     const address = selectAddress(store.getState());
-    Axios.get(address + "/stats", {
+    Axios.get<StatisticsResponse>(address + "/stats", {
       headers: finalQuery as AxiosRequestHeaders,
     })
       .then((response) => {
-        console.log("response:");
-        console.log(response);
+        setStatsData(response.data);
       })
       .catch((error) => {
         alert("Failed to fetch statistics: " + error);
