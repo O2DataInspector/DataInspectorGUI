@@ -22,6 +22,8 @@ function reduce(state = initialState, action: Action): State {
       return {...initialState, analysisHost: state.analysisHost};
     case Actions.SET_DEVICES:
       return { ...state, devices: action.devices };
+    case Actions.SET_INSPECTION:
+      return { ...state, devices: state.devices.map((d) => ({...d, isSelected: action.deviceNames.includes(d.name)})) };
     case Actions.SET_IS_RUN_ACTIVE:
       return { ...state, isRunActive: action.isRunActive };
     case Actions.SET_MESSAGES: {

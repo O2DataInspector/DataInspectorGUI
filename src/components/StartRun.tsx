@@ -20,12 +20,10 @@ import {
   Checkbox,
   Autocomplete,
 } from "@mui/material";
-import {Run, Runs} from "../models/Runs";
 import {useHistory} from "react-router-dom";
 import Axios from "axios";
 import {useSelector} from "react-redux";
 import {selectAddress} from "../store/selectors";
-import {setDevices} from "../store/actions";
 
 interface Build {
   id: string,
