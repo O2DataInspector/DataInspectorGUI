@@ -179,10 +179,10 @@ const StatisticsForm = ({ statsData, setStatsData, runId }: StatisticsFormProps)
             onChange={handleTextFieldChange}
           />
         </Grid>
-        <Grid item xs={3}>
+        <Grid item xs={4}>
           <SerializationSelect query={query} setQuery={setQuery} />
         </Grid>
-        <Grid item xs={3}>
+        <Grid item xs={4}>
           <TextField
             type="number"
             inputProps={{ min: 0 }}
@@ -193,7 +193,7 @@ const StatisticsForm = ({ statsData, setStatsData, runId }: StatisticsFormProps)
             onChange={handleTextFieldChange}
           />
         </Grid>
-        <Grid item xs={3}>
+        <Grid item xs={4}>
           <TextField
             type="number"
             inputProps={{ min: 0 }}

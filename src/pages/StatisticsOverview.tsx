@@ -13,6 +13,7 @@ import {
   TableCell,
   TableBody,
   TableHead,
+  Divider,
 } from "@mui/material";
 import MenuTabs from "components/MenuTabs";
 import { StatisticsForm } from "components/StatisticsForm";
@@ -77,12 +78,13 @@ const TimeSeriesPlot = ({ statsData }: StatisticsProps) => {
       <Container sx={{ width: "80%", mx: "auto" , height: "80%"}}>
           <Plot
             data={[{ type: "bar", x: statsData.x, y: statsData.yNumbers}]}
-            layout={{}}
+            layout={{title: "Messages distribution", xaxis: {title: "Start time"}, yaxis: {title: "Number of messages"}}}
             config={{ responsive: true }}
           /> 
+          <Divider/>
           <Plot
           data={[{ type: "bar", x: statsData.x, y: statsData.yData}]}
-          layout={{}}
+          layout={{title: "Data distribution", xaxis: {title: "Start time"}, yaxis: {title: "Data [B]"}}}
           config={{ responsive: true }}
         />
       </Container>
