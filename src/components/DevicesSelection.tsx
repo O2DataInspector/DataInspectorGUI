@@ -5,8 +5,8 @@ import * as Router from "react-router-dom";
 import { Store } from "redux";
 
 import State, { Device } from "store/state";
-import { setDevices } from "store/actions";
-import { selectAddress } from "store/selectors";
+import {setInspection} from "store/actions";
+import {selectAddress, selectIsRunActive} from "store/selectors";
 
 import {
   Button,
@@ -22,14 +22,28 @@ import {
   Stack,
   Divider,
 } from "@mui/material";
+import {useParams} from "react-router-dom";
+import {useSelector} from "react-redux";
+
+interface DeviceOption {
+  name: string,
+  isSelected: boolean
+}
 
 interface DevicesSelectionProps {
-  devices: Device[];
+  devices: DeviceOption[];
+}
+
+interface RunIdParam {
+  runId: string;
 }
 
 const DevicesSelection = ({ devices }: DevicesSelectionProps) => {
+  const isRunActive = useSelector(selectIsRunActive);
   const [state, setState] = React.useState(devices);
+  const params = useParams<RunIdParam>();
   const store = Redux.useStore() as Store<State>;
+  const address = useSelector(selectAddress);
   const history = Router.useHistory();
 
   const theme = createTheme({
@@ -43,10 +57,10 @@ const DevicesSelection = ({ devices }: DevicesSelectionProps) => {
     },
   });
 
-  function onClick(device: Device) {
+  function onClick(deviceName: string) {
     setState(
       state.map((other) =>
-        other === device ? { ...other, isSelected: !other.isSelected } : other
+        other.name === deviceName ? { ...other, isSelected: !other.isSelected } : other
       )
     );
   }
@@ -60,24 +74,29 @@ const DevicesSelection = ({ devices }: DevicesSelectionProps) => {
   }
 
   function onSave() {
-    const address = selectAddress(store.getState());
-    Axios.get(address + "/select-devices", {
-      headers: {
-        devices: state
-          .filter((device) => device.isSelected)
-          .map((d) => d.name)
-          .join(","),
-      },
-    })
-      .then((_) => {
-        store.dispatch(setDevices(state));
-        history.push("/dashboard");
+    if(isRunActive) {
+      Axios.get(address + "/select-devices", {
+        headers: {
+          runId: params.runId,
+          devices: state
+            .filter((device) => device.isSelected)
+            .map((d) => d.name)
+            .join(","),
+        },
       })
-      .catch((error) => {
-        alert("Failed to refresh the messages: " + error);
-        store.dispatch(setDevices(state));
-        history.goBack();
-      });
+        .then((_) => {
+          store.dispatch(setInspection(state.filter((d) => d.isSelected).map((d) => d.name)));
+          history.push(`/runs/${params.runId}/dashboard`);
+        })
+        .catch((error) => {
+          alert("Failed to refresh the messages: " + error);
+          store.dispatch(setInspection(state.filter((d) => d.isSelected).map((d) => d.name)));
+          history.goBack();
+        });
+    } else {
+      store.dispatch(setInspection(state.filter((d) => d.isSelected).map((d) => d.name)));
+      history.push(`/runs/${params.runId}/dashboard`);
+    }
   }
 
   function onCancel() {
@@ -146,21 +165,33 @@ const DevicesSelection = ({ devices }: DevicesSelectionProps) => {
 };
 
 interface SelectionOptionProps {
-  device: Device;
-  onClick: (device: Device) => void;
+  device: DeviceOption;
+  onClick: (deviceName: string) => void;
 }
 
 const SelectionOption = ({ device, onClick }: SelectionOptionProps) => (
   <FormControlLabel
     control={
-      <Checkbox onChange={() => onClick(device)} checked={device.isSelected} />
+      <Checkbox onChange={() => onClick(device.name)} checked={device.isSelected} />
     }
     label={device.name}
   />
 );
 
-const mapState = (state: State) => ({
-  devices: state.devices,
-});
+const mapState = (state: State) => {
+  function onlyUnique(value: string, index: number, self: string[]) {
+    return self.indexOf(value) === index;
+  }
+
+  const names = state.devices.map((d) => d.name);
+  const uniqueNames = names.filter(onlyUnique);
+
+  return {devices: uniqueNames.map((name) => {
+      return {
+        name: name,
+        isSelected: state.devices.filter((d) => d.name === name).map((d) => d.isSelected)[0]
+      }
+    })};
+};
 
 export default Redux.connect(mapState)(DevicesSelection);

@@ -24,7 +24,11 @@ import RefreshIcon from "@mui/icons-material/Refresh";
 const options = ["Next", "Next 10", "Next 100"];
 const parameters = [1, 10, 100];
 
-export default function UpdateButtons() {
+interface UpdateButtonsProps {
+  runId: string;
+}
+
+export default function UpdateButtons({ runId }: UpdateButtonsProps) {
   const store = Redux.useStore() as Store<State>;
   const [open, setOpen] = React.useState(false);
   const anchorRef = React.useRef<HTMLDivElement>(null);
@@ -37,6 +41,7 @@ export default function UpdateButtons() {
     const lastMessageId = selectLastMessageId(store.getState());
     const headers = {
       devices: selectedDevices.map((device) => device.name).join(","),
+      runId: runId
     } as AxiosRequestHeaders;
     if (lastMessageId) headers["id"] = lastMessageId;
 
@@ -61,6 +66,7 @@ export default function UpdateButtons() {
     const headers = {
       devices: selectedDevices.map((device) => device.name).join(","),
       count: parameters[selectedIndex],
+      runId: runId
     } as AxiosRequestHeaders;
     if (lastMessageId) headers["id"] = lastMessageId;
 

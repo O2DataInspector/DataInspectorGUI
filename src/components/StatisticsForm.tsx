@@ -43,7 +43,6 @@ interface StatisticsQuery {
   maxDuration?: number;
   minPayloadSize?: number;
   maxPayloadSize?: number;
-  runId?: number;
   count?: number;
   [key: string]: string | number | undefined;
 }
@@ -52,25 +51,25 @@ interface StatisticsFormProps {
   statsData: StatisticsResponse | undefined;
   setStatsData: React.Dispatch<
     React.SetStateAction<StatisticsResponse | undefined>
-  >;
+  >,
+  runId: string;
 }
 
-const StatisticsForm = ({ statsData, setStatsData }: StatisticsFormProps) => {
+const StatisticsForm = ({ statsData, setStatsData, runId }: StatisticsFormProps) => {
   const store = Redux.useStore() as Store<State>;
   const [query, setQuery] = React.useState({} as StatisticsQuery);
 
   const fetchData = (count?: number) => {
-    const finalQuery = { ...query };
+    const finalQuery = { ...query, runId: runId };
     if (count) finalQuery.count = count;
     console.log("query:");
     console.log(finalQuery);
     const address = selectAddress(store.getState());
-    Axios.get(address + "/stats", {
+    Axios.get<StatisticsResponse>(address + "/stats", {
       headers: finalQuery as AxiosRequestHeaders,
     })
       .then((response) => {
-        console.log("response:");
-        console.log(response);
+        setStatsData(response.data);
       })
       .catch((error) => {
         alert("Failed to fetch statistics: " + error);
@@ -180,10 +179,10 @@ const StatisticsForm = ({ statsData, setStatsData }: StatisticsFormProps) => {
             onChange={handleTextFieldChange}
           />
         </Grid>
-        <Grid item xs={3}>
+        <Grid item xs={4}>
           <SerializationSelect query={query} setQuery={setQuery} />
         </Grid>
-        <Grid item xs={3}>
+        <Grid item xs={4}>
           <TextField
             type="number"
             inputProps={{ min: 0 }}
@@ -194,7 +193,7 @@ const StatisticsForm = ({ statsData, setStatsData }: StatisticsFormProps) => {
             onChange={handleTextFieldChange}
           />
         </Grid>
-        <Grid item xs={3}>
+        <Grid item xs={4}>
           <TextField
             type="number"
             inputProps={{ min: 0 }}
@@ -202,15 +201,6 @@ const StatisticsForm = ({ statsData, setStatsData }: StatisticsFormProps) => {
             placeholder="any"
             value={query.payloadSplitIndex}
             name="payloadSplitIndex"
-            onChange={handleTextFieldChange}
-          />
-        </Grid>
-        <Grid item xs={3}>
-          <TextField
-            label="Run ID"
-            placeholder="any"
-            value={query.runId}
-            name="runId"
             onChange={handleTextFieldChange}
           />
         </Grid>

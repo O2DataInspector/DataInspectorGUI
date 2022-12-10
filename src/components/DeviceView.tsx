@@ -1,21 +1,24 @@
-import Axios from "axios";
 import React from "react";
-import * as Redux from "react-redux";
-import * as Router from "react-router-dom";
 
 import { Device } from "store/state";
-import { Typography } from "@mui/material";
+import { Typography, Box } from "@mui/material";
 import { Card, CardContent, CardActionArea } from "@mui/material";
+import {useHistory, useParams} from "react-router-dom";
 
 interface DeviceProps {
   device: Device;
 }
 
+interface RunIdParam {
+  runId: string;
+}
+
 const DeviceView = ({ device }: DeviceProps) => {
-  const history = Router.useHistory();
+  const history = useHistory();
+  const params = useParams<RunIdParam>();
 
   function onClick() {
-    history.push(`/overview/${device.name}`);
+    history.push(`/runs/${params.runId}/overview/${device.name}`);
   }
 
   return (
@@ -36,6 +39,9 @@ const DeviceDetails = ({ device }: DeviceProps) => {
   const specs = device.specs;
   return (
     <React.Fragment>
+      <Typography variant="body1" color="text.secondary">
+        <Box fontWeight='fontWeightMedium' display='inline'>messages</Box>: {device.ids.length}
+      </Typography>
       <Typography variant="body2" color="text.secondary">
         rank: {specs.rank}
       </Typography>

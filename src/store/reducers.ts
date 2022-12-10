@@ -10,6 +10,7 @@ import State, {
 const initialState: State = {
   analysisHost: undefined,
   devices: [],
+  isRunActive: false,
   lastMessageId: undefined,
 };
 
@@ -17,8 +18,14 @@ function reduce(state = initialState, action: Action): State {
   switch (action.type) {
     case Actions.DISCONNECT:
       return initialState;
+    case Actions.CLEAN_RUN_DATA:
+      return {...initialState, analysisHost: state.analysisHost};
     case Actions.SET_DEVICES:
       return { ...state, devices: action.devices };
+    case Actions.SET_INSPECTION:
+      return { ...state, devices: state.devices.map((d) => ({...d, isSelected: action.deviceNames.includes(d.name)})) };
+    case Actions.SET_IS_RUN_ACTIVE:
+      return { ...state, isRunActive: action.isRunActive };
     case Actions.SET_MESSAGES: {
       if (action.messages.length > 0) {
         const messagesMap = mapToDevicesNames(action.messages);
@@ -37,19 +44,10 @@ function reduce(state = initialState, action: Action): State {
         };
       } else return state;
     }
-    case Actions.SET_TOPOLOGY_DETAILS:
+    case Actions.SET_ADDRESS:
       return {
         ...state,
-        analysisHost: action.analysisHost,
-        devices: action.devices.map(
-          (device) =>
-            ({
-              ...device,
-              isSelected: false,
-              messages: {} as MessageMap,
-              ids: [],
-            } as Device)
-        ),
+        analysisHost: action.analysisHost
       };
     case Actions.UPDATE_DEVICE_MESSAGE:
       return {

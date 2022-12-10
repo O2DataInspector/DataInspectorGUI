@@ -7,20 +7,37 @@ import {
 } from "store/state";
 
 const DISCONNECT = "DISCONNECT";
+const CLEAN_RUN_DATA = "CLEAN_RUN_DATA";
 const SET_DEVICES = "SET_DEVICES";
+const SET_INSPECTION = "SET_INSPECTION";
+const SET_IS_RUN_ACTIVE = "SET_IS_RUN_ACTIVE";
 const SET_MESSAGES = "SET_MESSAGES";
 const SET_DISPLAYED = "SET_DISPLAYED";
 const SET_DISPLAY_METHOD = "SET_DISPLAY_METHOD";
-const SET_TOPOLOGY_DETAILS = "SET_TOPOLOGY_DETAILS";
+const SET_ADDRESS = "SET_ADDRESS";
 const UPDATE_DEVICE_MESSAGE = "UPDATE_DEVICE_MESSAGE";
 
 interface Disconnect {
   type: typeof DISCONNECT;
 }
 
+interface CleanRunData {
+  type: typeof CLEAN_RUN_DATA;
+}
+
 interface SetDevices {
   type: typeof SET_DEVICES;
   devices: Device[];
+}
+
+interface SetInspection {
+  type: typeof SET_INSPECTION;
+  deviceNames: string[];
+}
+
+interface SetIsRunActive {
+  type: typeof SET_IS_RUN_ACTIVE;
+  isRunActive: boolean;
 }
 
 interface SetMessages {
@@ -40,10 +57,9 @@ interface SetDisplayMethod {
   method: DisplayMethod;
 }
 
-interface SetTopologyDetails {
-  type: typeof SET_TOPOLOGY_DETAILS;
+interface SetAddress {
+  type: typeof SET_ADDRESS;
   analysisHost: Url;
-  devices: Device[];
 }
 
 interface UpdateDeviceMessage {
@@ -55,20 +71,37 @@ interface UpdateDeviceMessage {
 
 type Action =
   | Disconnect
+  | CleanRunData
   | SetDevices
+  | SetInspection
+  | SetIsRunActive
   | SetMessages
   | SetDisplayed
   | SetDisplayMethod
-  | SetTopologyDetails
+  | SetAddress
   | UpdateDeviceMessage;
 
 const disconnect = (): Action => ({
   type: DISCONNECT,
 });
 
+const cleanRunData = (): Action => ({
+  type: CLEAN_RUN_DATA,
+});
+
 const setDevices = (devices: Device[]): Action => ({
   type: SET_DEVICES,
   devices: devices,
+});
+
+const setInspection = (deviceNames: string[]): Action => ({
+  type: SET_INSPECTION,
+  deviceNames: deviceNames,
+});
+
+const setIsRunActive = (isRunActive: boolean): Action => ({
+  type: SET_IS_RUN_ACTIVE,
+  isRunActive: isRunActive,
 });
 
 const setMessages = (messages: MessageSummary[]): Action => ({
@@ -88,10 +121,9 @@ const setDisplayMethod = (message: Message, method: DisplayMethod): Action => ({
   method: method,
 });
 
-const setTopologyDetails = (analysisHost: Url, devices: Device[]): Action => ({
-  type: SET_TOPOLOGY_DETAILS,
-  analysisHost: analysisHost,
-  devices: devices,
+const setAddress = (analysisHost: Url): Action => ({
+  type: SET_ADDRESS,
+  analysisHost: analysisHost
 });
 
 const updateDeviceMessage = (
@@ -108,17 +140,23 @@ const updateDeviceMessage = (
 export default Action;
 export {
   DISCONNECT,
+  CLEAN_RUN_DATA,
   SET_DEVICES,
+  SET_INSPECTION,
+  SET_IS_RUN_ACTIVE,
   SET_MESSAGES,
   SET_DISPLAYED,
   SET_DISPLAY_METHOD,
-  SET_TOPOLOGY_DETAILS,
+  SET_ADDRESS,
   UPDATE_DEVICE_MESSAGE,
   disconnect,
+  cleanRunData,
   setDevices,
+  setInspection,
+  setIsRunActive,
   setMessages,
   setDisplayed,
   setDisplayMethod,
-  setTopologyDetails,
+  setAddress,
   updateDeviceMessage,
 };

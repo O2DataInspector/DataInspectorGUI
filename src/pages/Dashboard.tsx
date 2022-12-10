@@ -10,28 +10,39 @@ import { Container, Box } from "@mui/system";
 import { Typography, Grid } from "@mui/material";
 import MenuTabs from "components/MenuTabs";
 import UpdateButtons from "components/UpdateButtons";
+import {useParams} from "react-router-dom";
+import {useSelector} from "react-redux";
+import {selectIsRunActive} from "../store/selectors";
 
 interface DashboardProps {
   devices: Device[];
 }
 
+interface RunIdParam {
+  runId: string;
+}
+
 const Dashboard = ({ devices }: DashboardProps) => {
+  const isRunActive = useSelector(selectIsRunActive);
   const store = Redux.useStore() as Store<State>;
+  const params = useParams<RunIdParam>();
 
   return (
     <React.Fragment>
       <NavigationBar>
         <Buttons.Disconnect />
-        <Buttons.SelectDevices />
+        <Buttons.SelectDevices runId={params.runId} />
+        {isRunActive && <Buttons.StopRun runId={params.runId} />}
+        <Buttons.SelectRun />
       </NavigationBar>
       <Container sx={{ height: "50%" }}>
-        <MenuTabs />
+        <MenuTabs runId={params.runId} />
         {devices.length ? (
           <NonEmptyDashboard devices={devices} />
         ) : (
           <EmptyDashboard />
         )}
-        <UpdateButtons />
+        <UpdateButtons runId={params.runId} />
       </Container>
     </React.Fragment>
   );

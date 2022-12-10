@@ -13,9 +13,13 @@ import {
   TableCell,
   TableBody,
   TableHead,
+  Divider,
 } from "@mui/material";
 import MenuTabs from "components/MenuTabs";
 import { StatisticsForm } from "components/StatisticsForm";
+import {useParams} from "react-router-dom";
+import {useSelector} from "react-redux";
+import {selectIsRunActive} from "../store/selectors";
 
 export interface StatisticsResponse {
   x: number[];
@@ -35,20 +39,28 @@ export interface StatisticsResponse {
   maxCreationTime: number;
 }
 
+interface RunIdParam {
+  runId: string
+}
+
 const StatisticsOverview = () => {
+  const isRunActive = useSelector(selectIsRunActive);
   const [statsData, setStatsData] = React.useState<
     StatisticsResponse | undefined
   >();
+  const params = useParams<RunIdParam>();
 
   return (
     <Stack direction="column">
       <NavigationBar>
         <Buttons.Disconnect />
-        <Buttons.SelectDevices />
+        <Buttons.SelectDevices runId={params.runId} />
+        {isRunActive && <Buttons.StopRun runId={params.runId} />}
+        <Buttons.SelectRun />
       </NavigationBar>
       <Container sx={{ flex: 1 }}>
-        <MenuTabs />
-        <StatisticsForm statsData={statsData} setStatsData={setStatsData} />
+        <MenuTabs runId={params.runId} />
+        <StatisticsForm statsData={statsData} setStatsData={setStatsData} runId={params.runId} />
         {(statsData && statsData.x.length > 0) && <TimeSeriesPlot statsData={statsData} />}
         {statsData && <SummaryTable statsData={statsData} />}
       </Container>
@@ -66,12 +78,13 @@ const TimeSeriesPlot = ({ statsData }: StatisticsProps) => {
       <Container sx={{ width: "80%", mx: "auto" , height: "80%"}}>
           <Plot
             data={[{ type: "bar", x: statsData.x, y: statsData.yNumbers}]}
-            layout={{}}
+            layout={{title: "Messages distribution", xaxis: {title: "Start time"}, yaxis: {title: "Number of messages"}}}
             config={{ responsive: true }}
           /> 
+          <Divider/>
           <Plot
           data={[{ type: "bar", x: statsData.x, y: statsData.yData}]}
-          layout={{}}
+          layout={{title: "Data distribution", xaxis: {title: "Start time"}, yaxis: {title: "Data [B]"}}}
           config={{ responsive: true }}
         />
       </Container>
