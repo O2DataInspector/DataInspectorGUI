@@ -14,7 +14,11 @@ const Router = () => (
       <Route path="/" exact component={Connection} />
       <Route path="/runs" exact component={RunsList} />
       <Route path="/runs/:runId/dashboard" exact component={Dashboard} />
-      <Route path="/runs/:runId/overview/:name" exact component={DeviceOverview} />
+      <Route
+        path="/runs/:runId/overview/:name"
+        exact
+        component={DeviceOverview}
+      />
       <Route path="/runs/:runId/selection" exact component={Selection} />
       <Route path="/runs/:runId/stats" exact component={StatisticsOverview} />
     </Switch>

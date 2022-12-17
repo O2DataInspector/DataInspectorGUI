@@ -123,7 +123,7 @@ const setDisplayMethod = (message: Message, method: DisplayMethod): Action => ({
 
 const setAddress = (analysisHost: Url): Action => ({
   type: SET_ADDRESS,
-  analysisHost: analysisHost
+  analysisHost: analysisHost,
 });
 
 const updateDeviceMessage = (

@@ -6,4 +6,9 @@ const selectSelectedDevices = (state: State) =>
   state.devices.filter((device) => device.isSelected);
 const selectLastMessageId = (state: State) => state.lastMessageId;
 
-export { selectAddress, selectIsRunActive, selectSelectedDevices, selectLastMessageId };
+export {
+  selectAddress,
+  selectIsRunActive,
+  selectSelectedDevices,
+  selectLastMessageId,
+};

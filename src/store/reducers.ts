@@ -19,11 +19,17 @@ function reduce(state = initialState, action: Action): State {
     case Actions.DISCONNECT:
       return initialState;
     case Actions.CLEAN_RUN_DATA:
-      return {...initialState, analysisHost: state.analysisHost};
+      return { ...initialState, analysisHost: state.analysisHost };
     case Actions.SET_DEVICES:
       return { ...state, devices: action.devices };
     case Actions.SET_INSPECTION:
-      return { ...state, devices: state.devices.map((d) => ({...d, isSelected: action.deviceNames.includes(d.name)})) };
+      return {
+        ...state,
+        devices: state.devices.map((d) => ({
+          ...d,
+          isSelected: action.deviceNames.includes(d.name),
+        })),
+      };
     case Actions.SET_IS_RUN_ACTIVE:
       return { ...state, isRunActive: action.isRunActive };
     case Actions.SET_MESSAGES: {
@@ -47,7 +53,7 @@ function reduce(state = initialState, action: Action): State {
     case Actions.SET_ADDRESS:
       return {
         ...state,
-        analysisHost: action.analysisHost
+        analysisHost: action.analysisHost,
       };
     case Actions.UPDATE_DEVICE_MESSAGE:
       return {

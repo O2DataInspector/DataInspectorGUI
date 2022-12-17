@@ -51,11 +51,15 @@ interface StatisticsFormProps {
   statsData: StatisticsResponse | undefined;
   setStatsData: React.Dispatch<
     React.SetStateAction<StatisticsResponse | undefined>
-  >,
+  >;
   runId: string;
 }
 
-const StatisticsForm = ({ statsData, setStatsData, runId }: StatisticsFormProps) => {
+const StatisticsForm = ({
+  statsData,
+  setStatsData,
+  runId,
+}: StatisticsFormProps) => {
   const store = Redux.useStore() as Store<State>;
   const [query, setQuery] = React.useState({} as StatisticsQuery);
 

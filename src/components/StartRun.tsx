@@ -1,4 +1,4 @@
-import React, {ChangeEvent, useEffect, useState} from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 
 import {
   Button,
@@ -20,15 +20,15 @@ import {
   Checkbox,
   Autocomplete,
 } from "@mui/material";
-import {useHistory} from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import Axios from "axios";
-import {useSelector} from "react-redux";
-import {selectAddress} from "../store/selectors";
+import { useSelector } from "react-redux";
+import { selectAddress } from "../store/selectors";
 
 interface Build {
-  id: string,
-  url: string,
-  name: string,
+  id: string;
+  url: string;
+  name: string;
   branch: string;
 }
 
@@ -51,9 +51,9 @@ interface RunIdResponse {
 const StartRun = () => {
   const history = useHistory();
   const address = useSelector(selectAddress);
-  const [builds, setBuilds] = useState<Builds>({builds: []});
-  const [datasets, setDatasets] = useState<Datasets>({datasets: []});
-  const [workflows, setWorkflows] = useState<Workflows>({workflows: []});
+  const [builds, setBuilds] = useState<Builds>({ builds: [] });
+  const [datasets, setDatasets] = useState<Datasets>({ datasets: [] });
+  const [workflows, setWorkflows] = useState<Workflows>({ workflows: [] });
 
   const [selectedBuild, setSelectedBuild] = useState<string>("");
   const [includeDataset, setIncludeDataset] = useState<boolean>(false);
@@ -80,13 +80,12 @@ const StartRun = () => {
   }, []);
 
   useEffect(() => {
-    if(selectedBuild.length == 0)
-      return;
+    if (selectedBuild.length == 0) return;
 
     Axios.get<Workflows>(`${address}/builds/workflows`, {
       headers: {
-        buildId: selectedBuild
-      }
+        buildId: selectedBuild,
+      },
     })
       .then((response) => {
         setWorkflows(response.data);
@@ -99,24 +98,26 @@ const StartRun = () => {
   const buildChanged = (e: SelectChangeEvent) => {
     e.preventDefault();
     setSelectedBuild(e.target.value);
-  }
+  };
 
-  const workflowChanged = (e: any, newWorkflow: string | null) => {
-    if(newWorkflow == null)
-      return;
+  const workflowChanged = (
+    e: React.SyntheticEvent,
+    newWorkflow: string | null
+  ) => {
+    if (newWorkflow == null) return;
 
     setSelectedWorkflow(newWorkflow);
-  }
+  };
 
   const datasetChanged = (e: SelectChangeEvent) => {
     e.preventDefault();
     setSelectedDataset(e.target.value);
-  }
+  };
 
   const configChanged = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     setConfig(e.target.value);
-  }
+  };
 
   const createRun = () => {
     Axios.post<RunIdResponse>(`${address}/runs`, null, {
@@ -124,17 +125,17 @@ const StartRun = () => {
         buildId: selectedBuild,
         dataset: selectedDataset,
         config: config,
-        workflow: selectedWorkflow
-      }
+        workflow: selectedWorkflow,
+      },
     })
       .then((response) => {
-        const runId = response.data.runId
+        const runId = response.data.runId;
         alert(`Wait for run(${runId}) to have status RUNNING`);
       })
       .catch((error) => {
         alert("Failed to run: " + error);
       });
-  }
+  };
 
   return (
     <Container sx={{ my: "2.5%", maxWidth: "50%" }}>
@@ -142,10 +143,10 @@ const StartRun = () => {
         sx={{
           height: "100%",
           display: "flex",
-          justifyContent: "space-between",
+          flexDirection: "column",
         }}
       >
-        <Box m="2em">
+        <Stack m="2em" width="50%" gap={2}>
           <Typography variant="h3">New run</Typography>
           <FormControl fullWidth>
             <InputLabel>Build</InputLabel>
@@ -154,9 +155,13 @@ const StartRun = () => {
               labelId="build-select"
               label="Build"
               onChange={buildChanged}
-              sx={{width: '100%'}}
+              sx={{ width: "100%" }}
             >
-              {builds.builds.map((build) => <MenuItem key={build.id} value={build.id}>{build.name}</MenuItem>)}
+              {builds.builds.map((build) => (
+                <MenuItem key={build.id} value={build.id}>
+                  {build.name}
+                </MenuItem>
+              ))}
             </Select>
           </FormControl>
           {workflows.workflows.length > 0 && (
@@ -166,18 +171,33 @@ const StartRun = () => {
                 id="combo-box-demo"
                 options={workflows.workflows}
                 getOptionLabel={(option) => option}
-                sx={{ width: 300 }}
-                renderOption={(props, option) => <Box component="li" {...props}> {option} </Box>}
-                renderInput={(params) => <TextField {...params} label="Workflow"/>}
+                renderOption={(props, option) => (
+                  <Box component="li" {...props}>
+                    {" "}
+                    {option}{" "}
+                  </Box>
+                )}
+                renderInput={(params) => (
+                  <TextField {...params} label="Workflow" />
+                )}
                 onChange={workflowChanged}
               />
             </FormControl>
           )}
+          <TextField
+            label="Config"
+            variant="outlined"
+            fullWidth
+            onChange={configChanged}
+          />
           <FormControl fullWidth>
             <FormControlLabel
               control={
-              <Checkbox onChange={() => setIncludeDataset(!includeDataset)} checked={includeDataset} />
-            }
+                <Checkbox
+                  onChange={() => setIncludeDataset(!includeDataset)}
+                  checked={includeDataset}
+                />
+              }
               label={"Include Dataset"}
             />
           </FormControl>
@@ -189,17 +209,24 @@ const StartRun = () => {
                 labelId="dataset-select"
                 label="Dataset"
                 onChange={datasetChanged}
-                sx={{width: '100%'}}
+                sx={{ width: "100%" }}
               >
-                {datasets.datasets.map((dataset, i) => <MenuItem key={i} value={dataset}>{dataset}</MenuItem>)}
+                {datasets.datasets.map((dataset, i) => (
+                  <MenuItem key={i} value={dataset}>
+                    {dataset}
+                  </MenuItem>
+                ))}
               </Select>
             </FormControl>
           )}
-          <FormControl fullWidth>
-            <TextField label="Config" variant="outlined" onChange={configChanged}/>
-            <Button onClick={createRun}>Run</Button>
-          </FormControl>
-        </Box>
+        </Stack>
+        <Button
+          variant="contained"
+          onClick={createRun}
+          sx={{ mx: "auto", mb: "1em", width: "25%" }}
+        >
+          Run
+        </Button>
       </Paper>
     </Container>
   );

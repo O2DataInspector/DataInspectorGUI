@@ -1,6 +1,6 @@
 import React from "react";
 import { Tabs, Tab } from "@mui/material";
-import {Link, useLocation} from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 interface MenuTabsProps {
   runId: string;

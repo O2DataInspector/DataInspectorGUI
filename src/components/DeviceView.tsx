@@ -3,7 +3,7 @@ import React from "react";
 import { Device } from "store/state";
 import { Typography, Box } from "@mui/material";
 import { Card, CardContent, CardActionArea } from "@mui/material";
-import {useHistory, useParams} from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 
 interface DeviceProps {
   device: Device;
@@ -40,7 +40,10 @@ const DeviceDetails = ({ device }: DeviceProps) => {
   return (
     <React.Fragment>
       <Typography variant="body1" color="text.secondary">
-        <Box fontWeight='fontWeightMedium' display='inline'>messages</Box>: {device.ids.length}
+        <Box fontWeight="fontWeightMedium" display="inline">
+          messages
+        </Box>
+        : {device.ids.length}
       </Typography>
       <Typography variant="body2" color="text.secondary">
         rank: {specs.rank}

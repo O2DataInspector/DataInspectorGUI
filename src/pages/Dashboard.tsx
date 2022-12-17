@@ -10,9 +10,9 @@ import { Container, Box } from "@mui/system";
 import { Typography, Grid } from "@mui/material";
 import MenuTabs from "components/MenuTabs";
 import UpdateButtons from "components/UpdateButtons";
-import {useParams} from "react-router-dom";
-import {useSelector} from "react-redux";
-import {selectIsRunActive} from "../store/selectors";
+import { useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { selectIsRunActive } from "../store/selectors";
 
 interface DashboardProps {
   devices: Device[];

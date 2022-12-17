@@ -17,9 +17,9 @@ import {
 } from "@mui/material";
 import MenuTabs from "components/MenuTabs";
 import { StatisticsForm } from "components/StatisticsForm";
-import {useParams} from "react-router-dom";
-import {useSelector} from "react-redux";
-import {selectIsRunActive} from "../store/selectors";
+import { useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { selectIsRunActive } from "../store/selectors";
 
 export interface StatisticsResponse {
   x: number[];
@@ -40,7 +40,7 @@ export interface StatisticsResponse {
 }
 
 interface RunIdParam {
-  runId: string
+  runId: string;
 }
 
 const StatisticsOverview = () => {
@@ -60,8 +60,14 @@ const StatisticsOverview = () => {
       </NavigationBar>
       <Container sx={{ flex: 1 }}>
         <MenuTabs runId={params.runId} />
-        <StatisticsForm statsData={statsData} setStatsData={setStatsData} runId={params.runId} />
-        {(statsData && statsData.x.length > 0) && <TimeSeriesPlot statsData={statsData} />}
+        <StatisticsForm
+          statsData={statsData}
+          setStatsData={setStatsData}
+          runId={params.runId}
+        />
+        {statsData && statsData.x.length > 0 && (
+          <TimeSeriesPlot statsData={statsData} />
+        )}
         {statsData && <SummaryTable statsData={statsData} />}
       </Container>
     </Stack>
@@ -75,16 +81,24 @@ interface StatisticsProps {
 const TimeSeriesPlot = ({ statsData }: StatisticsProps) => {
   return (
     <Paper sx={{ width: "80%", mx: "auto" }}>
-      <Container sx={{ width: "80%", mx: "auto" , height: "80%"}}>
-          <Plot
-            data={[{ type: "bar", x: statsData.x, y: statsData.yNumbers}]}
-            layout={{title: "Messages distribution", xaxis: {title: "Start time"}, yaxis: {title: "Number of messages"}}}
-            config={{ responsive: true }}
-          /> 
-          <Divider/>
-          <Plot
-          data={[{ type: "bar", x: statsData.x, y: statsData.yData}]}
-          layout={{title: "Data distribution", xaxis: {title: "Start time"}, yaxis: {title: "Data [B]"}}}
+      <Container sx={{ width: "80%", mx: "auto", height: "80%" }}>
+        <Plot
+          data={[{ type: "bar", x: statsData.x, y: statsData.yNumbers }]}
+          layout={{
+            title: "Messages distribution",
+            xaxis: { title: "Start time" },
+            yaxis: { title: "Number of messages" },
+          }}
+          config={{ responsive: true }}
+        />
+        <Divider />
+        <Plot
+          data={[{ type: "bar", x: statsData.x, y: statsData.yData }]}
+          layout={{
+            title: "Data distribution",
+            xaxis: { title: "Start time" },
+            yaxis: { title: "Data [B]" },
+          }}
           config={{ responsive: true }}
         />
       </Container>

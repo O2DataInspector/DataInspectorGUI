@@ -14,10 +14,10 @@ import {
 } from "@mui/material";
 
 import LogoIcon from "icons/logo.svg";
-import {cleanRunData, disconnect} from "store/actions";
+import { cleanRunData, disconnect } from "store/actions";
 import { selectAddress } from "store/selectors";
 import State from "store/state";
-import {useSelector, useStore} from "react-redux";
+import { useSelector, useStore } from "react-redux";
 
 type ContainerProps = {
   children: React.ReactNode;
@@ -119,8 +119,8 @@ const StopRun = ({ runId }: StopRunProps) => {
   function onClick() {
     Axios.post<object>(`${address}/runs/stop`, null, {
       headers: {
-        runId: runId
-      }
+        runId: runId,
+      },
     })
       .then((result) => {
         alert("Workflow stopped");
@@ -129,7 +129,7 @@ const StopRun = ({ runId }: StopRunProps) => {
       })
       .catch((reason) => {
         alert("Failed to stop running workflow.");
-      })
+      });
   }
 
   return (

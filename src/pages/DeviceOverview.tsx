@@ -19,17 +19,17 @@ import {
 } from "@mui/material";
 import { updateDeviceMessage } from "store/actions";
 import State, { Device, Message } from "store/state";
-import {selectAddress, selectIsRunActive} from "store/selectors";
+import { selectAddress, selectIsRunActive } from "store/selectors";
 import Axios from "axios";
-import {useParams} from "react-router-dom";
-import {useSelector} from "react-redux";
+import { useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 interface DeviceOverviewProps {
   maybeDevice: Device | undefined;
 }
 
 interface RunIdParam {
-  runId: string
+  runId: string;
 }
 
 const DeviceOverview = ({ maybeDevice }: DeviceOverviewProps) => {

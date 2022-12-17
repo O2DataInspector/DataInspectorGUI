@@ -41,7 +41,7 @@ export default function UpdateButtons({ runId }: UpdateButtonsProps) {
     const lastMessageId = selectLastMessageId(store.getState());
     const headers = {
       devices: selectedDevices.map((device) => device.name).join(","),
-      runId: runId
+      runId: runId,
     } as AxiosRequestHeaders;
     if (lastMessageId) headers["id"] = lastMessageId;
 
@@ -66,7 +66,7 @@ export default function UpdateButtons({ runId }: UpdateButtonsProps) {
     const headers = {
       devices: selectedDevices.map((device) => device.name).join(","),
       count: parameters[selectedIndex],
-      runId: runId
+      runId: runId,
     } as AxiosRequestHeaders;
     if (lastMessageId) headers["id"] = lastMessageId;
 
